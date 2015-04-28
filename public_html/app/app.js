@@ -3,7 +3,8 @@
 var app = angular.module('Application', [
     'ngRoute',
     'ngResource',
-    'highcharts-ng'
+    'highcharts-ng',
+    'ui.bootstrap'
 ]);
 
 var controllers = {};
@@ -26,5 +27,10 @@ app.config(function ($routeProvider) {
             {
                 templateUrl: 'app/partials/license.html'
             })
+        .when('/hotels',
+        {
+            templateUrl: 'app/partials/static-hotels.html',
+            controller: 'HotelsController'
+        })
         .otherwise({ redirectTo: '/frontpage' });
 });

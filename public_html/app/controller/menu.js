@@ -6,6 +6,10 @@ controllers.MenuController = function($scope, $location) {
             href: '#/frontpage'
         },
         {
+            name: 'Hotels',
+            href: '#/hotels'
+        },
+        {
             name: 'License',
             href: '#/license'
         }
