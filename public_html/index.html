@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Explanations for Skyline Query Results</title>
+
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/fixed-nav.css" rel="stylesheet">
+
+</head>
+<body ng-app="Application">
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container" ng-controller="MenuController">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#/frontpage">{{page_name}}</a>
+        </div>
+        <div class="navbar-collapse collapse" >
+              <ul class="nav navbar-nav">
+                  <li ng-repeat="nav in navigation" ng-class="{active:isActive(nav.href)}">
+                      <a href="{{nav.href}}">{{nav.name}}</a>
+                  </li>
+              </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="jumbotron">
+        <div ng-view></div>
+    </div>
+</div>
+
+<!-- Load main angular framework -->
+<script src="js/angular.min.js"></script>
+<!-- Load the app -->
+<script src="app/app.js"></script>
+<!-- Load controllers -->
+<script src="app/controller/test.js"></script>
+<script src="app/controller/menu.js"></script>
+<!-- Load factories -->
+<!-- Load additional angular modules -->
+<script src="js/angular-route.min.js"></script>
+<script src="js/angular-resource.min.js"></script>
+<script src="js/ui-bootstrap-tpls-0.12.1.min.js"></script>
+<!-- Load Highcharts by http://www.highcharts.com/ -->
+<script src="js/standalone-framework.min.js"></script>
+<script src="js/highcharts-ng.js"></script>
+<script src="js/highcharts.src.js"></script>
+</body>
+</html>
