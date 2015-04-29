@@ -9,7 +9,7 @@
         Here you can set q_U for the query
     </div>
     <div class="col-sm-12">
-        <button class="btn btn-primary btn-block">Query</button>
+        <button class="btn btn-primary btn-block" ng-click="query()">Query</button>
     </div>
 </div>
 
@@ -19,7 +19,7 @@
   </label>
 
   <accordion close-others="oneAtATime">
-    <accordion-group is-open="status.isFirstOpen">
+    <accordion-group tooltip="{{inSkyline.length > 0 ?  '' : 'You have to make a query'}}" is-open="status.isFirstOpen" is-disabled="inSkyline.length === 0">
     <accordion-heading ng-click="isopen=!isopen">
         <div>
             Skyline for query <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isFirstOpen, 'glyphicon-chevron-right': !status.isFirstOpen}"></i>
@@ -53,38 +53,38 @@
           </div>
       </div>
     </accordion-group>
-    <accordion-group is-open="status.isSecondOpen">
+    <accordion-group tooltip="{{notSkyline.length > 0 ?  '' : 'You have to make a query'}}" is-open="status.isSecondOpen" is-disabled="notSkyline.length === 0">
         <accordion-heading ng-click="isopen=!isopen">
             <div>
                 Not in skyline of query <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isSecondOpen, 'glyphicon-chevron-right': !status.isSecondOpen}"></i>
             </div>
         </accordion-heading>
-      <div class="well well-lg">
-          <div class="row">
-              <div class="col-sm-3">
-                  <img class="img-responsive img-thumbnail" src="img/hotel.png" alt="IMG">
-              </div>
-              <div class="col-sm-9">
-                  <table class="table">
-                      <tr>
-                          <th>Price/day:</th>
-                          <th>Dist. beach:</th>
-                          <th>Dist. downtown</th>
-                          <th>Num. pools</th>
-                          <th>User rating:</th>
-                          <th>Stars:</th>
-                      </tr>
-                      <tr>
-                          <td>{{250 | currency}}</td>
-                          <td>{{0.150 | number}} km</td>
-                          <td>{{0.6 | number}} km</td>
-                          <td>2</td>
-                          <td>4.9</td>
-                          <td><span class="glyphicon glyphicon-star" ng-repeat="s in stars" ng-if="$index < 4"></span></td>
-                      </tr>
-                  </table>
-              </div>
-          </div>
-      </div>
+        <div class="well well-lg" ng-repeat="hotel in notSkyline">
+            <div class="row">
+                <div class="col-sm-3">
+                    <img class="img-responsive img-thumbnail" src="img/hotel.png" alt="IMG">
+                </div>
+                <div class="col-sm-9">
+                    <table class="table">
+                        <tr>
+                            <th>Price/day:</th>
+                            <th>Dist. beach:</th>
+                            <th>Dist. downtown</th>
+                            <th>Num. pools</th>
+                            <th>User rating:</th>
+                            <th>Stars:</th>
+                        </tr>
+                        <tr>
+                            <td>{{hotel.price | currency}}</td>
+                            <td>{{hotel.beach| number}} km</td>
+                            <td>{{hotel.downtown| number}} km</td>
+                            <td>{{hotel.pools}}</td>
+                            <td>{{hotel.rating | number}}</td>
+                            <td><span class="glyphicon glyphicon-star" ng-repeat="s in stars" ng-if="$index < hotel.stars"></span></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
     </accordion-group>
   </accordion>
