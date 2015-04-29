@@ -1,10 +1,30 @@
-  <label class="checkbox">
+<div class="row">
+    <div class="well well-lg col-sm-4">
+        Here the change in q_L is shown
+    </div>
+    <div class="well well-lg col-sm-4">
+        Here you can set q_L for the query
+    </div>
+    <div class="well well-lg col-sm-4">
+        Here you can set q_U for the query
+    </div>
+    <div class="col-sm-12">
+        <button class="btn btn-primary btn-block">Query</button>
+    </div>
+</div>
+
+<label class="checkbox">
     <input type="checkbox" ng-model="oneAtATime">
     Open only one at a time
   </label>
 
   <accordion close-others="oneAtATime">
-    <accordion-group heading="Best for your query" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
+    <accordion-group is-open="status.isFirstOpen">
+    <accordion-heading ng-click="isopen=!isopen">
+        <div>
+            Skyline for query <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isFirstOpen, 'glyphicon-chevron-right': !status.isFirstOpen}"></i>
+        </div>
+    </accordion-heading>
       <div class="well well-lg" ng-repeat="hotel in inSkyline">
           <div class="row">
               <div class="col-sm-3">
@@ -33,7 +53,12 @@
           </div>
       </div>
     </accordion-group>
-    <accordion-group heading="Others">
+    <accordion-group is-open="status.isSecondOpen">
+        <accordion-heading ng-click="isopen=!isopen">
+            <div>
+                Not in skyline of query <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isSecondOpen, 'glyphicon-chevron-right': !status.isSecondOpen}"></i>
+            </div>
+        </accordion-heading>
       <div class="well well-lg">
           <div class="row">
               <div class="col-sm-3">

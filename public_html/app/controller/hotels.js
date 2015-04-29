@@ -24,7 +24,7 @@ controllers.HotelsController = function ($scope) {
         }
     ];
   $scope.status = {
-    isFirstOpen: true,
-    isFirstDisabled: false
+    isFirstOpen: false,
+      isSecondOpen: true
   };
 };
