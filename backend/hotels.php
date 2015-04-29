@@ -1,9 +1,11 @@
 <?php
 require_once("headers.php");
 
+
 echo json_encode([
     "skyline" => [
         [
+            "id" => 1,
             "price" => 200,
             "beach" => 0.1,
             "downtown" => 0.8,
@@ -12,6 +14,7 @@ echo json_encode([
             "stars" => 5
         ],
         [
+            "id" => 2,
             "price" => 150,
             "beach" => 0.1,
             "downtown" => 1.1,
@@ -22,6 +25,7 @@ echo json_encode([
     ],
     "notSkyline" => [
         [
+            "id" => 3,
             "price" => 250,
             "beach" => 0.15,
             "downtown" => 0.6,
@@ -29,5 +33,6 @@ echo json_encode([
             "rating" => 4.9,
             "stars" => 4
         ]
-    ]
+    ],
+    'GET' => $_GET["price"] === "true" ? true : false
 ]);

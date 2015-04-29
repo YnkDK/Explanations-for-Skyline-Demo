@@ -2,13 +2,58 @@
     <div class="well well-lg col-sm-4">
         Here the change in q_L is shown
     </div>
-    <div class="well well-lg col-sm-4">
-        Here you can set q_L for the query
-    </div>
-    <div class="well well-lg col-sm-4">
-        Here you can set q_U for the query
-    </div>
-    <div class="col-sm-12">
+    <div class="well well-lg col-sm-8">
+        <table class="table">
+            <tr>
+                <th></th>
+                <th class="text-center">From</th>
+                <th></th>
+                <th class="text-center">To</th>
+                <th class="text-center" tooltip="Uses all data on attribute if unchecked">Include attr.</th>
+            </tr>
+            <tr>
+                <td class="text-left">Price ($)</td>
+                <td class="text-center"><input class="form-control" type="number" step="10" ng-model="data.priceFrom" ng-disabled="!data.price"></td>
+                <td class="text-center">-</td>
+                <td class="text-center"><input class="form-control" type="number" step="10" ng-model="data.priceTo" ng-disabled="!data.price"></td>
+                <td class="text-center"><input type="checkbox" ng-model="data.price"></td>
+            </tr>
+            <tr>
+                <td class="text-left">Dist. beach (km)</td>
+                <td class="text-center"><input class="form-control" type="number" step="0.1" min="0" max="{{data.beachTo}}" ng-model="data.beachFrom" ng-disabled="!data.beach"></td>
+                <td class="text-center">-</td>
+                <td class="text-center"><input class="form-control" type="number" step="0.1" min="{{data.beachFrom}}" ng-model="data.beachTo" ng-disabled="!data.beach"></td>
+                <td class="text-center"><input type="checkbox" ng-model="data.beach"></td>
+            </tr>
+            <tr>
+                <td class="text-left">Dist. downtown (km)</td>
+                <td class="text-center"><input class="form-control" type="number" step="0.1" ng-model="data.downtownFrom" ng-disabled="!data.downtown"></td>
+                <td class="text-center">-</td>
+                <td class="text-center"><input class="form-control" type="number" step="0.1" ng-model="data.downtownTo" ng-disabled="!data.downtown"></td>
+                <td class="text-center"><input type="checkbox" ng-model="data.downtown"></td>
+            </tr>
+            <tr>
+                <td class="text-left">Num. pools</td>
+                <td class="text-center"><input class="form-control" type="number" step="1" ng-model="data.poolsFrom" ng-disabled="!data.pools"></td>
+                <td class="text-center">-</td>
+                <td class="text-center"><input class="form-control" type="number" step="1" ng-model="data.poolsTo" ng-disabled="!data.pools"></td>
+                <td class="text-center"><input type="checkbox" ng-model="data.pools"></td>
+            </tr>
+            <tr>
+                <td class="text-left">User rating</td>
+                <td class="text-center"><input class="form-control" type="number" step="0.5" ng-model="data.ratingsFrom" ng-disabled="!data.ratings"></td>
+                <td class="text-center">-</td>
+                <td class="text-center"><input class="form-control" type="number" step="0.5" ng-model="data.ratingsTo" ng-disabled="!data.ratings"></td>
+                <td class="text-center"><input type="checkbox" ng-model="data.ratings"></td>
+            </tr>
+            <tr>
+                <td class="text-left">Stars</td>
+                <td class="text-center"><input class="form-control" type="number" step="1" ng-model="data.starsFrom" ng-disabled="!data.stars"></td>
+                <td class="text-center">-</td>
+                <td class="text-center"><input class="form-control" type="number" step="1" ng-model="data.starsTo" ng-disabled="!data.stars"></td>
+                <td class="text-center"><input type="checkbox" ng-model="data.stars"></td>
+            </tr>
+        </table>
         <button class="btn btn-primary btn-block" ng-click="query()">Query</button>
     </div>
 </div>
@@ -53,7 +98,7 @@
           </div>
       </div>
     </accordion-group>
-    <accordion-group tooltip="{{notSkyline.length > 0 ?  '' : 'You have to make a query'}}" is-open="status.isSecondOpen" is-disabled="notSkyline.length === 0">
+    <accordion-group id="notSkyline" tooltip="{{notSkyline.length > 0 ?  '' : 'You have to make a query'}}" is-open="status.isSecondOpen" is-disabled="notSkyline.length === 0">
         <accordion-heading ng-click="isopen=!isopen">
             <div>
                 Not in skyline of query <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isSecondOpen, 'glyphicon-chevron-right': !status.isSecondOpen}"></i>
