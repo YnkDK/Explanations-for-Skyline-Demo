@@ -30,3 +30,6 @@
 # Aux. files 
 *~
 .idea/
+
+# Large Data files
+utils/generators/*.json
