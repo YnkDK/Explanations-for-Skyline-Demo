@@ -30,3 +30,6 @@
 # Aux. files 
 *~
 .idea/
+
+# Big data files
+utils/generators/aarhus.json
