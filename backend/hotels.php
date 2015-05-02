@@ -1,7 +1,8 @@
 <?php
 require_once("headers.php");
 
-
+$string = file_get_contents("hotels.json");
+$json_a = json_decode($string, true);
 echo json_encode([
     "skyline" => [
         [
@@ -23,16 +24,6 @@ echo json_encode([
             "stars" => 4
         ]
     ],
-    "notSkyline" => [
-        [
-            "id" => 3,
-            "price" => 250,
-            "beach" => 0.15,
-            "downtown" => 0.6,
-            "pools" => 2,
-            "rating" => 4.9,
-            "stars" => 4
-        ]
-    ],
+    "notSkyline" => $json_a,
     'GET' => $_GET["price"] === "true" ? true : false
 ]);
