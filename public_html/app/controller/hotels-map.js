@@ -98,9 +98,14 @@ controllers.HotelsMapController = function ($scope, $resource, $location, uiGmap
 
     $scope.hotels = [];
     var notSkyline = [];
+    $scope.handleClick = function (event) {
+        $scope.current = notSkyline[event.model.id];
+    };
     $resource(url).get(
         $scope.data
         , function (values) {
+            $scope.hotels = [];
+            notSkyline = [];
             for(var i = 0; i < values.notSkyline.length; i++) {
                 $scope.hotels.push({
                     id: i,
@@ -109,7 +114,6 @@ controllers.HotelsMapController = function ($scope, $resource, $location, uiGmap
                 });
                 notSkyline.push(values.notSkyline[i]);
             }
-            $log.info(values.notSkyline);
         }, function (error) {
             alert("That's an error. See console for more info.");
             console.log(error);

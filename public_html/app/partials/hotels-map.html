@@ -1,7 +1,36 @@
+<div class="well well-lg" ng-if="current">
+    <div class="row">
+        <div class="col-sm-3">
+            <img class="img-responsive img-thumbnail" src="img/hotel.png" alt="IMG">
+        </div>
+        <div class="col-sm-9">
+            <div>{{current.address}}</div>
+            <table class="table">
+                <tr>
+                    <th>Price/day:</th>
+                    <th>Dist. beach:</th>
+                    <th>Dist. downtown</th>
+                    <th>Num. pools</th>
+                    <th>User rating:</th>
+                    <th>Stars:</th>
+                </tr>
+                <tr>
+                    <td>{{current.price | currency}}</td>
+                    <td>{{current.beach| number : 1}} km</td>
+                    <td>{{current.downtown| number : 1}} km</td>
+                    <td>{{current.pools}}</td>
+                    <td>{{current.rating | number : 1}}</td>
+                    <td><span class="glyphicon glyphicon-star" ng-repeat="s in stars" ng-if="$index < current.stars"></span></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
 <ui-gmap-google-map
         center='map.center'
         zoom='map.zoom'
         style="height: 400px;">
-    <ui-gmap-markers models="hotels" coords="'self'" icon="'icon'">
+    <ui-gmap-markers models="hotels" coords="'self'" icon="'icon'" click="handleClick">
     </ui-gmap-markers>
 </ui-gmap-google-map>
