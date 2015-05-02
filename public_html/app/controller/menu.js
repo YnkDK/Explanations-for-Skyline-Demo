@@ -10,6 +10,10 @@ controllers.MenuController = function($scope, $location) {
             href: '#/hotels'
         },
         {
+            name: 'Hotels (map)',
+            href: '#/hotels-map'
+        },
+        {
             name: 'License',
             href: '#/license'
         }

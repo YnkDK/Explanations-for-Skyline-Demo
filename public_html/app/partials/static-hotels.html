@@ -76,6 +76,7 @@
                   <img class="img-responsive img-thumbnail" src="img/hotel.png" alt="IMG">
               </div>
               <div class="col-sm-9">
+                  <div class="center-block">{{hotel.address}}</div>
                   <table class="table">
                       <tr>
                           <th>Price/day:</th>
@@ -87,10 +88,10 @@
                       </tr>
                       <tr>
                           <td>{{hotel.price | currency}}</td>
-                          <td>{{hotel.beach| number}} km</td>
-                          <td>{{hotel.downtown| number}} km</td>
+                          <td>{{hotel.beach| number : 1}} km</td>
+                          <td>{{hotel.downtown| number : 1}} km</td>
                           <td>{{hotel.pools}}</td>
-                          <td>{{hotel.rating | number}}</td>
+                          <td>{{hotel.rating | number : 1}}</td>
                           <td><span class="glyphicon glyphicon-star" ng-repeat="s in stars" ng-if="$index < hotel.stars"></span></td>
                       </tr>
                   </table>
@@ -104,12 +105,13 @@
                 Not in skyline of query <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isSecondOpen, 'glyphicon-chevron-right': !status.isSecondOpen}"></i>
             </div>
         </accordion-heading>
-        <div class="well well-lg" ng-repeat="hotel in notSkyline">
+        <div class="well well-lg" ng-repeat="hotel in filteredTodos">
             <div class="row">
                 <div class="col-sm-3">
                     <img class="img-responsive img-thumbnail" src="img/hotel.png" alt="IMG">
                 </div>
                 <div class="col-sm-9">
+                    <div>{{hotel.address}}</div>
                     <table class="table">
                         <tr>
                             <th>Price/day:</th>
@@ -121,15 +123,17 @@
                         </tr>
                         <tr>
                             <td>{{hotel.price | currency}}</td>
-                            <td>{{hotel.beach| number}} km</td>
-                            <td>{{hotel.downtown| number}} km</td>
+                            <td>{{hotel.beach| number : 1}} km</td>
+                            <td>{{hotel.downtown| number : 1}} km</td>
                             <td>{{hotel.pools}}</td>
-                            <td>{{hotel.rating | number}}</td>
+                            <td>{{hotel.rating | number : 1}}</td>
                             <td><span class="glyphicon glyphicon-star" ng-repeat="s in stars" ng-if="$index < hotel.stars"></span></td>
                         </tr>
                     </table>
                 </div>
             </div>
         </div>
+        <pagination ng-model="currentPage" total-items="notSkyline.length" max-size="20" boundary-links="true">
+        </pagination>
     </accordion-group>
   </accordion>

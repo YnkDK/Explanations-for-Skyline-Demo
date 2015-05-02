@@ -6,7 +6,14 @@
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/fixed-nav.css" rel="stylesheet">
-
+    <link href="css/example.css" rel="stylesheet">
+    <style>
+        #map-canvas {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
 </head>
 <body ng-app="Application">
 <nav class="navbar navbar-default navbar-fixed-top">
@@ -35,6 +42,7 @@
     <div class="jumbotron">
         <div ng-view></div>
     </div>
+    <div id="map-canvas"></div>
 </div>
 
 <!-- Load main angular framework -->
@@ -45,6 +53,7 @@
 <script src="app/controller/test.js"></script>
 <script src="app/controller/menu.js"></script>
 <script src="app/controller/hotels.js"></script>
+<script src="app/controller/hotels-map.js"></script>
 <!-- Load factories -->
 <!-- Load additional angular modules -->
 <script src="js/angular-route.min.js"></script>
@@ -54,5 +63,8 @@
 <script src="js/standalone-framework.min.js"></script>
 <script src="js/highcharts-ng.js"></script>
 <script src="js/highcharts.src.js"></script>
+<!-- Google Maps -->
+<script src="js/lodash.min.js"></script>
+<script src="js/angular-google-maps.min.js"></script>
 </body>
 </html>

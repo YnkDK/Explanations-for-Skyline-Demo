@@ -4,7 +4,8 @@ var app = angular.module('Application', [
     'ngRoute',
     'ngResource',
     'highcharts-ng',
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'uiGmapgoogle-maps'
 ]);
 
 var controllers = {};
@@ -16,7 +17,7 @@ app.controller(controllers);
 app.factory(factories);
 
 // Set config
-app.config(function ($routeProvider) {
+app.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
     $routeProvider
         .when('/frontpage',
             {
@@ -32,5 +33,16 @@ app.config(function ($routeProvider) {
             templateUrl: 'app/partials/static-hotels.html',
             controller: 'HotelsController'
         })
+        .when('/hotels-map',
+        {
+            templateUrl: 'app/partials/hotels-map.html',
+            controller: 'HotelsMapController'
+        })
         .otherwise({ redirectTo: '/frontpage' });
+
+    uiGmapGoogleMapApiProvider.configure({
+        //    key: 'your api key',
+        v: '3.17',
+        libraries: 'weather,geometry,visualization'
+    });
 });

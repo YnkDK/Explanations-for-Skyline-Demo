@@ -7,6 +7,10 @@ controllers.HotelsController = function ($scope, $resource, $location) {
     // The accordions data, i.e. the hotels
     $scope.inSkyline = [];
     $scope.notSkyline = [];
+    $scope.filteredTodos = [];
+    $scope.currentPage = 0;
+    $scope.numPerPage = 20;
+
     // Default settings for the query
     $scope.data = {
         price: true,
@@ -45,6 +49,7 @@ controllers.HotelsController = function ($scope, $resource, $location) {
                 $scope.inSkyline = values.skyline;
                 $scope.notSkyline = values.notSkyline;
                 $scope.status.isSecondOpen = true;
+                $scope.currentPage = 2;
             }, function (error) {
                 alert("That's an error. See console for more info.");
                 console.log(error);
@@ -55,4 +60,14 @@ controllers.HotelsController = function ($scope, $resource, $location) {
         isFirstOpen: false,
         isSecondOpen: false
     };
+
+    $scope.$watch('currentPage', function() {
+        console.log($scope.currentPage);
+        if($scope.notSkyline.length > 0) {
+            var begin = (($scope.currentPage - 1) * $scope.numPerPage)
+                , end = begin + $scope.numPerPage;
+
+                $scope.filteredTodos = $scope.notSkyline.slice(begin, end);
+        }
+    }, true);
 };
