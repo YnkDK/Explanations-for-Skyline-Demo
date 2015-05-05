@@ -105,7 +105,20 @@
                 Not in skyline of query <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isSecondOpen, 'glyphicon-chevron-right': !status.isSecondOpen}"></i>
             </div>
         </accordion-heading>
-        <div class="well well-lg" ng-repeat="hotel in filteredTodos">
+        <div class="btn-group" dropdown dropdown-append-to-body>
+            <button type="button" class="btn btn-primary dropdown-toggle" dropdown-toggle>
+                Order by: {{ order }} <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+                <li><a href ng-click="sortBy('price', false)">Price/day</a></li>
+                <li><a href ng-click="sortBy('beach', false)">Dist. beach</a></li>
+                <li><a href ng-click="sortBy('downtown', false)">Dist. downtown</a></li>
+                <li><a href ng-click="sortBy('pools', true)">Num. pools</a></li>
+                <li><a href ng-click="sortBy('rating', true)">User rating</a></li>
+                <li><a href ng-click="sortBy('stars', true)">Stars</a></li>
+            </ul>
+        </div>
+        <div class="well well-lg pointer" ng-repeat="hotel in filteredNotSkyline" ng-click="skyNot(hotel)">
             <div class="row">
                 <div class="col-sm-3">
                     <img class="img-responsive img-thumbnail" src="img/hotel.png" alt="IMG">
@@ -133,7 +146,15 @@
                 </div>
             </div>
         </div>
-        <pagination ng-model="currentPage" total-items="notSkyline.length" max-size="20" boundary-links="true">
+        <pagination
+                total-items="notSkyline.length"
+                items-per-page="numPerPage"
+                ng-model="currentPage"
+                max-size="10"
+                class="pagination"
+                boundary-links="true"
+                ng-change="changePage(currentPage)">
         </pagination>
-    </accordion-group>
+
+          </accordion-group>
   </accordion>

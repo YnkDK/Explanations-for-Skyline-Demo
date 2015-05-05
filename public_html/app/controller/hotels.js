@@ -1,4 +1,4 @@
-controllers.HotelsController = function ($scope, $resource, $location) {
+controllers.HotelsController = function ($scope, $resource, $location, $filter) {
     $scope.oneAtATime = true;
     var url = "http://" + $location.host() + ":" + $location.port() + '/Explanations-for-Skyline-Demo/backend/hotels.php';
     $scope.stars = [
@@ -7,9 +7,10 @@ controllers.HotelsController = function ($scope, $resource, $location) {
     // The accordions data, i.e. the hotels
     $scope.inSkyline = [];
     $scope.notSkyline = [];
-    $scope.filteredTodos = [];
+    $scope.filteredNotSkyline = [];
     $scope.currentPage = 0;
-    $scope.numPerPage = 20;
+    $scope.numPerPage = 5;
+    $scope.order = 'beach';
 
     // Default settings for the query
     $scope.data = {
@@ -48,8 +49,10 @@ controllers.HotelsController = function ($scope, $resource, $location) {
             , function (values) {
                 $scope.inSkyline = values.skyline;
                 $scope.notSkyline = values.notSkyline;
+                $scope.sortBy('price');
+
                 $scope.status.isSecondOpen = true;
-                $scope.currentPage = 2;
+
             }, function (error) {
                 alert("That's an error. See console for more info.");
                 console.log(error);
@@ -61,13 +64,22 @@ controllers.HotelsController = function ($scope, $resource, $location) {
         isSecondOpen: false
     };
 
-    $scope.$watch('currentPage', function() {
-        console.log($scope.currentPage);
+    $scope.changePage = function(newPage) {
         if($scope.notSkyline.length > 0) {
-            var begin = (($scope.currentPage - 1) * $scope.numPerPage)
+            var begin = ((newPage - 1) * $scope.numPerPage)
                 , end = begin + $scope.numPerPage;
 
-                $scope.filteredTodos = $scope.notSkyline.slice(begin, end);
+            $scope.filteredNotSkyline = $scope.notSkyline.slice(begin, end);
         }
-    }, true);
+    };
+
+    $scope.sortBy = function(attribute, reverse) {
+        $scope.notSkyline = $filter('orderBy')($scope.notSkyline, attribute, reverse);
+        $scope.order = attribute; // TODO: Make this pretty
+        $scope.changePage(1);
+    };
+
+    $scope.skyNot = function(hotel) {
+        alert("You have clicked on this hotel: " + hotel.address);
+    }
 };
