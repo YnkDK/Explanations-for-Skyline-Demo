@@ -25,32 +25,32 @@
 using namespace std;
 
 typedef struct TUPLE {
-	float elems[NUM_DIMS];
-	int pid;
+    float elems[NUM_DIMS];
+    int pid;
 
-	void printTuple() {
-		printf( "[" );
-		for (uint32_t i = 0; i < NUM_DIMS; ++i)
-			printf( "%.16f ", elems[i] );
-		printf( "]\n" );
-	}
+    void printTuple() {
+        printf( "[" );
+        for (uint32_t i = 0; i < NUM_DIMS; ++i)
+            printf( "%.16f ", elems[i] );
+        printf( "]\n" );
+    }
 
-	uint32_t numset( const TUPLE &origin ) {
-		uint32_t n = 0;
-			for(uint32_t i = 0; i < NUM_DIMS; ++i )
-				if( elems[i] > origin.elems[i] ) { ++n; }
-		return n;
-	}
+    uint32_t numset( const TUPLE &origin ) {
+        uint32_t n = 0;
+            for(uint32_t i = 0; i < NUM_DIMS; ++i )
+                if( elems[i] > origin.elems[i] ) { ++n; }
+        return n;
+    }
 
 } TUPLE;
 
 // Sort-based Tuple
 typedef struct STUPLE: TUPLE {
-	float score; // value on dimension of interest
-	float min_val; //minimum value on other dimensions
+    float score; // value on dimension of interest
+    float min_val; //minimum value on other dimensions
 
-	// By default, STUPLEs are sorted by score value
-	bool operator<(const STUPLE &rhs) const {
-		return score > rhs.score;
-	}
+    // By default, STUPLEs are sorted by score value
+    bool operator<(const STUPLE &rhs) const {
+        return score > rhs.score;
+    }
 } STUPLE;

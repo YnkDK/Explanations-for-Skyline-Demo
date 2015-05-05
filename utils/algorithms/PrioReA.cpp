@@ -26,20 +26,20 @@
  * Copies the coordinates of src to dest.
  */
 inline void copyTuple( const STUPLE &src, STUPLE &dest ) {
-	for(uint32_t i = 0; i < NUM_DIMS; ++i)
-		dest.elems[i] = src.elems[i];
+    for(uint32_t i = 0; i < NUM_DIMS; ++i)
+        dest.elems[i] = src.elems[i];
 }
 
 /**
  * Returns the L_1 (i.e., Manhattan) distance from p1 to p2.
  */
 inline float l1_dist( const STUPLE &p1, const STUPLE &p2 ) {
-	float x = 0;
-	for(uint32_t d = 0; d < NUM_DIMS; ++d) {
-		float y = p1.elems[d] - p2.elems[d];
-		x += (y > 0) ? y: -1*y;
-	}
-	return x;
+    float x = 0;
+    for(uint32_t d = 0; d < NUM_DIMS; ++d) {
+        float y = p1.elems[d] - p2.elems[d];
+        x += (y > 0) ? y: -1*y;
+    }
+    return x;
 }
 
 /**
@@ -47,15 +47,15 @@ inline float l1_dist( const STUPLE &p1, const STUPLE &p2 ) {
  * removes it from dims.
  */
 void sort_dims( const STUPLE &q, const STUPLE &o, vector<uint32_t> &dims ) {
-	map<float, uint32_t> m;
-	for (uint32_t i = 0; i < dims.size(); ++i) {
-		m.insert( pair<float, uint32_t> ( q.elems[dims[i]] - o.elems[dims[i]], dims[i] ) );
-	}
-	dims.clear();
-	for(map<float, uint32_t>::iterator it = m.begin(); it != m.end(); ++it ) {
-		dims.push_back( it->second );
-  	}
-	return;
+    map<float, uint32_t> m;
+    for (uint32_t i = 0; i < dims.size(); ++i) {
+        m.insert( pair<float, uint32_t> ( q.elems[dims[i]] - o.elems[dims[i]], dims[i] ) );
+    }
+    dims.clear();
+    for(map<float, uint32_t>::iterator it = m.begin(); it != m.end(); ++it ) {
+        dims.push_back( it->second );
+      }
+    return;
 }
 
 inline uint32_t getMinDim(const STUPLE &p, const STUPLE &origin, const vector<uint32_t> dims ) {
@@ -71,35 +71,35 @@ inline uint32_t getMinDim(const STUPLE &p, const STUPLE &origin, const vector<ui
  * the origin, o, with respect to other dimensions in dim.
  */
 void sortByDim( vector<STUPLE> &p, const STUPLE &o, const uint32_t d, const vector<uint32_t> dims ) {
-	for (uint32_t i = 0; i < p.size(); ++i) {
-		p[i].score = p[i].elems[d] - o.elems[d];
-    	const uint32_t min_d = getMinDim( p[i], o, dims );
-    	p[i].min_val = p[i].elems[min_d] - o.elems[min_d];
-  	}
-  	sort( p.begin(), p.end() );
+    for (uint32_t i = 0; i < p.size(); ++i) {
+        p[i].score = p[i].elems[d] - o.elems[d];
+        const uint32_t min_d = getMinDim( p[i], o, dims );
+        p[i].min_val = p[i].elems[min_d] - o.elems[min_d];
+      }
+      sort( p.begin(), p.end() );
 }
 
 
-float PrioReA(  const vector<STUPLE> &points,	//< All points within q_L and q_U
-                const STUPLE &q,				//< The query
-                const STUPLE &origin,			//<
-                STUPLE &soln,					//<
-                vector<uint32_t> &dims ) {		//<
+float PrioReA(  const vector<STUPLE> &points,   //< All points within q_L and q_U
+                const STUPLE &q,                //< The query
+                const STUPLE &origin,           //<
+                STUPLE &soln,                   //< The solution
+                vector<uint32_t> &dims ) {      //<
 
-	/* First base case: no points in this partition! */
+    /* First base case: no points in this partition! */
     if( !points.size() ) {
         copyTuple( origin, soln );
         return 0;
     }
-	
+    
     vector<STUPLE> mypoints ( points );
     float score = l1_dist ( q, origin );
-	
+    
     for(uint32_t d = 0; d < dims.size(); ++d ) {
         uint32_t cur_dim = dims[d];
         vector<uint32_t> dims_left ( dims );
         dims_left.erase( dims_left.begin() );
-		
+        
         /* Sort data by active dimension, and populate metadata. */
         sortByDim( mypoints, origin, cur_dim, dims_left );
         float max = 0;
