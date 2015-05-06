@@ -32,5 +32,6 @@
 .idea/
 
 # Big data files
-utils/generators/aarhus.json
-utils/generators/hotels.json
+utils/generators/*.json
+utils/generators/*.csv
+utils/algorithms/Sky
