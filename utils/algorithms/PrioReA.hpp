@@ -21,6 +21,11 @@
 #include <vector>
 #include <cstdint>
 #include <algorithm>
+#include <stdio.h>
+
+#define DOM_LEFT   0
+#define DOM_RIGHT  1
+#define DOM_INCOMP  2
 
 using namespace std;
 
@@ -57,3 +62,51 @@ typedef struct STUPLE: TUPLE {
 
 // Define the algorithm
 float PrioReA(  const vector<STUPLE> &points, const STUPLE &q, const STUPLE &origin, STUPLE &soln, vector<uint32_t> &dims );
+// Define helpers
+/**
+ * Copies the coordinates of src to dest.
+ */
+inline void copyTuple( const STUPLE &src, STUPLE &dest ) {
+    for(uint32_t i = 0; i < NUM_DIMS; ++i)
+        dest.elems[i] = src.elems[i];
+}
+
+/*
+ * 2-way dominance test with NO assumption for distinct value condition.
+ */
+inline int DominanceTest(const TUPLE &t1, const TUPLE &t2) {
+	bool t1_better = false, t2_better = false;
+
+	for (uint32_t i = 0; i < NUM_DIMS; i++) {
+		if ( t1.elems[i] < t2.elems[i] )
+			t1_better = true;
+		else if ( t1.elems[i] > t2.elems[i] )
+			t2_better = true;
+
+		if ( t1_better && t2_better )
+			return DOM_INCOMP;
+	}
+	if ( !t1_better && t2_better )
+		return DOM_RIGHT;
+	if ( !t2_better && t1_better )
+		return DOM_LEFT;
+
+	//    if ( !t1_better && !t2_better )
+	//      return DOM_INCOMP; //equal
+	return DOM_INCOMP;
+}
+
+inline bool DominateLeft(const TUPLE &t1, const TUPLE &t2) {
+	uint32_t i;
+	for (i = 0; i < NUM_DIMS && t1.elems[i] <= t2.elems[i]; ++i)
+	;
+	if ( i < NUM_DIMS )
+		return false; // Points are incomparable.
+
+	for (i = 0; i < NUM_DIMS; ++i) {
+		if ( t1.elems[i] < t2.elems[i] ) {
+	  		return true; // t1 dominates t2
+		}
+	}
+	return false; // Points are equal.
+}

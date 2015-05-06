@@ -22,13 +22,7 @@
 //      g++ -c -std=c++11 PrioReA.cpp -DNUM_DIMS=6 
 #include "PrioReA.hpp"
 
-/**
- * Copies the coordinates of src to dest.
- */
-inline void copyTuple( const STUPLE &src, STUPLE &dest ) {
-    for(uint32_t i = 0; i < NUM_DIMS; ++i)
-        dest.elems[i] = src.elems[i];
-}
+
 
 /**
  * Returns the L_1 (i.e., Manhattan) distance from p1 to p2.
