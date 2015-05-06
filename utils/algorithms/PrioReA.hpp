@@ -62,7 +62,12 @@ typedef struct STUPLE: TUPLE {
 
 // Define the algorithm
 float PrioReA(  const vector<STUPLE> &points, const STUPLE &q, const STUPLE &origin, STUPLE &soln, vector<uint32_t> &dims );
-// Define helpers
+
+/*
+ *	FROM HERE ONLY HELPER FUNCTIONS ARE DEFINED
+ */
+ 
+ 
 /**
  * Copies the coordinates of src to dest.
  */
@@ -109,4 +114,56 @@ inline bool DominateLeft(const TUPLE &t1, const TUPLE &t2) {
 		}
 	}
 	return false; // Points are equal.
+}
+
+/**
+ * Returns the L_1 (i.e., Manhattan) distance from p1 to p2.
+ */
+inline float l1_dist( const STUPLE &p1, const STUPLE &p2 ) {
+    float x = 0;
+    for(uint32_t d = 0; d < NUM_DIMS; ++d) {
+        float y = p1.elems[d] - p2.elems[d];
+        x += (y > 0) ? y: -1*y;
+    }
+    return x;
+}
+
+/**
+ * Selects the index of dims for the dimension in which q is closest to o and
+ * removes it from dims.
+ */
+void sort_dims( const STUPLE &q, const STUPLE &o, vector<uint32_t> &dims ) {
+    map<float, uint32_t> m;
+    for (uint32_t i = 0; i < dims.size(); ++i) {
+        m.insert( pair<float, uint32_t> ( q.elems[dims[i]] - o.elems[dims[i]], dims[i] ) );
+    }
+    dims.clear();
+    for(map<float, uint32_t>::iterator it = m.begin(); it != m.end(); ++it ) {
+        // Push the dimensions back, now in sorted order    
+        dims.push_back( it->second );
+    }
+    return;
+}
+
+inline uint32_t getMinDim(const STUPLE &p, const STUPLE &origin, const vector<uint32_t> dims ) {
+  uint32_t d = dims[0];
+  for(uint32_t i = 1; i < dims.size(); ++i) {
+    if( p.elems[dims[i]] - origin.elems[dims[i]] < p.elems[d] - origin.elems[d] ) {
+        d = i;
+    }
+  }
+  return d;
+}
+
+/**
+ * Sorts tuples in p by dimension d, meanwhile updating their min distances from 
+ * the origin, o, with respect to other dimensions in dim.
+ */
+void sortByDim( vector<STUPLE> &p, const STUPLE &o, const uint32_t d, const vector<uint32_t> dims ) {
+    for (uint32_t i = 0; i < p.size(); ++i) {
+        p[i].score = p[i].elems[d] - o.elems[d];
+        const uint32_t min_d = getMinDim( p[i], o, dims );
+        p[i].min_val = p[i].elems[min_d] - o.elems[min_d];
+    }
+    sort( p.begin(), p.end() );
 }
