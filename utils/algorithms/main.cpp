@@ -3,7 +3,7 @@
 
 int main(int argc, char **argv) {
     // TODO: Check if argument(s) seems right
-    int query = atoi(argv[2]);
+    int query;
     /* Read input file */
     vector<vector<float>> lines;
     FILE *inputFile = fopen(argv[1], "r");
@@ -32,58 +32,66 @@ int main(int argc, char **argv) {
         }
     }
     
-    STUPLE q, origin, soln;
-    /* Init origin to (0, ..., 0). */
-    for(uint32_t i = 0; i < NUM_DIMS; ++i ) { origin.elems[i] = 0.0; }
-    
-    copyTuple( data[ query ], q );
-    
-    // TODO: getCloseDoms
-    vector<STUPLE> closedoms;
-    for ( int i = 0; i < n; ++i ) {
+    for(int i = 0; i < n; i++) {
+        query = i;
+        STUPLE q, origin, soln;
+        /* Init origin to (0, ..., 0). */
+        for(uint32_t i = 0; i < NUM_DIMS; ++i ) { origin.elems[i] = 0.0; }
+        
+        copyTuple( data[ query ], q );
+        
+        /* Corresponds to McSky::getCloseDoms */
+        vector<STUPLE> closedoms;
+        for ( int i = 0; i < n; ++i ) {
 
-        if ( i == query ) continue; // don't compare to oneself.
+            if ( i == query ) continue; // don't compare to oneself.
 
-        if ( DominateLeft( origin, data[i]) && DominateLeft( data[i], data[query] ) ) {
+            if ( DominateLeft( origin, data[i]) && DominateLeft( data[i], data[query] ) ) {
 
-            uint32_t j;
-            for ( j = 0; j < closedoms.size(); ++j ) {
-                int dt_res = DominanceTest(data[i], closedoms.at( j ) );
-                if( dt_res == DOM_LEFT )
-                    break; //clearly not close dominating.
-                else if ( dt_res == DOM_RIGHT ) {
-                    closedoms.erase( closedoms.begin() + j ); //old point not close dominating.
+                uint32_t j;
+                for ( j = 0; j < closedoms.size(); ++j ) {
+                    int dt_res = DominanceTest(data[i], closedoms.at( j ) );
+                    if( dt_res == DOM_LEFT )
+                        break; //clearly not close dominating.
+                    else if ( dt_res == DOM_RIGHT ) {
+                        closedoms.erase( closedoms.begin() + j ); //old point not close dominating.
+                    }
+                }
+                if( j >= closedoms.size() ) 
+                closedoms.push_back( data[i] );
+            }
+        }
+        
+        // Initialize the dims
+        vector<uint32_t> dims;
+        dims.reserve( NUM_DIMS );
+        for(uint32_t i = 0; i < NUM_DIMS; ++i) { dims.push_back( i ); }
+        // Run PrioReA using q
+        float score = PrioReA(
+            closedoms,
+            q,
+            origin,
+            soln,
+            dims
+        );
+        
+        /* Prettyprint if it requries a change */
+        if(score > 0) {
+            printf("Query (q):       ");       
+            
+            data[query].printTuple(); 
+            printf("Solution (soln): ");
+            soln.printTuple();
+            printf("Score: %10.5f ", score);
+            for(int k = 0; k < NUM_DIMS; k++) {
+                if(soln.elems[k] > 0.0) {
+                    printf("   ^^^^^^^^^^ ");
+                } else {
+                    printf("              ");
                 }
             }
-            if( j >= closedoms.size() ) 
-            closedoms.push_back( data[i] );
-        }
+            printf("\n\n");
+        } 
     }
-    
-    vector<uint32_t> dims;
-    dims.reserve( NUM_DIMS );
-    for(uint32_t i = 0; i < NUM_DIMS; ++i) { dims.push_back( i ); }
-    /*
-    			hotels[h]["price"],
-			hotels[h]["beach"],
-			hotels[h]["downtown"],
-			maxPools-hotels[h]["pools"],
-			rating-hotels[h]["rating"],
-			maxStars-hotels[h]["stars"]
-     */
-    printf("Price/day | Dist. Beach | Dist. Downtown | 5-Num. pools | 10-Rating | 5-Stars\n");
-    printf("Query (q): ");
-    data[query].printTuple();
-    float score = PrioReA(
-        closedoms,
-        q,
-        origin,
-        soln,
-        dims
-    );
-    
-    printf("Score: %f\n", score);
-    printf("Solution (soln): ");
-    soln.printTuple();
     return 0;
 }
