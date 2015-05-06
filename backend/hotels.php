@@ -3,6 +3,7 @@ require_once("headers.php");
 $skyline = [];
 $notSkyline = [];
 
+
 // Get the hotels as a php-array
 $hotels = json_decode(file_get_contents("hotels.json"), true);
 $file = fopen('skyNot.csv', 'r');
