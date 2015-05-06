@@ -3,7 +3,7 @@
 import json
 from pprint import pprint
 from sys import argv
-from random import choice, randint
+from random import choice, randint, uniform
 from math import radians, cos, asin, sqrt
 
 ##
@@ -34,9 +34,40 @@ ratings = [
 ##
 #	Load the data
 ##
-with open('aarhus.json', 'rb') as f:
-	# Source: http://dawa.aws.dk/adresser?format=json&kommunekode=0751
-	data = json.load(f)
+try:
+	with open('aarhus.json', mode='rb') as f:
+		# Source: http://dawa.aws.dk/adresser?format=json&kommunekode=0751
+		print 'Loading json...'
+		data = json.load(f)
+except IOError:
+	import urllib2
+	url = "http://dawa.aws.dk/adresser?format=json&kommunekode=0751"
+
+	u = urllib2.urlopen(url)
+	with open('aarhus.json', 'wb') as f:
+		meta = u.info()
+		file_size = 466045503
+		print "Downloading aarhus.json (~488MB)"
+
+		file_size_dl = 0
+		block_sz = 8192
+		while True:
+			buffer = u.read(block_sz)
+			if not buffer:
+				break
+
+			file_size_dl += len(buffer)
+			f.write(buffer)
+			status = r"%10d  [%3.2f%%]" % (file_size_dl, file_size_dl * 100. / file_size)
+			status = status + chr(8)*(len(status)+1)
+			print status,
+	status = r"Done!"
+	print status + chr(8)*(len(status)+1),
+	print ''
+	
+	with open('aarhus.json', 'rb') as f:
+		print 'Loading json...'
+		data = json.load(f, encoding="utf8")
 
 ##
 #	Define functions
@@ -46,12 +77,15 @@ def get_data(address):
 	Extracts the coordinates and the address name, e.g.
 	Stationsvangen 81, 8541 Skødstrup at (10.3038663068088, 56.2617675784168)
 	"""
+	zipcode = int(address["adgangsadresse"]["postnummer"]["nr"])
+	if not (8000 <= zipcode <= 8270):
+		return None, None
 	coordinates = address["adgangsadresse"]["adgangspunkt"]["koordinater"]
 	address_text = "{:s} {:s}, {:s} {:s}".format(
-		address["adgangsadresse"]["vejstykke"]["navn"].encode('utf-8'),
+		address["adgangsadresse"]["vejstykke"]["navn"].encode("utf-8"),
 		address["adgangsadresse"]["husnr"],
 		address["adgangsadresse"]["postnummer"]["nr"],
-		address["adgangsadresse"]["postnummer"]["navn"].encode('utf-8')
+		address["adgangsadresse"]["postnummer"]["navn"].encode("utf-8")
 	)
 	return tuple(coordinates), address_text
 
@@ -75,17 +109,29 @@ def dist(a, b):
 	# Solve for d  using arcsine
 	d = 2*r*asin(sqrt(h))
 	return d
+	
 ##
 #	Generate the random hotels
 ##
+print "Generating random hotels..."
 hotels = dict()
+identifier = 0
 while len(hotels) != num_hotels:
 	res = get_data(choice(data))
-	hotels[res[1]] = {
-		"coordinates": res[0]
+	if res[0] is None:
+		continue
+	hotels[identifier] = {
+		"coordinates": res[0],
+		"address": res[1]
 	}
+	identifier += 1
 
+maxStars = 0
+maxPools = 0
+maxRating = 0
 for hotel in hotels.keys():
+	# price
+	hotels[hotel]["price"] = 20
 	# Calculate distances to sights/attractions
 	hotel_coord = hotels[hotel]["coordinates"]
 	for name, coord in dists.iteritems():
@@ -96,16 +142,49 @@ for hotel in hotels.keys():
 				d = dist(c, hotel_coord)
 				if d < minDist:
 					minDist = d
-			hotels[hotel][name] = d
 		else:
 			# Find dist
-			hotels[hotel][name] = dist(coord, hotel_coord)
+			d = dist(coord, hotel_coord)
+		hotels[hotel][name] = d
+		hotels[hotel]["price"] += uniform(10,15)/d
 	# Rate the hotel
-	hotels[hotel]["rating"] = choice(ratings)
+	rating = choice(ratings)
+	hotels[hotel]["rating"] = rating
+	if maxRating < rating:
+		maxRating = rating
 	# Give it stars
-	hotels[hotel]["stars"] = randint(1,5)
-	# TODO: Give it a price depending on the above
-pprint(hotels)
+	stars = randint(1,5)
+	hotels[hotel]["stars"] = stars
+	hotels[hotel]["price"] += stars*uniform(15, 25)
+	if maxStars < stars:
+		maxStars = stars
+	# It might have some pools
+	pools = randint(0,5)
+	hotels[hotel]["pools"] = pools
+	hotels[hotel]["price"] += pools * uniform(4,6)
+	if maxPools < pools:
+		maxPools = pools
+##
+#	Dump the result
+##
+print "Dumps hotels"
+with open('hotels.json', 'wb') as f:
+	f.write(json.dumps(hotels, ensure_ascii=False))
+	
+with open('hotels.csv', 'wb') as f:
+	formatted = ",".join(["{:f}"]*(len(hotels[0])-2)) + "\n"
+	print formatted
+	for h in hotels.keys():
+		# TODO: This is hardcoded
+		print hotels[h]
+		f.write(formatted.format(
+			hotels[h]["price"],
+			hotels[h]["beach"],
+			hotels[h]["downtown"],
+			maxPools-hotels[h]["pools"],
+			maxRating-hotels[h]["rating"],
+			maxStars-hotels[h]["stars"]
+		))
 	
 	
 	
