@@ -36,7 +36,7 @@ typedef struct TUPLE {
     void printTuple() {
         printf( "[" );
         for (uint32_t i = 0; i < NUM_DIMS; ++i)
-            printf( "%.16f ", elems[i] );
+            printf( "%13.8f ", elems[i] );
         printf( "]\n" );
     }
 
