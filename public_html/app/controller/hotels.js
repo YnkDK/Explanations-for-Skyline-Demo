@@ -1,6 +1,7 @@
 controllers.HotelsController = function ($scope, $resource, $location, $filter) {
     $scope.oneAtATime = true;
-    var url = "http://" + $location.host() + ":" + $location.port() + '/Explanations-for-Skyline-Demo/backend/hotels.php';
+    var urlHotelData = "http://" + $location.host() + ":" + $location.port() + '/Explanations-for-Skyline-Demo/backend/hotels.php';
+    var urlDefaultData = "http://" + $location.host() + ":" + $location.port() + '/Explanations-for-Skyline-Demo/backend/ranges.php';
     $scope.stars = [
         1, 2, 3, 4, 5
     ];
@@ -12,39 +13,35 @@ controllers.HotelsController = function ($scope, $resource, $location, $filter) 
     $scope.numPerPage = 5;
     $scope.order = 'beach';
 
-    // Default settings for the query
-    $scope.data = {
-        price: true,
-        priceFrom: 100,
-        priceTo: 500,
+    // Load default settings for the query
+    $resource(urlDefaultData).get(
+        {}
+        , function (values) {
 
-        beach: true,
-        beachFrom: 0.0,
-        beachTo: 2.0,
+            $scope.data = values.data;
 
-        downtown: true,
-        downtownFrom: 0.0,
-        downtownTo: 1.5,
+            $scope.data.priceFrom = parseInt(Math.floor(values.data.priceFrom / 10) * 10);
+            $scope.data.priceTo = parseInt(Math.ceil(values.data.priceTo / 10) * 10);
 
-        pools: true,
-        poolsFrom: 0,
-        poolsTo: 10,
+            $scope.data.beachFrom = Math.floor(values.data.beachFrom);
+            $scope.data.beachTo = Math.ceil(values.data.beachTo);
 
-        ratings: true,
-        ratingsFrom: 3,
-        ratingsTo: 5,
+            $scope.data.downtownFrom = Math.floor(values.data.downtownFrom);
+            $scope.data.downtownTo = Math.ceil(values.data.downtownTo);
 
-        stars: true,
-        starsFrom: 0,
-        starsTo: 5
-    };
+        }, function (error) {
+            alert("The server did not respond. See console for more info.");
+            console.log(error);
+        });
+
+
 
     /**
      * Sends the query to backend and update the accordions
      * with the result
      */
     $scope.query = function () {
-        $resource(url).get(
+        $resource(urlHotelData).get(
             $scope.data
             , function (values) {
                 $scope.inSkyline = values.skyline;
@@ -54,9 +51,14 @@ controllers.HotelsController = function ($scope, $resource, $location, $filter) 
                 $scope.status.isSecondOpen = true;
 
             }, function (error) {
-                alert("That's an error. See console for more info.");
+                alert("The server did not respond. See console for more info.");
                 console.log(error);
             });
+
+        if($scope.currentSkyNot !== undefined){
+            resetPreviousDataValues();
+        }
+
     };
 
     $scope.status = {
@@ -80,6 +82,46 @@ controllers.HotelsController = function ($scope, $resource, $location, $filter) 
     };
 
     $scope.skyNot = function(hotel) {
-        alert("You have clicked on this hotel: " + hotel.address);
+        console.log(hotel);
+        $scope.notSkyline = [];
+        $scope.filteredNotSkyline = [];
+        $scope.status.isSecondOpen = false;
+
+        //Current data
+        $scope.currentSkyNot = {
+            priceFrom : (hotel.snPrice === 0) ? '' : $scope.data.priceFrom,
+            beachFrom : (hotel.snBeach === 0) ? '' : $scope.data.beachFrom,
+            downtownFrom : (hotel.snDowntown === 0) ? '' :  $scope.data.downtownFrom,
+            poolsTo : (hotel.snPools === 0) ? '' : $scope.data.poolsTo,
+            ratingsTo : (hotel.snRating === 0) ? '' : $scope.data.ratingTo,
+            starsTo : (hotel.snStars === 0) ? '' : $scope.data.starsTo
+        };
+
+        $scope.data.priceFrom += hotel.snPrice;
+        $scope.data.priceTo = ($scope.data.priceTo < $scope.data.priceFrom ? $scope.data.priceFrom : $scope.data.priceTo);
+
+        $scope.data.beachFrom += hotel.snBeach;
+        $scope.data.beachTo = ($scope.data.beachTo < $scope.data.beachFrom ? $scope.data.beachFrom : $scope.data.beachTo);
+
+        $scope.data.downtownFrom += hotel.snDowntown;
+        $scope.data.downtownTo = ($scope.data.downtownTo < $scope.data.downtownFrom ? $scope.data.downtownFrom : $scope.data.downtownTo);
+
+        $scope.data.poolsTo -= hotel.snPools;
+        $scope.data.poolsFrom = ($scope.data.poolsFrom > $scope.data.poolsTo ? $scope.data.poolsTo : $scope.data.poolsFrom);
+
+        $scope.data.ratingTo -= hotel.snRating;
+        $scope.data.ratingFrom = ($scope.data.ratingFrom > $scope.data.ratingTo ? $scope.data.ratingTo : $scope.data.ratingFrom);
+
+        $scope.data.starsTo -= hotel.snStars;
+        $scope.data.starsFrom = ($scope.data.starsFrom > $scope.data.starsTo ? $scope.data.starsTo : $scope.data.starsFrom);
+    };
+
+    function resetPreviousDataValues(){
+        $scope.currentSkyNot.priceFrom = "";
+        $scope.currentSkyNot.beachFrom = "";
+        $scope.currentSkyNot.downtownFrom = "";
+        $scope.currentSkyNot.poolsTo = "";
+        $scope.currentSkyNot.ratingsTo = "";
+        $scope.currentSkyNot.starsTo = "";
     }
 };

@@ -1,55 +1,69 @@
 <div class="row">
-    <div class="well well-lg col-sm-4">
-        Here the change in q_L is shown
-    </div>
-    <div class="well well-lg col-sm-8">
+    <!--<div class="well well-lg col-sm-4">-->
+        <!--Here the change in q_L is shown-->
+    <!--</div>-->
+    <div class="well well-lg col-sm-12">
         <table class="table">
             <tr>
+                <th>Attribute</th>
                 <th></th>
                 <th class="text-center">From</th>
+                <th></th>
                 <th></th>
                 <th class="text-center">To</th>
                 <th class="text-center" tooltip="Uses all data on attribute if unchecked">Include attr.</th>
             </tr>
             <tr>
                 <td class="text-left">Price ($)</td>
+                <td class="text-center"><span class="previous-data">{{currentSkyNot.priceFrom}}</span></td>
                 <td class="text-center"><input class="form-control" type="number" step="10" min="0" max="{{data.priceTo}}" ng-model="data.priceFrom" ng-disabled="!data.price"></td>
                 <td class="text-center">-</td>
+                <td class="text-center"></td>
                 <td class="text-center"><input class="form-control" type="number" step="10" min="{{data.priceFrom}}" ng-model="data.priceTo" ng-disabled="!data.price"></td>
                 <td class="text-center"><input type="checkbox" ng-model="data.price"></td>
             </tr>
             <tr>
                 <td class="text-left">Dist. beach (km)</td>
+                <td class="text-center"><span class="previous-data">{{currentSkyNot.beachFrom}}</span></td>
                 <td class="text-center"><input class="form-control" type="number" step="0.1" min="0" max="{{data.beachTo}}" ng-model="data.beachFrom" ng-disabled="!data.beach"></td>
                 <td class="text-center">-</td>
+                <td class="text-center"></td>
                 <td class="text-center"><input class="form-control" type="number" step="0.1" min="{{data.beachFrom}}" ng-model="data.beachTo" ng-disabled="!data.beach"></td>
                 <td class="text-center"><input type="checkbox" ng-model="data.beach"></td>
             </tr>
             <tr>
                 <td class="text-left">Dist. downtown (km)</td>
+                <td class="text-center"><span class="previous-data">{{currentSkyNot.downtownFrom}}</span></td>
                 <td class="text-center"><input class="form-control" type="number" step="0.1" min="0" max="{{data.downtownTo}}" ng-model="data.downtownFrom" ng-disabled="!data.downtown"></td>
                 <td class="text-center">-</td>
+                <td class="text-center"></td>
                 <td class="text-center"><input class="form-control" type="number" step="0.1" min="{{data.downtownFrom}}" ng-model="data.downtownTo" ng-disabled="!data.downtown"></td>
                 <td class="text-center"><input type="checkbox" ng-model="data.downtown"></td>
             </tr>
             <tr>
                 <td class="text-left">Num. pools</td>
+                <td class="text-center"></td>
                 <td class="text-center"><input class="form-control" type="number" step="1" min="0" max="{{data.poolsTo}}" ng-model="data.poolsFrom" ng-disabled="!data.pools"></td>
                 <td class="text-center">-</td>
+                <td class="text-center"><span class="previous-data">{{currentSkyNot.poolsTo}}</span></td>
                 <td class="text-center"><input class="form-control" type="number" step="1" min="{{data.poolsFrom}}" ng-model="data.poolsTo" ng-disabled="!data.pools"></td>
                 <td class="text-center"><input type="checkbox" ng-model="data.pools"></td>
             </tr>
             <tr>
                 <td class="text-left">User rating</td>
-                <td class="text-center"><input class="form-control" type="number" step="0.5" min="0" max="{{data.ratingsTo}}" ng-model="data.ratingsFrom" ng-disabled="!data.ratings"></td>
+                <td class="text-center"></td>
+                <td class="text-center"><input class="form-control" type="number" step="0.5" min="0" max="{{data.ratingTo}}" ng-model="data.ratingFrom" ng-disabled="!data.rating"></td>
                 <td class="text-center">-</td>
-                <td class="text-center"><input class="form-control" type="number" step="0.5" min="{{data.ratingsFrom}}" max="5" ng-model="data.ratingsTo" ng-disabled="!data.ratings"></td>
-                <td class="text-center"><input type="checkbox" ng-model="data.ratings"></td>
+                <td class="text-center"><span class="previous-data">{{currentSkyNot.ratingsTo}}</span></td>
+                <td class="text-center"><input class="form-control" type="number" step="0.5" min="{{data.ratingFrom}}" max="5" ng-model="data.ratingTo" ng-disabled="!data.rating"></td>
+                <td class="text-center"><input type="checkbox" ng-model="data.rating"></td>
             </tr>
             <tr>
                 <td class="text-left">Stars</td>
+                <td class="text-center"></td>
                 <td class="text-center"><input class="form-control" type="number" step="1" min="0" max="{{data.starsTo}}" ng-model="data.starsFrom" ng-disabled="!data.stars"></td>
                 <td class="text-center">-</td>
+                <td class="text-center"><span class="previous-data">{{currentSkyNot.starsTo}}</span></td>
                 <td class="text-center"><input class="form-control" type="number" step="1" min="{{data.starsFrom}}" max="5" ng-model="data.starsTo" ng-disabled="!data.stars"></td>
                 <td class="text-center"><input type="checkbox" ng-model="data.stars"></td>
             </tr>
@@ -92,7 +106,9 @@
                           <td>{{hotel.downtown| number : 1}} km</td>
                           <td>{{hotel.pools}}</td>
                           <td>{{hotel.rating | number : 1}}</td>
-                          <td><span class="glyphicon glyphicon-star" ng-repeat="s in stars" ng-if="$index < hotel.stars"></span></td>
+                          <td>
+                              <span class="glyphicon glyphicon-star" ng-repeat="s in stars" ng-if="$index < hotel.stars"></span>
+                          </td>
                       </tr>
                   </table>
               </div>
@@ -140,7 +156,9 @@
                             <td>{{hotel.downtown| number : 1}} km</td>
                             <td>{{hotel.pools}}</td>
                             <td>{{hotel.rating | number : 1}}</td>
-                            <td><span class="glyphicon glyphicon-star" ng-repeat="s in stars" ng-if="$index < hotel.stars"></span></td>
+                            <td>
+                                <span class="glyphicon " ng-class="{'glyphicon-star' : $index < hotel.stars, 'glyphicon-star-empty' : !($index < hotel.stars)}" ng-repeat="s in stars"></span>
+                            </td>
                         </tr>
                     </table>
                 </div>
