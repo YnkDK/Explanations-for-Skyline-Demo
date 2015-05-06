@@ -1,4 +1,4 @@
-/* ---------------------------------------------------------------------------
+/* ------------------------------------------------------------------------------
 ** This software is implemented as part of a project at Aarhus Univerity Denmark. 
 **
 ** PrioReA.cpp
@@ -16,7 +16,7 @@
 ** Supervisors: Ira Assent and Sean Chester
 **
 ** 4th quarter 2015
-** -------------------------------------------------------------------------*/
+** ----------------------------------------------------------------------------*/
 
 //  Can at the momemnt compiles using
 //      g++ -c -std=c++11 PrioReA.cpp -DNUM_DIMS=6 
@@ -53,15 +53,18 @@ void sort_dims( const STUPLE &q, const STUPLE &o, vector<uint32_t> &dims ) {
     }
     dims.clear();
     for(map<float, uint32_t>::iterator it = m.begin(); it != m.end(); ++it ) {
+        // Push the dimensions back, now in sorted order    
         dims.push_back( it->second );
-      }
+    }
     return;
 }
 
 inline uint32_t getMinDim(const STUPLE &p, const STUPLE &origin, const vector<uint32_t> dims ) {
   uint32_t d = dims[0];
   for(uint32_t i = 1; i < dims.size(); ++i) {
-    if( p.elems[dims[i]] - origin.elems[dims[i]] < p.elems[d] - origin.elems[d] ) {  d = i; }
+    if( p.elems[dims[i]] - origin.elems[dims[i]] < p.elems[d] - origin.elems[d] ) {
+        d = i;
+    }
   }
   return d;
 }
@@ -75,8 +78,8 @@ void sortByDim( vector<STUPLE> &p, const STUPLE &o, const uint32_t d, const vect
         p[i].score = p[i].elems[d] - o.elems[d];
         const uint32_t min_d = getMinDim( p[i], o, dims );
         p[i].min_val = p[i].elems[min_d] - o.elems[min_d];
-      }
-      sort( p.begin(), p.end() );
+    }
+    sort( p.begin(), p.end() );
 }
 
 

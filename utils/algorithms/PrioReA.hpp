@@ -1,4 +1,4 @@
-/* ---------------------------------------------------------------------------
+/* ------------------------------------------------------------------------------
 ** This software is implemented as part of a project at Aarhus Univerity Denmark. 
 **
 ** PrioReA.hpp
@@ -16,7 +16,7 @@
 ** Supervisors: Ira Assent and Sean Chester
 **
 ** 4th quarter 2015
-** -------------------------------------------------------------------------*/
+** ----------------------------------------------------------------------------*/
 #include <map>
 #include <vector>
 #include <cstdint>
@@ -54,3 +54,6 @@ typedef struct STUPLE: TUPLE {
         return score > rhs.score;
     }
 } STUPLE;
+
+// Define the algorithm
+float PrioReA(  const vector<STUPLE> &points, const STUPLE &q, const STUPLE &origin, STUPLE &soln, vector<uint32_t> &dims );
