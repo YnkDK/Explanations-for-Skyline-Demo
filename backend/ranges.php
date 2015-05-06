@@ -3,7 +3,7 @@ require_once("headers.php");
 
 $hotels = json_decode(file_get_contents("hotels.json"), true);
 
-$range = [
+$range = array(
     "price" => TRUE,
     "priceFrom" => INF,
     "priceTo" => -INF,
@@ -22,7 +22,7 @@ $range = [
     "stars" => TRUE,
     "starsFrom" => INF,
     "starsTo" => -INF
-];
+);
 
 for($i = 0; $i < count($hotels); $i++) {
 // Set ranges, i.e. min/max for each attribute
@@ -69,6 +69,6 @@ for($i = 0; $i < count($hotels); $i++) {
     }
 }
 
-echo json_encode([
+echo json_encode(array(
     "data" => $range
-]);
+));

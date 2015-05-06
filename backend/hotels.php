@@ -1,7 +1,7 @@
 <?php
 require_once("headers.php");
-$skyline = [];
-$notSkyline = [];
+$skyline = array();
+$notSkyline = array();
 
 
 // Get the hotels as a php-array
@@ -25,7 +25,7 @@ while (($line = fgetcsv($file)) !== FALSE) {
     $i++;
 }
 
-echo json_encode([
+echo json_encode(array(
     "skyline" => $skyline,
     "notSkyline" => $notSkyline
-]);
+));
