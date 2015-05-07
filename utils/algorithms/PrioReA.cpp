@@ -20,12 +20,65 @@
 
 #include "PrioReA.hpp"
 
+/**
+ *	Get a tuple
+ */
+STUPLE PrioReA::get(uint32_t pid) {
+	if(pid > this->n) {
+		fprintf(stderr, "Index out of bounds (Request: %d Max: %d)\n", pid, this->n-1);
+		STUPLE err = STUPLE();
+		err.pid = -1;
+		return err;
+	}
+	return this->data[pid];
+}
 
-float PrioReA(  const vector<STUPLE> &points,   //< All points within q_L and q_U
-                const STUPLE &q,                //< The query
-                const STUPLE &origin,           //<
-                STUPLE &soln,                   //< The solution
-                vector<uint32_t> &dims ) {      //<
+/**
+ *	Prepare the query, prune by finding close dominations
+ */
+float PrioReA::query(const STUPLE &q, STUPLE &soln) {
+	const int pid = q.pid;
+    STUPLE origin;
+    /* Init origin to (0, ..., 0). */
+    for(uint32_t i = 0; i < this->num_dims; ++i ) { origin.elems[i] = 0.0; }
+
+	/* Init dims */
+    vector<uint32_t> dims;
+    dims.reserve( NUM_DIMS );
+    for(uint32_t i = 0; i < NUM_DIMS; ++i) { dims.push_back( i ); }
+    
+    /* Corresponds to McSky::getCloseDoms */
+	vector<STUPLE> closedoms;
+	for ( int i = 0; i < (int)this->n; ++i ) {
+    	
+		if ( i == pid ) continue; // don't compare to oneself.
+		if ( DominateLeft( origin, this->data[i]) && DominateLeft( this->data[i], this->data[pid] ) ) {
+   			uint32_t j;
+            for ( j = 0; j < closedoms.size(); ++j ) {
+                int dt_res = DominanceTest(this->data[i], closedoms.at( j ) );
+                if( dt_res == DOM_LEFT )
+                    break; //clearly not close dominating.
+                else if ( dt_res == DOM_RIGHT ) {
+                    closedoms.erase( closedoms.begin() + j ); //old point not close dominating.
+                }
+            }
+            if( j >= closedoms.size() ) {
+            	closedoms.push_back( this->data[i] );
+        	}     
+        }
+    }
+    
+	return this->alg(closedoms, q, origin, soln, dims);
+}
+
+/**
+ *	The actual algorithm
+ */
+float PrioReA::alg(	const vector<STUPLE> &points,   //< All points within q_L and q_U
+                	const STUPLE &q,                //< The query
+                	const STUPLE &origin,           //< (0,0,...,0)
+                	STUPLE &soln,                   //< The solution
+                	vector<uint32_t> &dims ) {      //<
 
     /* First base case: no points in this partition! */
     if( !points.size() ) {
@@ -48,7 +101,7 @@ float PrioReA(  const vector<STUPLE> &points,   //< All points within q_L and q_
             if( it->score + max < score ) {
                 STUPLE soln_recursion ( origin );
                 vector<uint32_t> dims_recursion ( dims_left );
-                float recurse_score = PrioReA(
+                float recurse_score = this->alg(
                     vector<STUPLE> ( mypoints.begin(), it ),
                     q,
                     origin,
