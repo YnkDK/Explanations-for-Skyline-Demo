@@ -1,5 +1,23 @@
 <?php
-
+/* ------------------------------------------------------------------------------
+** This software is implemented as part of a project at Aarhus Univerity Denmark.
+**
+** Point.php
+** Implementation of Prioritized Recursion Algorithm, which an adaption of the
+** work performed by:
+**
+** Sean Chester and Ira Assent. (2015).
+** "Explanations for skyline query results."
+** Proceedings of the 18th International Conference on Extending
+** DatabaseTechnology (EDBT 2015), pp. 349-360. DOI:  10.5441/002/edbt.2015.31
+**
+** Licensed under CC BY-NC 4.0
+**
+** Author: Martin Storgaard, Jesper M. Kristensen and Lars Christensen
+** Supervisors: Ira Assent and Sean Chester
+**
+** 4th quarter 2015
+** ----------------------------------------------------------------------------*/
 
 class Point {
     private static $tmp = 0;
