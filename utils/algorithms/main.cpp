@@ -48,7 +48,7 @@ int main(int argc, char **argv) {
 	PrioReA *pra = new PrioReA(lines);
 	// Get some query point
 	// TODO: Should be given from command-line
-	STUPLE q = pra->get(4);
+	STUPLE q = pra->get(atoi(argv[2]));
 	
 	STUPLE soln;
 	// Get the solution for this query point
