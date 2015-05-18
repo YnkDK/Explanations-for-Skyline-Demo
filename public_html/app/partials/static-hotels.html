@@ -17,12 +17,18 @@
                 <td class="text-left">Price ($)</td>
                 <td class="text-center"><span class="previous-data">{{currentSkyNot.priceFrom}}</span></td>
                 <td class="text-center">
-                    <input class="form-control" type="number" step="10" min="0" max="{{data.priceTo}}" ng-model="data.priceFrom" ng-disabled="!data.price">
+                    <div class="input-wrapper">
+                        <span class="no-form-control text-left" ng-click="edit.priceFrom = true" ng-hide="!data.price || edit.priceFrom">{{data.priceFrom | number:2}}</span>
+                        <input ng-blur="edit.priceFrom = false" class="form-control" type="number" step="10" min="0" max="{{data.priceTo}}" ng-model="data.priceFrom" ng-disabled="!data.price" value="{{data.priceFrom | number:2}}">
+                    </div>
                 </td>
                 <td class="text-center">-</td>
                 <td class="text-center"></td>
                 <td class="text-center">
-                    <input class="form-control" type="number" step="10" min="{{data.priceFrom}}" ng-model="data.priceTo" ng-disabled="!data.price">
+                    <div class="input-wrapper">
+                        <span class="no-form-control text-left" ng-click="edit.priceTo = true" ng-hide="!data.price || edit.priceTo">{{data.priceTo | number:2}}</span>
+                        <input ng-blur="edit.priceTo = false" class="form-control" type="number" step="10" min="{{data.priceFrom}}" ng-model="data.priceTo" ng-disabled="!data.price" value="{{data.priceTo | number:2}}">
+                    </div>
                 </td>
                 <td class="text-center"><input type="checkbox" ng-model="data.price"></td>
             </tr>
@@ -31,14 +37,17 @@
                 <td class="text-center"><span class="previous-data">{{currentSkyNot.beachFrom | number:1}}</span></td>
                 <td class="text-center">
                     <div class="input-wrapper">
-                        <span class="no-form-control text-left" ng-click="edit.beachTo = true" ng-hide="!data.beach || edit.beachTo">{{data.beachFrom | number:2}}</span>
-                        <input ng-blur="edit.beachTo = false" class="form-control" type="number" step="0.1" min="0" max="{{data.beachTo}}" ng-model="data.beachFrom" ng-disabled="!data.beach" value="{{data.beachFrom | number:2}}">
+                        <span class="no-form-control text-left" ng-click="edit.beachFrom = true" ng-hide="!data.beach || edit.beachFrom">{{data.beachFrom | number:2}}</span>
+                        <input ng-blur="edit.beachFrom = false" class="form-control" type="number" step="0.1" min="0" max="{{data.beachTo}}" ng-model="data.beachFrom" ng-disabled="!data.beach" value="{{data.beachFrom | number:2}}">
                     </div>
                 </td>
                 <td class="text-center">-</td>
                 <td class="text-center"></td>
                 <td class="text-center">
-                    <input class="form-control" type="number" step="0.1" min="{{data.beachFrom}}" ng-model="data.beachTo" ng-disabled="!data.beach">
+                    <div class="input-wrapper">
+                        <span class="no-form-control text-left" ng-click="edit.beachTo = true" ng-hide="!data.downtown || edit.beachTo">{{data.beachTo | number:2}}</span>
+                        <input ng-blur="edit.beachTo = false" class="form-control" type="number" step="0.1" min="{{data.beachFrom}}" ng-model="data.beachTo" ng-disabled="!data.beach" value="{{data.beachTo | number:2}}">
+                    </div>
                 </td>
                 <td class="text-center"><input type="checkbox" ng-model="data.beach"></td>
             </tr>
@@ -46,40 +55,76 @@
                 <td class="text-left">Dist. downtown (km)</td>
                 <td class="text-center"><span class="previous-data">{{currentSkyNot.downtownFrom}}</span></td>
                 <td class="text-center">
-                    <input class="form-control" type="number" step="0.1" min="0" max="{{data.downtownTo}}" ng-model="data.downtownFrom" ng-disabled="!data.downtown">
+                    <div class="input-wrapper">
+                        <span class="no-form-control text-left" ng-click="edit.downtownFrom = true" ng-hide="!data.downtown || edit.downtownFrom">{{data.downtownFrom | number:2}}</span>
+                        <input ng-blur="edit.downtownFrom = false" class="form-control" type="number" step="0.1" min="0" max="{{data.downtownTo}}" ng-model="data.downtownFrom" ng-disabled="!data.downtown" value="{{data.downtownFrom | number:2}}">
+                    </div>
                 </td>
                 <td class="text-center">-</td>
                 <td class="text-center"></td>
                 <td class="text-center">
-                    <input class="form-control" type="number" step="0.1" min="{{data.downtownFrom}}" ng-model="data.downtownTo" ng-disabled="!data.downtown">
+                    <div class="input-wrapper">
+                        <span class="no-form-control text-left" ng-click="edit.downtownTo = true" ng-hide="!data.downtown || edit.downtownTo">{{data.downtownTo | number:2}}</span>
+                        <input ng-blur="edit.downtownTo = false" class="form-control" type="number" step="0.1" min="{{data.downtownFrom}}" ng-model="data.downtownTo" ng-disabled="!data.downtown" value="{{data.downtownTo | number:2}}">
+                    </div>
                 </td>
                 <td class="text-center"><input type="checkbox" ng-model="data.downtown"></td>
             </tr>
             <tr>
                 <td class="text-left">Num. pools</td>
                 <td class="text-center"></td>
-                <td class="text-center"><input class="form-control" type="number" step="1" min="0" max="{{data.poolsTo}}" ng-model="data.poolsFrom" ng-disabled="!data.pools"></td>
+                <td class="text-center">
+                    <div class="input-wrapper">
+                        <span class="no-form-control text-left" ng-click="edit.poolsFrom = true" ng-hide="!data.pools || edit.poolsFrom">{{data.poolsFrom | number:2}}</span>
+                        <input ng-blur="edit.poolsFrom = false" class="form-control" type="number" step="1" min="0" max="{{data.poolsTo}}" ng-model="data.poolsFrom" ng-disabled="!data.pools" value="{{data.poolsFrom | number:2}}">
+                    </div>
+                </td>
                 <td class="text-center">-</td>
                 <td class="text-center"><span class="previous-data">{{currentSkyNot.poolsTo}}</span></td>
-                <td class="text-center"><input class="form-control" type="number" step="1" min="{{data.poolsFrom}}" ng-model="data.poolsTo" ng-disabled="!data.pools"></td>
+                <td class="text-center">
+                    <div class="input-wrapper">
+                        <span class="no-form-control text-left" ng-click="edit.poolsTo = true" ng-hide="!data.pools || edit.poolsTo">{{data.poolsTo | number:2}}</span>
+                        <input ng-blur="edit.poolsTo = false" class="form-control" type="number" step="1" min="{{data.poolsFrom}}" ng-model="data.poolsTo" ng-disabled="!data.pools" value="{{data.poolsTo | number:2}}">
+                    </div>
+                </td>
                 <td class="text-center"><input type="checkbox" ng-model="data.pools"></td>
             </tr>
             <tr>
                 <td class="text-left">User rating</td>
                 <td class="text-center"></td>
-                <td class="text-center"><input class="form-control" type="number" step="0.5" min="0" max="{{data.ratingTo}}" ng-model="data.ratingFrom" ng-disabled="!data.rating"></td>
+                <td class="text-center">
+                    <div class="input-wrapper">
+                        <span class="no-form-control text-left" ng-click="edit.ratingFrom = true" ng-hide="!data.rating || edit.ratingFrom">{{data.ratingFrom | number:2}}</span>
+                        <input ng-blur="edit.ratingFrom = false" class="form-control" type="number" step="0.5" min="0" max="{{data.ratingTo}}" ng-model="data.ratingFrom" ng-disabled="!data.rating" value="{{data.ratingFrom | number:2}}">
+                    </div>
+                </td>
                 <td class="text-center">-</td>
                 <td class="text-center"><span class="previous-data">{{currentSkyNot.ratingTo}}</span></td>
-                <td class="text-center"><input class="form-control" type="number" step="0.5" min="{{data.ratingFrom}}" max="5" ng-model="data.ratingTo" ng-disabled="!data.rating"></td>
+                <td class="text-center">
+                    <div class="input-wrapper">
+                        <span class="no-form-control text-left" ng-click="edit.ratingTo = true" ng-hide="!data.rating || edit.ratingTo">{{data.ratingTo | number:2}}</span>
+                        <input ng-blur="edit.ratingTo = false" class="form-control" type="number" step="0.5" min="{{data.ratingFrom}}" max="5" ng-model="data.ratingTo" ng-disabled="!data.rating" value="{{data.ratingTo | number:2}}">
+                    </div>
+                </td>
                 <td class="text-center"><input type="checkbox" ng-model="data.rating"></td>
             </tr>
             <tr>
                 <td class="text-left">Stars</td>
                 <td class="text-center"></td>
-                <td class="text-center"><input class="form-control" type="number" step="1" min="0" max="{{data.starsTo}}" ng-model="data.starsFrom" ng-disabled="!data.stars"></td>
+                <td class="text-center">
+                    <div class="input-wrapper">
+                        <span class="no-form-control text-left" ng-click="edit.starsFrom = true" ng-hide="!data.stars || edit.starsFrom">{{data.starsFrom | number:2}}</span>
+                        <input ng-blur="edit.starsFrom = false" class="form-control" type="number" step="1" min="0" max="{{data.starsTo}}" ng-model="data.starsFrom" ng-disabled="!data.stars" value="{{data.starsFrom | number:2}}">
+                    </div>
+                </td>
                 <td class="text-center">-</td>
                 <td class="text-center"><span class="previous-data">{{currentSkyNot.starsTo}}</span></td>
-                <td class="text-center"><input class="form-control" type="number" step="1" min="{{data.starsFrom}}" max="5" ng-model="data.starsTo" ng-disabled="!data.stars"></td>
+                <td class="text-center">
+                    <div class="input-wrapper">
+                        <span class="no-form-control text-left" ng-click="edit.starsTo = true" ng-hide="!data.stars || edit.starsTo">{{data.starsTo | number:2}}</span>
+                        <input ng-blur="edit.starsTo = false" class="form-control" type="number" step="1" min="{{data.starsFrom}}" max="5" ng-model="data.starsTo" ng-disabled="!data.stars" value="{{data.starsTo | number:2}}">
+                    </div>
+                </td>
                 <td class="text-center"><input type="checkbox" ng-model="data.stars"></td>
             </tr>
         </table>
