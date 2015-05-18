@@ -7,26 +7,8 @@ $database = new Data();
 
 $skyline = array();
 $notSkyline = array();
-/*
-    [beach] => true
-    [beachFrom] => 0
-    [beachTo] => 17
-    [downtown] => true
-    [downtownFrom] => 0
-    [downtownTo] => 13
-    [pools] => true
-    [poolsFrom] => 0
-    [poolsTo] => 5
-    [price] => true
-    [priceFrom] => 30
-    [priceTo] => 630
-    [rating] => true
-    [ratingFrom] => 0
-    [ratingTo] => 10
-    [stars] => true
-    [starsFrom] => 1
-    [starsTo] => 5
-*/
+
+// Define the user-specified ranges
 $ranges = array();
 if(strcmp($_GET['beach'], 'true') === 0) {
     $ranges['beach'] = array($_GET['beachFrom'], $_GET['beachTo'], 'MIN');
@@ -46,7 +28,7 @@ if(strcmp($_GET['rating'], 'true') === 0) {
 if(strcmp($_GET['stars'], 'true') === 0) {
     $ranges['stars'] = array($_GET['starsFrom'], $_GET['starsTo'], 'MAX');
 }
-
+// Get all hotels within the above ranges
 $hotels = $database->query($ranges);
 
 // Prepare for PrioReA
@@ -58,6 +40,7 @@ foreach($hotels as $id => $value) {
         if($v[2] === 'MIN') {
             array_push($tmp, $value[$k]);
         } elseif($v[2] === 'MAX') {
+            // Solve the dual to maximize a value
             array_push($tmp, floatval($extremes[$k][1]) - floatval($value[$k]));
         }
     }
@@ -67,13 +50,19 @@ foreach($hotels as $id => $value) {
 // Setup PrioReA
 $skyNot = new PrioReA($data);
 foreach($hotels as $id => $value) {
+    // Get the Point-object corresponding to the current hotel
     $q = $skyNot->getPoint($id);
+    // Ensure that we actual did find a hotel
     if($q === NULL) {
         continue;
     }
+    // Start with an optimal solution
     $s = new Point(array_fill(0, count($ranges), 0));
+    // Query the PrioReA
     $score = floatval($skyNot->query($q, $s));
+    // Set the score for this hotel
     $hotels[$id]["score"] = $score;
+    // Add the sky-not value for each attribute
     $i = 0;
     foreach($ranges as $k=>$v) {
         if($s->getElements()[$i] > 0.0) {
@@ -84,35 +73,14 @@ foreach($hotels as $id => $value) {
 
         $i++;
     }
+    // Determine this hotel is in the skyline
     if($score === 0.0) {
         array_push($skyline, $hotels[$id]);
     } else {
         array_push($notSkyline, $hotels[$id]);
     }
 }
-// Get the hotels as a php-array
-/*
-$hotels = json_decode(file_get_contents("hotels.json"), true);
-$file = fopen('skyNot.csv', 'r');
-
-$i = 0;
-while (($line = fgetcsv($file)) !== FALSE) {
-    $hotels[$i]["snPrice"]    = floatval($line[0]);
-    $hotels[$i]["snBeach"]    = floatval($line[1]);
-    $hotels[$i]["snDowntown"] = floatval($line[2]);
-    $hotels[$i]["snPools"]    = intval($line[3]);
-    $hotels[$i]["snRating"]   = floatval($line[4]);
-    $hotels[$i]["snStars"]    = intval($line[5]);
-
-    if(intval($line[0])+intval($line[1])+intval($line[2])+intval($line[3])+intval($line[4])+intval($line[5]) === 0) {
-        array_push($skyline, $hotels[$i]);
-    } else {
-        array_push($notSkyline, $hotels[$i]);
-    }
-    $i++;
-}
-
-*/
+// Return the result as a nice JSON
 echo json_encode(array(
     "skyline" => $skyline,
     "notSkyline" => $notSkyline
