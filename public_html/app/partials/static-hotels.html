@@ -92,6 +92,24 @@
     Open only one at a time
   </label>
 
+<div class="btn-group" dropdown dropdown-append-to-body>
+    <button type="button" class="btn btn-primary dropdown-toggle" dropdown-toggle>
+        Søg efter hotel adresse: <span
+            class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+        <li class="input-group input-group-sm search-control">
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </span>
+            <input type="text" ng-click="$event.stopPropagation();" class="form-control" placeholder="Søg" ng-model="hotelQuery">
+        </li>
+        <li ng-repeat="h in inSkyline.concat(notSkyline) | filter:hotelQuery">
+            <a href ng-click="findHotel(h)">{{ h.address }}</a>
+        </li>
+    </ul>
+</div>
+
   <accordion close-others="oneAtATime">
     <accordion-group tooltip="{{inSkyline.length > 0 ?  '' : 'You have to make a query'}}" is-open="status.isFirstOpen" is-disabled="inSkyline.length === 0">
     <accordion-heading ng-click="isopen=!isopen">
@@ -150,7 +168,7 @@
                 <li><a href ng-click="sortBy('score', false)">Sky-not score</a></li>
             </ul>
         </div>
-        <div class="well well-lg pointer" ng-repeat="hotel in filteredNotSkyline" ng-click="skyNot(hotel)">
+        <div id="{{hotel.address}}" class="well well-lg pointer" ng-class="{'green-border' : hotel.highlight}" ng-repeat="hotel in filteredNotSkyline" ng-click="skyNot(hotel)">
             <div class="row">
                 <div class="col-sm-3">
                     <img class="img-responsive img-thumbnail" src="img/hotel.png" alt="IMG">
