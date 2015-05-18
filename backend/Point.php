@@ -31,7 +31,7 @@ class Point {
      * @param array|$elements The elements of this point
      */
     function __construct(array $elements) {
-        $this->elements = $elements;
+        $this->elements = array_map("floatval", $elements);
         $this->min_value = INF;
         $this->pid = self::$tmp;
         self::$tmp++;
@@ -79,7 +79,6 @@ class Point {
                 return true;
             }
         }
-        echo "Points are equal<br>";
         return false; // Points are equal
     }
 
@@ -119,6 +118,16 @@ class Point {
             printf("%13.8f ", $e);
         }
         printf("]\n");
+    }
+
+    public function toJSON($keys) {
+        $out = array();
+        $i = 0;
+        foreach($keys as $k => $v) {
+            $out[$k] = $this->elements[$i];
+            $i++;
+        }
+        return json_encode($out);
     }
 
     /**

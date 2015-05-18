@@ -27,21 +27,36 @@ define("DOM_INCOMP", 2);
 class PrioReA {
     private $data;
     private $n;
-    private $num_dims;
+    private $reverse_lookup;
     /**
      * @param array|$data List of selected dimensions
      */
     function __construct(array &$data) {
         $this->data = array();
+        $i = 0;
         foreach($data as $key => $elements) {
-            $this->data[$key] = new Point($elements);
+            $this->data[$i] = new Point($elements);
+            $this->reverse_lookup[$key] = $i;
+            $i++;
         }
 
         $this->n = count($data);
     }
 
+
+    /**
+     * @param $index
+     * @return Point
+     */
     public function getPoint($index) {
-        return $this->data[$index];
+        if(!array_key_exists($index, $this->reverse_lookup)) {
+            return NULL;
+        }
+        $idx = $this->reverse_lookup[$index];
+        if(!array_key_exists($idx, $this->data)) {
+            return NULL;
+        }
+        return $this->data[$idx];
     }
 
     public function query(Point &$q, Point &$solution) {
@@ -50,7 +65,6 @@ class PrioReA {
         $origin = new Point(array_fill(0, $numDims, 0.0));
         // Init dims
         $dims = range(0, $numDims-1);
-
         $closeDoms = $this->getCloseDoms($q->getPid(), $origin);
         return $this->alg($closeDoms, $q, $origin, $solution, $dims);
     }

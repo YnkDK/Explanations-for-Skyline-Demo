@@ -41,6 +41,7 @@ controllers.HotelsController = function ($scope, $resource, $location, $filter) 
      * with the result
      */
     $scope.query = function () {
+        console.log($scope.data);
         $resource(urlHotelData).get(
             $scope.data
             , function (values) {
@@ -82,6 +83,7 @@ controllers.HotelsController = function ($scope, $resource, $location, $filter) 
     };
 
     $scope.skyNot = function(hotel) {
+        // TODO: Rewrite such that it works
         console.log(hotel);
         $scope.notSkyline = [];
         $scope.filteredNotSkyline = [];
@@ -97,22 +99,22 @@ controllers.HotelsController = function ($scope, $resource, $location, $filter) 
             starsTo : (hotel.snStars === 0) ? '' : $scope.data.starsTo
         };
 
-        $scope.data.priceFrom += hotel.snPrice;
+        $scope.data.priceFrom = (hotel.snPrice === 0) ? $scope.data.priceFrom : hotel.snPrice;
         $scope.data.priceTo = ($scope.data.priceTo < $scope.data.priceFrom ? $scope.data.priceFrom : $scope.data.priceTo);
 
-        $scope.data.beachFrom += hotel.snBeach;
+        $scope.data.beachFrom = (hotel.snBeach === 0) ? $scope.data.beachFrom : hotel.snBeach;
         $scope.data.beachTo = ($scope.data.beachTo < $scope.data.beachFrom ? $scope.data.beachFrom : $scope.data.beachTo);
 
-        $scope.data.downtownFrom += hotel.snDowntown;
+        $scope.data.downtownFrom = (hotel.snDowntown === 0) ? $scope.data.downtownFrom : hotel.snDowntown;
         $scope.data.downtownTo = ($scope.data.downtownTo < $scope.data.downtownFrom ? $scope.data.downtownFrom : $scope.data.downtownTo);
 
-        $scope.data.poolsTo -= hotel.snPools;
+        $scope.data.poolsTo = (hotel.snPools === 0) ? $scope.data.poolsTo : hotel.snPools;
         $scope.data.poolsFrom = ($scope.data.poolsFrom > $scope.data.poolsTo ? $scope.data.poolsTo : $scope.data.poolsFrom);
 
-        $scope.data.ratingTo -= hotel.snRating;
+        $scope.data.ratingTo = (hotel.snRating === 0) ? $scope.data.ratingTo : hotel.snRating;
         $scope.data.ratingFrom = ($scope.data.ratingFrom > $scope.data.ratingTo ? $scope.data.ratingTo : $scope.data.ratingFrom);
 
-        $scope.data.starsTo -= hotel.snStars;
+        $scope.data.starsTo = (hotel.snStars === 0) ? $scope.data.starsTo : hotel.snStars;
         $scope.data.starsFrom = ($scope.data.starsFrom > $scope.data.starsTo ? $scope.data.starsTo : $scope.data.starsFrom);
     };
 

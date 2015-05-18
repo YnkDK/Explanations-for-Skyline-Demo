@@ -54,7 +54,7 @@
                 <td class="text-center"></td>
                 <td class="text-center"><input class="form-control" type="number" step="0.5" min="0" max="{{data.ratingTo}}" ng-model="data.ratingFrom" ng-disabled="!data.rating"></td>
                 <td class="text-center">-</td>
-                <td class="text-center"><span class="previous-data">{{currentSkyNot.ratingsTo}}</span></td>
+                <td class="text-center"><span class="previous-data">{{currentSkyNot.ratingTo}}</span></td>
                 <td class="text-center"><input class="form-control" type="number" step="0.5" min="{{data.ratingFrom}}" max="5" ng-model="data.ratingTo" ng-disabled="!data.rating"></td>
                 <td class="text-center"><input type="checkbox" ng-model="data.rating"></td>
             </tr>
@@ -132,6 +132,7 @@
                 <li><a href ng-click="sortBy('pools', true)">Num. pools</a></li>
                 <li><a href ng-click="sortBy('rating', true)">User rating</a></li>
                 <li><a href ng-click="sortBy('stars', true)">Stars</a></li>
+                <li><a href ng-click="sortBy('score', false)">Sky-not score</a></li>
             </ul>
         </div>
         <div class="well well-lg pointer" ng-repeat="hotel in filteredNotSkyline" ng-click="skyNot(hotel)">

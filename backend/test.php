@@ -5,31 +5,40 @@
  * Date: 5/16/15
  * Time: 5:12 PM
  */
-
+echo '<html><body><pre>';
 require_once('headers.php');
 require_once('PrioReA.php');
+require_once('Data.php');
 
+$d = new Data();
+$query = array(
+    "price" => array(100, 300, 'MIN'),
+    "rating" => array(5, 10, 'MAX'),
+    "stars" => array(4, 5, 'MAX'),
+    "beach" => array(0, 2, 'MIN')
+);
+$extremes = $d->getExtremes();
+$hotels = $d->query($query);
+//print_r($hotels);
 $data = array();
-$file = fopen('hotels.csv', 'r');
-// TODO: Only push the values needed
-// TODO: Read values in a better way
-while (($line = fgetcsv($file)) !== FALSE) {
-    array_push($data, array(
-        floatval($line[0]),
-        floatval($line[1]),
-        floatval($line[2]),
-        floatval($line[3]),
-        floatval($line[4]),
-        floatval($line[5])
-    ));
+foreach($hotels as $id => $value) {
+    $tmp = array();
+    foreach($query as $k=>$v) {
+        if(count($v) < 3) $v[2] = 'MIN';
+        if($v[2] === 'MIN') {
+            array_push($tmp, $value[$k]);
+        } elseif($v[2] === 'MAX') {
+            array_push($tmp, $extremes[$k][1] - $value[$k]);
+        }
+    }
+    $data[$id] = $tmp;
 }
-$test = new PrioReA($data);
 
-$q = $test->getPoint(126);
-$s = new Point(array());
+$notsky = new PrioReA($data);
+$q = $notsky->getPoint(21);
+$s = new Point(array_fill(0, count($query), 0));
+$notsky->query($q, $s);
 
-echo '<pre>';
-echo 'Score: '.$test->query($q, $s);
-echo '<br>';
-$s->printPoint();
-echo '</pre>';
+print_r($s->toJSON($query));
+
+echo '</pre></body></html>';
