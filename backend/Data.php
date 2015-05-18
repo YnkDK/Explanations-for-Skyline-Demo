@@ -21,12 +21,6 @@ class Data {
     function __construct() {
         touch('index/hotels.bin');
         $this->hotels = unserialize(file_get_contents('index/hotels.bin'));
-
-        $this->openTrees();
-        if(!($this->bPrice && $this->bRating && $this->bDowntown && $this->bStars && $this->bPools && $this->bBeach)) {
-            die('One of the b+-trees could not be opened!');
-        }
-
     }
 
     /**
@@ -167,6 +161,11 @@ class Data {
      * @return array
      */
     public function query(array &$q) {
+        $this->openTrees();
+        if(!($this->bPrice && $this->bRating && $this->bDowntown && $this->bStars && $this->bPools && $this->bBeach)) {
+            die('One of the b+-trees could not be opened!');
+        }
+
         $result = array();
         foreach($q as $k => $v) {
             switch($k) {
