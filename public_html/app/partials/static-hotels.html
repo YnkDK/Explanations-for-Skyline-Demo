@@ -16,28 +16,43 @@
             <tr>
                 <td class="text-left">Price ($)</td>
                 <td class="text-center"><span class="previous-data">{{currentSkyNot.priceFrom}}</span></td>
-                <td class="text-center"><input class="form-control" type="number" step="10" min="0" max="{{data.priceTo}}" ng-model="data.priceFrom" ng-disabled="!data.price"></td>
+                <td class="text-center">
+                    <input class="form-control" type="number" step="10" min="0" max="{{data.priceTo}}" ng-model="data.priceFrom" ng-disabled="!data.price">
+                </td>
                 <td class="text-center">-</td>
                 <td class="text-center"></td>
-                <td class="text-center"><input class="form-control" type="number" step="10" min="{{data.priceFrom}}" ng-model="data.priceTo" ng-disabled="!data.price"></td>
+                <td class="text-center">
+                    <input class="form-control" type="number" step="10" min="{{data.priceFrom}}" ng-model="data.priceTo" ng-disabled="!data.price">
+                </td>
                 <td class="text-center"><input type="checkbox" ng-model="data.price"></td>
             </tr>
             <tr>
                 <td class="text-left">Dist. beach (km)</td>
-                <td class="text-center"><span class="previous-data">{{currentSkyNot.beachFrom}}</span></td>
-                <td class="text-center"><input class="form-control" type="number" step="0.1" min="0" max="{{data.beachTo}}" ng-model="data.beachFrom" ng-disabled="!data.beach"></td>
+                <td class="text-center"><span class="previous-data">{{currentSkyNot.beachFrom | number:1}}</span></td>
+                <td class="text-center">
+                    <div class="input-wrapper">
+                        <span class="no-form-control text-left" ng-click="edit.beachTo = true" ng-hide="!data.beach || edit.beachTo">{{data.beachFrom | number:2}}</span>
+                        <input ng-blur="edit.beachTo = false" class="form-control" type="number" step="0.1" min="0" max="{{data.beachTo}}" ng-model="data.beachFrom" ng-disabled="!data.beach" value="{{data.beachFrom | number:2}}">
+                    </div>
+                </td>
                 <td class="text-center">-</td>
                 <td class="text-center"></td>
-                <td class="text-center"><input class="form-control" type="number" step="0.1" min="{{data.beachFrom}}" ng-model="data.beachTo" ng-disabled="!data.beach"></td>
+                <td class="text-center">
+                    <input class="form-control" type="number" step="0.1" min="{{data.beachFrom}}" ng-model="data.beachTo" ng-disabled="!data.beach">
+                </td>
                 <td class="text-center"><input type="checkbox" ng-model="data.beach"></td>
             </tr>
             <tr>
                 <td class="text-left">Dist. downtown (km)</td>
                 <td class="text-center"><span class="previous-data">{{currentSkyNot.downtownFrom}}</span></td>
-                <td class="text-center"><input class="form-control" type="number" step="0.1" min="0" max="{{data.downtownTo}}" ng-model="data.downtownFrom" ng-disabled="!data.downtown"></td>
+                <td class="text-center">
+                    <input class="form-control" type="number" step="0.1" min="0" max="{{data.downtownTo}}" ng-model="data.downtownFrom" ng-disabled="!data.downtown">
+                </td>
                 <td class="text-center">-</td>
                 <td class="text-center"></td>
-                <td class="text-center"><input class="form-control" type="number" step="0.1" min="{{data.downtownFrom}}" ng-model="data.downtownTo" ng-disabled="!data.downtown"></td>
+                <td class="text-center">
+                    <input class="form-control" type="number" step="0.1" min="{{data.downtownFrom}}" ng-model="data.downtownTo" ng-disabled="!data.downtown">
+                </td>
                 <td class="text-center"><input type="checkbox" ng-model="data.downtown"></td>
             </tr>
             <tr>

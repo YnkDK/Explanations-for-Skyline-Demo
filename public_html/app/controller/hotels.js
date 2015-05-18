@@ -12,6 +12,7 @@ controllers.HotelsController = function ($scope, $resource, $location, $filter) 
     $scope.currentPage = 0;
     $scope.numPerPage = 5;
     $scope.order = 'beach';
+    $scope.edit = {};
 
     // Load default settings for the query
     $resource(urlDefaultData).get(
