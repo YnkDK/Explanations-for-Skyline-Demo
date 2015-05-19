@@ -71,6 +71,7 @@ class PrioReA {
 
     private function alg(array &$points, Point &$q, Point &$origin, Point &$solution, array &$dims) {
         if(count($points) === 0) {
+            $this->copyTuple($origin, $solution);
             return 0;
         }
         $myPoints = $points;
