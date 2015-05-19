@@ -47,3 +47,7 @@ body {
 .input-wrapper span {
     position: absolute;
 }
+
+.green-border {
+    border: 5px dashed darkseagreen;
+}
