@@ -33,7 +33,7 @@ struct membuf : std::streambuf
 
 int main(int argc, char **argv) {
     // TODO: Use arguments to select which dimensions that should be used
-    uint32_t query_index = atoi(argv[1]);
+    uint32_t pid = atoi(argv[1]);
     //
     std::string line = argv[2];
     std::stringstream ss(line);
@@ -49,21 +49,51 @@ int main(int argc, char **argv) {
     }
 
 
+    	STUPLE *data = new STUPLE[lines.size()];
+	/* Corresponds to McSky::Init  */
+	for(uint32_t i = 0; i < lines.size(); i++) {
+	    data[i].pid = i;
+	    for(uint32_t j = 0; j < NUM_DIMS; j++) {
+	        data[i].elems[j] = lines[i][j];
+	    }
+	}	
+	
+	STUPLE origin;
+    /* Init origin to (0, ..., 0). */
+    for(uint32_t i = 0; i < NUM_DIMS; ++i ) { origin.elems[i] = 0.0; }
+
+	/* Init dims */
+    vector<uint32_t> dims;
+    dims.reserve( NUM_DIMS );
+    for(uint32_t i = 0; i < NUM_DIMS; ++i) { dims.push_back( i ); }
     
-	// Initialize the algorithm
-	PrioReA *pra = new PrioReA(lines);
-	// Get some query point
-	// TODO: Should be given from command-line
-	STUPLE q = pra->get(query_index);
-	
+    /* Corresponds to McSky::getCloseDoms */
+	vector<STUPLE> closedoms;
+	for ( uint32_t i = 0; i < lines.size(); ++i ) {
+    	
+		if ( i == pid ) continue; // don't compare to oneself.
+		if ( DominateLeft( origin, data[i]) && DominateLeft( data[i], data[pid] ) ) {
+   			uint32_t j;
+            for ( j = 0; j < closedoms.size(); ++j ) {
+                int dt_res = DominanceTest(data[i], closedoms.at( j ) );
+                if( dt_res == DOM_LEFT )
+                    break; //clearly not close dominating.
+                else if ( dt_res == DOM_RIGHT ) {
+                    closedoms.erase( closedoms.begin() + j ); //old point not close dominating.
+                }
+            }
+            if( j >= closedoms.size() ) {
+            	closedoms.push_back( data[i] );
+        	}     
+        }
+    }
+    STUPLE q = data[pid];
 	STUPLE soln;
-	// Get the solution for this query point
-	float score = pra->query(q, soln);
-	// Print the result
-	// TODO: This should be an output understood by the backend
-	printf("Score: %f\n", score);
-	soln.printTuple();
-	
-	delete pra;
+	PrioReA(closedoms, q, origin, soln, dims);
+
+	for(int i = 0; i < NUM_DIMS-1; i++) {
+		std::cout << soln.elems[i] << ",";
+	}
+	std::cout << soln.elems[NUM_DIMS-1];
     return 0;
 }

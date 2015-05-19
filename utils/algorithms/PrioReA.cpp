@@ -21,64 +21,40 @@
 #include "PrioReA.hpp"
 
 /**
- *	Get a tuple
+ * Sorts tuples in p by dimension d, meanwhile updating their min distances from 
+ * the origin, o, with respect to other dimensions in dim.
  */
-STUPLE PrioReA::get(uint32_t pid) {
-	if(pid > this->n) {
-		fprintf(stderr, "Index out of bounds (Request: %d Max: %d)\n", pid, this->n-1);
-		STUPLE err = STUPLE();
-		err.pid = -1;
-		return err;
-	}
-	return this->data[pid];
-}
-
-/**
- *	Prepare the query, prune by finding close dominations
- */
-float PrioReA::query(const STUPLE &q, STUPLE &soln) {
-	const int pid = q.pid;
-    STUPLE origin;
-    /* Init origin to (0, ..., 0). */
-    for(uint32_t i = 0; i < this->num_dims; ++i ) { origin.elems[i] = 0.0; }
-
-	/* Init dims */
-    vector<uint32_t> dims;
-    dims.reserve( NUM_DIMS );
-    for(uint32_t i = 0; i < NUM_DIMS; ++i) { dims.push_back( i ); }
-    
-    /* Corresponds to McSky::getCloseDoms */
-	vector<STUPLE> closedoms;
-	for ( int i = 0; i < (int)this->n; ++i ) {
-    	
-		if ( i == pid ) continue; // don't compare to oneself.
-		if ( DominateLeft( origin, this->data[i]) && DominateLeft( this->data[i], this->data[pid] ) ) {
-   			uint32_t j;
-            for ( j = 0; j < closedoms.size(); ++j ) {
-                int dt_res = DominanceTest(this->data[i], closedoms.at( j ) );
-                if( dt_res == DOM_LEFT )
-                    break; //clearly not close dominating.
-                else if ( dt_res == DOM_RIGHT ) {
-                    closedoms.erase( closedoms.begin() + j ); //old point not close dominating.
-                }
-            }
-            if( j >= closedoms.size() ) {
-            	closedoms.push_back( this->data[i] );
-        	}     
-        }
+void sortByDim( vector<STUPLE> &p, const STUPLE &o, const uint32_t d, const vector<uint32_t> dims ) {
+    for (uint32_t i = 0; i < p.size(); ++i) {
+        p[i].score = p[i].elems[d] - o.elems[d];
+        const uint32_t min_d = getMinDim( p[i], o, dims );
+        p[i].min_val = p[i].elems[min_d] - o.elems[min_d];
     }
-    
-	return this->alg(closedoms, q, origin, soln, dims);
+    sort( p.begin(), p.end() );
 }
 
 /**
- *	The actual algorithm
+ * Selects the index of dims for the dimension in which q is closest to o and
+ * removes it from dims.
  */
-float PrioReA::alg(	const vector<STUPLE> &points,   //< All points within q_L and q_U
-                	const STUPLE &q,                //< The query
-                	const STUPLE &origin,           //< (0,0,...,0)
-                	STUPLE &soln,                   //< The solution
-                	vector<uint32_t> &dims ) {      //<
+void sort_dims( const STUPLE &q, const STUPLE &o, vector<uint32_t> &dims ) {
+    map<float, uint32_t> m;
+    for (uint32_t i = 0; i < dims.size(); ++i) {
+        m.insert( pair<float, uint32_t> ( q.elems[dims[i]] - o.elems[dims[i]], dims[i] ) );
+    }
+    dims.clear();
+    for(map<float, uint32_t>::iterator it = m.begin(); it != m.end(); ++it ) {
+        // Push the dimensions back, now in sorted order    
+        dims.push_back( it->second );
+    }
+    return;
+}
+
+float PrioReA(  const vector<STUPLE> &points,   //< All points within q_L and q_U
+                const STUPLE &q,                //< The query
+                const STUPLE &origin,           //<
+                STUPLE &soln,                   //< The solution
+                vector<uint32_t> &dims ) {      //<
 
     /* First base case: no points in this partition! */
     if( !points.size() ) {
@@ -101,7 +77,7 @@ float PrioReA::alg(	const vector<STUPLE> &points,   //< All points within q_L an
             if( it->score + max < score ) {
                 STUPLE soln_recursion ( origin );
                 vector<uint32_t> dims_recursion ( dims_left );
-                float recurse_score = this->alg(
+                float recurse_score = PrioReA(
                     vector<STUPLE> ( mypoints.begin(), it ),
                     q,
                     origin,

@@ -13,5 +13,11 @@ all: $(SRC)
 	$(CC) -o Sky3 $(CXXFLAGS) -DNUM_DIMS=3 main3.cpp PrioReA.cpp
 	$(CC) -o Sky2 $(CXXFLAGS) -DNUM_DIMS=2 main2.cpp PrioReA.cpp
 	$(CC) -o Sky1 $(CXXFLAGS) -DNUM_DIMS=1 main1.cpp PrioReA.cpp
+	mv Sky6 ../../backend/bin/Sky6
+	mv Sky5 ../../backend/bin/Sky5
+	mv Sky4 ../../backend/bin/Sky4
+	mv Sky3 ../../backend/bin/Sky3
+	mv Sky2 ../../backend/bin/Sky2
+	mv Sky1 ../../backend/bin/Sky1
 
 
