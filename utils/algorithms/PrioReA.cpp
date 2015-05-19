@@ -25,12 +25,14 @@
  * the origin, o, with respect to other dimensions in dim.
  */
 void sortByDim( vector<STUPLE> &p, const STUPLE &o, const uint32_t d, const vector<uint32_t> dims ) {
+	if(p.size() <= 1 || dims.size() == 0) return;
     for (uint32_t i = 0; i < p.size(); ++i) {
         p[i].score = p[i].elems[d] - o.elems[d];
         const uint32_t min_d = getMinDim( p[i], o, dims );
         p[i].min_val = p[i].elems[min_d] - o.elems[min_d];
     }
     sort( p.begin(), p.end() );
+    
 }
 
 /**
@@ -55,7 +57,7 @@ float PrioReA(  const vector<STUPLE> &points,   //< All points within q_L and q_
                 const STUPLE &origin,           //<
                 STUPLE &soln,                   //< The solution
                 vector<uint32_t> &dims ) {      //<
-
+	
     /* First base case: no points in this partition! */
     if( !points.size() ) {
         copyTuple( origin, soln );
@@ -77,6 +79,7 @@ float PrioReA(  const vector<STUPLE> &points,   //< All points within q_L and q_
             if( it->score + max < score ) {
                 STUPLE soln_recursion ( origin );
                 vector<uint32_t> dims_recursion ( dims_left );
+                
                 float recurse_score = PrioReA(
                     vector<STUPLE> ( mypoints.begin(), it ),
                     q,

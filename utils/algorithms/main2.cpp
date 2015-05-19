@@ -90,6 +90,15 @@ int main(int argc, char **argv) {
     }
     STUPLE q = data[pid];
 	STUPLE soln;
+	// If there are no closedoms, then "we" dominates everthing
+	if(closedoms.size() == 0) {
+		for(int i = 0; i < NUM_DIMS-1; i++) {
+			std::cout << "0,";
+		}
+		std::cout << 0;
+		return 0;		
+	}
+	// Otherwise call the 
 	PrioReA(closedoms, q, origin, soln, dims);
 
 	for(int i = 0; i < NUM_DIMS-1; i++) {
