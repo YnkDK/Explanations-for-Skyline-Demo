@@ -10,11 +10,14 @@ var app = angular.module('Application', [
 
 var controllers = {};
 var factories = {};
+var directives = {};
 
 // Register the controllers
 app.controller(controllers);
 // Register the factories
 app.factory(factories);
+// Register the directives
+app.directive(directives);
 
 // Set config
 app.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
