@@ -3,7 +3,7 @@ require_once('headers.php');
 require_once('BRA.php');
 require_once('PointPaper.php');
 
-echo '<html><body><pre>';
+//echo '<html><body><pre>';
 $id = $_GET["id"];
 
 
@@ -74,5 +74,7 @@ foreach(unserialize($_SESSION['ranges']) as $attrName => $val){
     $result[$attrName] = $res->attributes[$index];
     $index++;
 }
-echo json_encode($result);
+echo json_encode(array(
+    "qL" => $result
+));
 //echo '</pre></body></html>';
