@@ -10,6 +10,7 @@ class PointPaper {
     /* @var array */
     public $attributes = array();
 
+
     function __construct(array $attributes) {
         if(PointPaper::$num_dims == -1) {
             // This is the first point, now all other points must have the same dimension size
@@ -54,5 +55,9 @@ class PointPaper {
             $res += abs($this->attributes[$d] - $that->attributes[$d]);
         }
         return $res;
+    }
+
+    public function __toString() {
+        return implode(',', $this->attributes);
     }
 }
