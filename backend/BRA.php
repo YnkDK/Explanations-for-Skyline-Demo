@@ -39,7 +39,6 @@ class BRA {
     public function closeDominance(&$points, $p) {
         $C = array();
         foreach($points as $s) {
-            echo $s->getNumberofDimensions();
             if($p === $s) {
                 continue;
             }

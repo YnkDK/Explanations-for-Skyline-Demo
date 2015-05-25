@@ -58,17 +58,21 @@ $bra = new BRA();
 
 
 $res = $bra->query($data, $data[$id], unserialize($_SESSION['qL']));
-echo "qL: <br>";
-print_r(unserialize($_SESSION['qL']));
-echo "Res: <br />";
-print_r($res);
-echo "data[$id]: <br>";
-print_r($data[$id]);
-echo "ranges: <br>";
-print_r(unserialize($_SESSION['ranges']));
+//echo "qL: <br>";
+//print_r(unserialize($_SESSION['qL']));
+//echo "Res: <br />";
+//print_r($res);
+//echo "data[$id]: <br>";
+//print_r($data[$id]);
+//echo "ranges: <br>";
+//print_r(unserialize($_SESSION['ranges']));
 //echo "DATA: <br>";
 //print_r($data);
-echo json_encode(array(
-    "qLPrime" => $res->attributes
-));
-echo '</pre></body></html>';
+$result = array();
+$index = 0;
+foreach(unserialize($_SESSION['ranges']) as $attrName => $val){
+    $result[$attrName] = $res->attributes[$index];
+    $index++;
+}
+echo json_encode($result);
+//echo '</pre></body></html>';

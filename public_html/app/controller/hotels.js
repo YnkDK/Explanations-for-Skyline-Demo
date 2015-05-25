@@ -33,6 +33,7 @@ controllers.HotelsController = function ($scope, $modal, $timeout, HotelRange, H
                 // TODO: Locate the hotel and show it
             }
         })
+        console.log("hotels: " + hotels);
     };
 
     /**
