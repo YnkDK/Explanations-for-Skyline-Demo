@@ -5,7 +5,6 @@ class BRA {
 
     public function query(&$points, $p, $qL) {
         $C = $this->closeDominance($points, $p); // Line 1-10
-
         if(count($C) === 0) {
             return $qL;
         }
@@ -13,10 +12,10 @@ class BRA {
         foreach($this->getCorners($C) as $c) {
             $add = true;
             foreach($W as $p) {
-                if($this->strictlyDominated($c->attributes, $p->attributes)) {
+                if($this->strictlyDominated($c, $p)) {
                     $add = false;
                     break;
-                } elseif($this->strictlyDominated($p->attributes, $c->attributes)) {
+                } elseif($this->strictlyDominated($p, $c)) {
                     $W = array_diff($W, [$p]);
                 }
             }
@@ -37,9 +36,10 @@ class BRA {
         return $w0;
     }
 
-    private function closeDominance(&$points, $p) {
+    public function closeDominance(&$points, $p) {
         $C = array();
         foreach($points as $s) {
+            echo $s->getNumberofDimensions();
             if($p === $s) {
                 continue;
             }
@@ -61,7 +61,7 @@ class BRA {
         return array_values($C);
     }
 
-    private function dominanceOrEqual(PointPaper &$p1, PointPaper &$p2) {
+    public function dominanceOrEqual(PointPaper &$p1, PointPaper &$p2) {
         for($i = 0; $i < $p1->getNumberOfDimensions(); $i++) {
             if($p1->attributes[$i] > $p2->attributes[$i]) {
                 return false;
@@ -70,7 +70,21 @@ class BRA {
         return true;
     }
 
-    private function dominance(PointPaper &$p1, &$p2) {
+    public function dominance(PointPaper &$p1, PointPaper &$p2) {
+        $atLeastOneStrict = false;
+        for($i = 0; $i < $p1->getNumberOfDimensions(); $i++) {
+            if($p1->attributes[$i] > $p2->attributes[$i]) {
+                return false;
+            } else if ($p1->attributes[$i] < $p2->attributes[$i]){
+                $atLeastOneStrict = true;
+            }
+        }
+        if($atLeastOneStrict)
+            return true;
+        return false;
+    }
+
+    public function strictlyDominated(PointPaper $p1, PointPaper $p2) {
         for($i = 0; $i < $p1->getNumberOfDimensions(); $i++) {
             if($p1->attributes[$i] >= $p2->attributes[$i]) {
                 return false;
@@ -153,15 +167,7 @@ class BRA {
         return $newCombs;
     }
 
-    private function strictlyDominated(array $p1, array $p2) {
-        $numDims = count($p1);
-        for($i = 0; $i < $numDims; $i++) {
-            if($p1[$i] >= $p2[$i]) {
-                return false;
-            }
-        }
-        return true;
-    }
+
 }
 
 // Run the following if we access this file

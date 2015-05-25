@@ -60,10 +60,12 @@ if(count($data) === 0) {
 
 $bnl = new BNL();
 foreach($bnl->query($data) as $k => $_) {
-    array_push($skyline, $hotels[$k]);
+    $skyline[$k] = $hotels[$k];
 }
+
 $notSkyline = array_values(array_diff_key($hotels, $skyline));
-// TODO: Order notSkyline by distance to skyline
+
+    // TODO: Order notSkyline by distance to skyline
 // Setup PrioReA
 /*
 $minMax = getExtreme($hotels, $ranges);
@@ -128,7 +130,8 @@ function getExtreme(&$hotels, &$ranges) {
     return $res;
 }
 */
-session_unset();
+
+session_unset(); //Clear session variables
 $_SESSION['notSkyline'] = serialize(array_diff_key($data, $skyline));
 $qL = array();
 foreach($ranges as $k=>$v) {
@@ -145,6 +148,8 @@ $_SESSION['ranges'] = serialize($ranges);
 // Return the result as a nice JSON
 echo json_encode(array(
     "skyline" => $skyline,
+    "skyline-size" => count($skyline),
     "notSkyline" => $notSkyline,
+    "notSkyline-size" => count($notSkyline),
     "outputSize" => count($skyline) + count($notSkyline)
 ));

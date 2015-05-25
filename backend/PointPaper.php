@@ -25,7 +25,8 @@ class PointPaper {
     }
 
     public function getNumberOfDimensions() {
-        return PointPaper::$num_dims;
+        return count($this->attributes);
+//        return PointPaper::$num_dims;
     }
 
     /**
