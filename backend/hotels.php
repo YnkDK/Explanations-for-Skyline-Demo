@@ -1,6 +1,7 @@
 <?php
 require_once("headers.php");
 require_once('Data.php');
+require_once('BNL.php');
 
 
 
@@ -35,6 +36,7 @@ $hotels = $database->query($ranges);
 // Prepare for PrioReA
 $extremes = $database->getExtremes();
 $data = array();
+$qL = array();
 foreach($hotels as $id => $value) {
     $tmp = array();
     foreach($ranges as $k=>$v) {
@@ -43,10 +45,11 @@ foreach($hotels as $id => $value) {
         } elseif($v[2] === 'MAX') {
             // Solve the dual to maximize a value
             //printf("%f - %f = %f\n", floatval($extremes[$k][1]), floatval($value[$k]), floatval($extremes[$k][1]) - floatval($value[$k]) + 1);
-            array_push($tmp, floatval($extremes[$k][1]) - floatval($value[$k]) + 1);
+            array_push($tmp, floatval($extremes[$k][1]) - floatval($value[$k]));
         }
     }
-    array_push($data, implode(',', $tmp));
+    $hotels[$id]["id"] = $id;
+    $data[$id] = new PointPaper($tmp);
 }
 if(count($data) === 0) {
     die(json_encode(array(
@@ -55,16 +58,24 @@ if(count($data) === 0) {
 }
 
 
-
+$bnl = new BNL();
+foreach($bnl->query($data) as $k => $_) {
+    array_push($skyline, $hotels[$k]);
+}
+$notSkyline = array_values(array_diff_key($hotels, $skyline));
+// TODO: Order notSkyline by distance to skyline
 // Setup PrioReA
-
+/*
 $minMax = getExtreme($hotels, $ranges);
+$bra = new BRA();
 $idx = 0;
 foreach($hotels as $id => $value) {
     // Get the Point-object corresponding to the current hotel
-    $output = explode(",", exec('bin/Sky'. count($ranges) .' '.$idx.' "' . implode($data, '|') . '"'));
-    $output = array_map('floatval', $output);
+    $output = $bra->query($data, $data[$id], new PointPaper(array_fill(0, count($ranges), 0.0)));
+    //$output = explode(",", exec('bin/Sky'. count($ranges) .' '.$idx.' "' . implode($data, '|') . '"'));
+    //$output = array_map('floatval', $output);
     // Set the score for this hotel
+    $output = $output->attributes;
     $score =  array_sum($output);
     // Add the sky-not value for each attribute
     $i = 0;
@@ -116,12 +127,24 @@ function getExtreme(&$hotels, &$ranges) {
     }
     return $res;
 }
+*/
+session_unset();
+$_SESSION['notSkyline'] = serialize(array_diff_key($data, $skyline));
+$qL = array();
+foreach($ranges as $k=>$v) {
+    if($v[2] === 'MIN') {
+        array_push($qL, $v[0]);
+    } elseif($v[2] === 'MAX') {
+        array_push($qL, $v[1]);
+    }
+}
+// TODO: Generate qL
+$_SESSION['qL'] = serialize(new PointPaper($qL));
+$_SESSION['ranges'] = serialize($ranges);
 
 // Return the result as a nice JSON
 echo json_encode(array(
     "skyline" => $skyline,
     "notSkyline" => $notSkyline,
-    "outputSize" => count($skyline) + count($notSkyline),
-    "minMax" => $minMax,
-    "query" => implode($data, '|'),
+    "outputSize" => count($skyline) + count($notSkyline)
 ));
