@@ -1,5 +1,11 @@
 /// <reference path="../js/angular.min.js" />
 // Register the main application
+
+var backend = location.protocol + "//" + location.host + '/backend/';
+
+
+var factories = {};
+
 var app = angular.module('Application', [
     'ngRoute',
     'ngResource',
@@ -9,13 +15,11 @@ var app = angular.module('Application', [
 ]);
 
 var controllers = {};
-var factories = {};
 var directives = {};
+app.factory(factories);
 
 // Register the controllers
 app.controller(controllers);
-// Register the factories
-app.factory(factories);
 // Register the directives
 app.directive(directives);
 
@@ -33,7 +37,7 @@ app.config(function ($routeProvider, uiGmapGoogleMapApiProvider) {
             })
         .when('/hotels',
         {
-            templateUrl: 'app/partials/static-hotels.html',
+            templateUrl: 'app/partials/hotels.html',
             controller: 'HotelsController'
         })
         .when('/hotels-map',

@@ -1,0 +1,35 @@
+<div id="{{hotel.address}}"
+     class="well well-lg"
+     ng-class="{'green-border' : hotel.highlight, 'pointer' : acc.isClickable}"
+     ng-repeat="hotel in acc.filtered" ng-click="skyNot(hotel, acc.isClickable)">
+    <div class="row">
+        <div class="col-sm-3">
+            <img class="img-responsive img-thumbnail" src="img/hotel.png" alt="IMG">
+        </div>
+        <div class="col-sm-9">
+            <div>{{hotel.address}}</div>
+            <table class="table">
+                <tr>
+                    <th>Price/day:</th>
+                    <th>Dist. beach:</th>
+                    <th>Dist. downtown</th>
+                    <th>Num. pools</th>
+                    <th>User rating:</th>
+                    <th>Stars:</th>
+                </tr>
+                <tr>
+                    <td>{{hotel.price | currency}}</td>
+                    <td>{{hotel.beach| number : 1}} km</td>
+                    <td>{{hotel.downtown| number : 1}} km</td>
+                    <td>{{hotel.pools}}</td>
+                    <td>{{hotel.rating | number : 1}}</td>
+                    <td>
+                                <span class="glyphicon "
+                                      ng-class="{'glyphicon-star' : $index < hotel.stars, 'glyphicon-star-empty' : !($index < hotel.stars)}"
+                                      ng-repeat="s in stars"></span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

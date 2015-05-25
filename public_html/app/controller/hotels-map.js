@@ -1,6 +1,6 @@
 controllers.HotelsMapController = function ($scope, $resource, $location, uiGmapGoogleMapApi, $log) {
     $scope.oneAtATime = true;
-    var url = "http://" + $location.host() + ":" + $location.port() + '/Explanations-for-Skyline-Demo/backend/hotels.php';
+    var url = backend + 'hotels.php';
     $scope.stars = [
         1, 2, 3, 4, 5
     ];
@@ -11,24 +11,24 @@ controllers.HotelsMapController = function ($scope, $resource, $location, uiGmap
         // Default settings for the query
         $scope.data = {
             price: true,
-            priceFrom: 100,
-            priceTo: 500,
+            priceFrom: 0,
+            priceTo: 900,
 
             beach: true,
             beachFrom: 0.0,
-            beachTo: 2.0,
+            beachTo: 20.0,
 
             downtown: true,
             downtownFrom: 0.0,
-            downtownTo: 1.5,
+            downtownTo: 20,
 
             pools: true,
             poolsFrom: 0,
             poolsTo: 10,
 
             ratings: true,
-            ratingsFrom: 3,
-            ratingsTo: 5,
+            ratingsFrom: 0,
+            ratingsTo: 10,
 
             stars: true,
             starsFrom: 0,
@@ -104,6 +104,7 @@ controllers.HotelsMapController = function ($scope, $resource, $location, uiGmap
     $resource(url).get(
         $scope.data
         , function (values) {
+            console.log(values);
             $scope.hotels = [];
             notSkyline = [];
             for(var i = 0; i < values.notSkyline.length; i++) {

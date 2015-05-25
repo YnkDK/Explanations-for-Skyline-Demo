@@ -1,0 +1,42 @@
+<div ng-include="'app/partials/search.html'"></div>
+
+<div
+        ng-show="currentHotel"
+        class="well well-lg">
+    <div class="row">
+        <div class="col-sm-3">
+            <img class="img-responsive img-thumbnail" src="img/hotel.png" alt="IMG">
+        </div>
+        <div class="col-sm-9">
+            <div>{{currentHotel.address}}</div>
+            <table class="table">
+                <tr>
+                    <th>Price/day:</th>
+                    <th>Dist. beach:</th>
+                    <th>Dist. downtown</th>
+                    <th>Num. pools</th>
+                    <th>User rating:</th>
+                    <th>Stars:</th>
+                </tr>
+                <tr>
+                    <td>{{currentHotel.price | currency}}</td>
+                    <td>{{currentHotel.beach| number : 1}} km</td>
+                    <td>{{currentHotel.downtown| number : 1}} km</td>
+                    <td>{{currentHotel.pools}}</td>
+                    <td>{{currentHotel.rating | number : 1}}</td>
+                    <td>
+                        <span class="glyphicon "
+                              ng-class="{'glyphicon-star' : $index < currentHotel.stars, 'glyphicon-star-empty' : !($index < currentHotel.stars)}"
+                              ng-repeat="s in stars"></span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<accordion close-others="oneAtATime">
+    <accordion-group ng-repeat="acc in hotels" is-open="acc.isOpen">
+        <div ng-include="'app/partials/hotels-accordin.html'"></div>
+    </accordion-group>
+</accordion>
