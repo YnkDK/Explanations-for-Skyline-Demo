@@ -147,7 +147,7 @@ $_SESSION['ranges'] = serialize($ranges);
 
 // Return the result as a nice JSON
 echo json_encode(array(
-    "skyline" => $skyline,
+    "skyline" => array_values($skyline),
     "skyline-size" => count($skyline),
     "notSkyline" => $notSkyline,
     "notSkyline-size" => count($notSkyline),

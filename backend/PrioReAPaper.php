@@ -40,7 +40,7 @@ class PrioReAPaper {
         if($size === 0) {
             return $qL;
         }
-
+        print_r($C);
         $best = $p;
         $D = $this->sortD($D, $p, $qL);
         foreach($D as $d) {
@@ -208,7 +208,7 @@ if (!debug_backtrace()) {
         new PointPaper(array(4.0, 4.0))
     );
 
-    $qL = new PointPaper(array(0.5, 0.5));
+    $qL = new PointPaper(array(0.0, 0.0));
 
     $alg = new PrioReAPaper();
     foreach($points as $p) {
