@@ -5,3 +5,7 @@ factories.HotelRange = function($resource) {
 factories.Hotels = function($resource) {
     return $resource(backend + 'hotels.php');
 };
+
+factories.SkyNot = function($resource) {
+    return $resource(backend + 'skyNot.php');
+};

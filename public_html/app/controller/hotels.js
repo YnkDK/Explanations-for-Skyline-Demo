@@ -1,4 +1,4 @@
-controllers.HotelsController = function ($scope, $modal, $timeout, HotelRange, Hotels, $location, $filter) {
+controllers.HotelsController = function ($scope, $modal, $timeout, HotelRange, Hotels, SkyNot, $location, $filter) {
     // Define scope variables
     $scope.ranges = {}; // Defines qL and qU for the range query
     $scope.hotels = []; // Index 0 holds all hotels in skyline, while index 1 holds all non-skyline
@@ -12,7 +12,6 @@ controllers.HotelsController = function ($scope, $modal, $timeout, HotelRange, H
         loading();
         $scope.hotels = [];
         var hotels = Hotels.get($scope.ranges, function() {
-
             $scope.hotels.push({
                 hotels: hotels.skyline,
                 heading: 'Skyline',
@@ -32,8 +31,7 @@ controllers.HotelsController = function ($scope, $modal, $timeout, HotelRange, H
             if($scope.currentHotel) {
                 // TODO: Locate the hotel and show it
             }
-        })
-        console.log("hotels: " + hotels);
+        });
     };
 
     /**
@@ -73,9 +71,32 @@ controllers.HotelsController = function ($scope, $modal, $timeout, HotelRange, H
      * @param isClickable
      */
     $scope.skyNot = function(hotel, isClickable) {
+        // TODO: Fix this!!
         if(isClickable) {
             $scope.currentHotel = hotel;
             $scope.hotels = [];
+            var skyNot = SkyNot.get({id: hotel.id}, function() {
+                if($scope.ranges.beach) {
+                    $scope.ranges.beachFrom = parseFloat(skyNot.qL.beach) + 0.0001;
+                }
+                if($scope.ranges.price) {
+                    $scope.ranges.priceFrom = parseFloat(skyNot.qL.price) + 0.01;
+                }
+                if($scope.ranges.downtown) {
+                    $scope.ranges.downtownFrom = parseFloat(skyNot.qL.downtown) + 0.0001;
+                }
+                if($scope.ranges.stars) {
+                    $scope.ranges.starsTo = Math.min(5 - parseFloat(skyNot.qL.stars) + 1, hotel.starsTo);
+                }
+                if($scope.ranges.rating) {
+                    $scope.ranges.ratingTo = Math.min(10 - parseFloat(skyNot.qL.rating) + 0.1, hotel.ratingTo);
+                }
+                if($scope.ranges.pools) {
+                    $scope.ranges.poolsTo = parseFloat(skyNot.qL.pools);
+                }
+
+            });
+            console.log(hotel);
             // TODO: Fetch new Query data from backend
         }
     };
