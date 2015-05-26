@@ -15,21 +15,43 @@ controllers.HotelsController = function ($scope, $modal, $timeout, HotelRange, H
             $scope.hotels.push({
                 hotels: hotels.skyline,
                 heading: 'Skyline',
-                isClickable: false,
-                isOpen: false
+                isClickable: false
+                //isOpen: false
             });
             $scope.hotels.push({
                 hotels: hotels.notSkyline,
                 heading: 'Not skyline',
-                isClickable: true,
-                isOpen: true
+                isClickable: true
+                //isOpen: true
             });
             $scope.sortBy('price', true, $scope.hotels[0]);
             $scope.sortBy('price', true, $scope.hotels[1]);
             modalInstance.dismiss();
 
             if($scope.currentHotel) {
-                // TODO: Locate the hotel and show it
+                var found = false;
+                for(var i = 1; i < hotels.skyline.length; i++) {
+                    $scope.changePage(i, $scope.hotels[0]);
+                    var tmp = $scope.hotels[0].filtered;
+                    for(var j = 0; j < tmp.length; j++) {
+                        if(tmp[j].id === $scope.currentHotel.id) {
+                            tmp[j].highlight = true;
+                            found = true;
+                            break;
+                        }
+                    }
+                    if(found) {
+                        break;
+
+                    }
+                }
+                if(found) {
+                    $scope.currentHotel = undefined;
+                    $scope.hotels[0].isOpen = false;
+                    $scope.hotels[1].isOpen = true;
+                } else {
+                    alert("Something went wrong. The hotel was not in the skyline :(");
+                }
             }
         });
     };
@@ -137,7 +159,12 @@ controllers.HotelsController = function ($scope, $modal, $timeout, HotelRange, H
         });
     }
 
+
     // Start by getting the extreme ranges
     fetchRanges();
-
+    $timeout(function() {
+        if(modalInstance) {
+            modalInstance.dismiss();
+        }
+    }, 1000)
 };
