@@ -20,8 +20,17 @@ class PointPaper {
         }
         foreach($attributes as $a) {
             // Ensure that the keys are 0...|D|-1
-            array_push($this->attributes, $a);
+            array_push($this->attributes, floatval($a));
         }
+    }
+
+    function __wakeup() {
+        $tmp = array();
+        foreach($this->attributes as $a) {
+            // Ensure that the keys are 0...|D|-1
+            array_push($tmp, floatval($a));
+        }
+        $this->attributes = $tmp;
     }
 
     public function getNumberOfDimensions() {
