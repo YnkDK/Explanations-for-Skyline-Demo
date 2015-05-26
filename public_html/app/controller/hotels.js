@@ -1,6 +1,7 @@
 controllers.HotelsController = function ($scope, $modal, $timeout, HotelRange, Hotels, SkyNot, $location, $filter) {
     // Define scope variables
     $scope.ranges = {}; // Defines qL and qU for the range query
+    $scope.currentSkyNot = {}; // The previous value if BRA/PrioReA tells to change the range query
     $scope.hotels = []; // Index 0 holds all hotels in skyline, while index 1 holds all non-skyline
     $scope.numPerPage = 5; // The number of pages in each accordion
     $scope.stars = [1, 2, 3, 4, 5]; // The maximum number stars allowed
@@ -29,29 +30,27 @@ controllers.HotelsController = function ($scope, $modal, $timeout, HotelRange, H
             modalInstance.dismiss();
 
             if($scope.currentHotel) {
+                var tmp = $scope.hotels[0].hotels;
                 var found = false;
-                for(var i = 1; i < hotels.skyline.length; i++) {
-                    $scope.changePage(i, $scope.hotels[0]);
-                    var tmp = $scope.hotels[0].filtered;
-                    for(var j = 0; j < tmp.length; j++) {
-                        if(tmp[j].id === $scope.currentHotel.id) {
-                            tmp[j].highlight = true;
-                            found = true;
-                            break;
-                        }
-                    }
-                    if(found) {
+                for(var i = 0; i < tmp.length; i++) {
+                    if(tmp[i].id === $scope.currentHotel.id) {
+                        tmp[i].highlight = true;
+                        tmp.move(i, 0);
+                        found = true;
                         break;
-
                     }
                 }
                 if(found) {
+                    $scope.hotels[0].isOpen = true;
+                    $scope.hotels[1].isOpen = false;
                     $scope.currentHotel = undefined;
-                    $scope.hotels[0].isOpen = false;
-                    $scope.hotels[1].isOpen = true;
+
                 } else {
-                    alert("Something went wrong. The hotel was not in the skyline :(");
+                    alert("DID NOT FIND THE SELECTED HOTEL IN SKYLINE");
                 }
+            } else {
+                $scope.hotels[0].isOpen = false;
+                $scope.hotels[1].isOpen = true;
             }
         });
     };
@@ -98,29 +97,52 @@ controllers.HotelsController = function ($scope, $modal, $timeout, HotelRange, H
             $scope.currentHotel = hotel;
             $scope.hotels = [];
             var skyNot = SkyNot.get({id: hotel.id}, function() {
+                var ql;
                 if($scope.ranges.beach) {
-                    $scope.ranges.beachFrom = parseFloat(skyNot.qL.beach) + 0.0001;
+                    ql = parseFloat(skyNot.qL.beach);
+                    if(ql != $scope.ranges.beachFrom) {
+                        $scope.currentSkyNot.beachFrom = $scope.ranges.beachFrom;
+                        $scope.ranges.beachFrom = ql + 0.00001;
+                    }
                 }
                 if($scope.ranges.price) {
-                    $scope.ranges.priceFrom = parseFloat(skyNot.qL.price) + 0.01;
+                    ql = parseFloat(skyNot.qL.price);
+                    if(ql != $scope.ranges.priceFrom) {
+                        $scope.currentSkyNot.priceFrom = $scope.ranges.priceFrom;
+                        $scope.ranges.priceFrom = ql + 0.00001;
+                    }
                 }
                 if($scope.ranges.downtown) {
-                    $scope.ranges.downtownFrom = parseFloat(skyNot.qL.downtown) + 0.0001;
+                    ql = parseFloat(skyNot.qL.downtown);
+                    if(ql != $scope.ranges.downtownFrom) {
+                        $scope.currentSkyNot.downtownFrom = $scope.ranges.downtownFrom;
+                        $scope.ranges.downtownFrom = ql + 0.00001;
+                    }
                 }
                 if($scope.ranges.stars) {
-                    $scope.ranges.starsTo = 5 - parseFloat(skyNot.qL.stars);
+                    ql = parseFloat(skyNot.qL.stars);
+                    if(ql != $scope.ranges.starsTo) {
+                        $scope.currentSkyNot.starsTo = $scope.ranges.starsTo;
+                        $scope.ranges.starsTo = 5.0 - ql;
+                    }
                 }
-                if($scope.ranges.rating) {
-                    $scope.ranges.ratingTo = 10 - parseFloat(skyNot.qL.rating);
+                if($scope.ranges.rating)  {
+                    ql = parseFloat(skyNot.qL.rating);
+                    if(ql != $scope.ranges.ratingTo) {
+                        $scope.currentSkyNot.ratingTo = $scope.ranges.ratingTo;
+                        $scope.ranges.ratingTo = 9.8 - ql - 0.1;
+                    }
                 }
                 if($scope.ranges.pools) {
-                    $scope.ranges.poolsTo = 5 - parseFloat(skyNot.qL.pools);
+                    ql = parseFloat(skyNot.qL.pools);
+                    if(ql != $scope.ranges.poolsTo) {
+                        $scope.currentSkyNot.poolsTo = $scope.ranges.poolsTo;
+                        $scope.ranges.poolsTo = 5 - ql;
+                    }
                 }
-
             });
-            console.log(hotel);
-            // TODO: Fetch new Query data from backend
         }
+        console.log(hotel);
     };
 
     // Define local variables
@@ -159,6 +181,16 @@ controllers.HotelsController = function ($scope, $modal, $timeout, HotelRange, H
         });
     }
 
+    function highlight(hotels) {
+        for(var i = 0; i < hotels.length; i++) {
+            if(hotels[j].id === $scope.currentHotel.id) {
+                hotels[j].highlight = true;
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     // Start by getting the extreme ranges
     fetchRanges();
@@ -166,5 +198,20 @@ controllers.HotelsController = function ($scope, $modal, $timeout, HotelRange, H
         if(modalInstance) {
             modalInstance.dismiss();
         }
-    }, 1000)
+    }, 1000);
+
+    $scope.$watchGroup('ranges', function() {
+        console.log("CHANGED");
+    }, true)
+};
+
+Array.prototype.move = function (old_index, new_index) {
+    if (new_index >= this.length) {
+        var k = new_index - this.length;
+        while ((k--) + 1) {
+            this.push(undefined);
+        }
+    }
+    this.splice(new_index, 0, this.splice(old_index, 1)[0]);
+    return this; // for testing purposes
 };
