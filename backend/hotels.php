@@ -138,7 +138,7 @@ foreach($ranges as $k=>$v) {
     if($v[2] === 'MIN') {
         array_push($qL, $v[0]);
     } elseif($v[2] === 'MAX') {
-        array_push($qL, $v[1]);
+        array_push($qL, floatval($extremes[$k][1]) - $v[1]);
     }
 }
 // TODO: Generate qL
