@@ -86,13 +86,13 @@ controllers.HotelsController = function ($scope, $modal, $timeout, HotelRange, H
                     $scope.ranges.downtownFrom = parseFloat(skyNot.qL.downtown) + 0.0001;
                 }
                 if($scope.ranges.stars) {
-                    $scope.ranges.starsTo = Math.min(5 - parseFloat(skyNot.qL.stars) + 1, hotel.starsTo);
+                    $scope.ranges.starsTo = 5 - parseFloat(skyNot.qL.stars);
                 }
                 if($scope.ranges.rating) {
-                    $scope.ranges.ratingTo = Math.min(10 - parseFloat(skyNot.qL.rating) + 0.1, hotel.ratingTo);
+                    $scope.ranges.ratingTo = 10 - parseFloat(skyNot.qL.rating);
                 }
                 if($scope.ranges.pools) {
-                    $scope.ranges.poolsTo = parseFloat(skyNot.qL.pools);
+                    $scope.ranges.poolsTo = 5 - parseFloat(skyNot.qL.pools);
                 }
 
             });
