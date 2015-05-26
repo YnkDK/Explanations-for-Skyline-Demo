@@ -120,6 +120,13 @@ while len(hotels) != num_hotels:
 	res = get_data(choice(data))
 	if res[0] is None:
 		continue
+	duplicate = False
+	for k,v in hotels.iteritems():
+		if v["address"] == res[1]:
+			duplicate = True
+			break
+	if duplicate:
+		continue
 	hotels[identifier] = {
 		"coordinates": res[0],
 		"address": res[1]
