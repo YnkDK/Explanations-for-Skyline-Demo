@@ -246,8 +246,8 @@ if (!debug_backtrace()) {
 
     // The following creates the "database" if it does not exist
 
-//    $hotels = json_decode(file_get_contents("hotels.json"), true);
-//    echo $d->update($hotels);
+    $hotels = json_decode(file_get_contents("hotels.json"), true);
+    echo $d->update($hotels);
 
 
     // Make a range query
