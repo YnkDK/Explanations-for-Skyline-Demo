@@ -7,10 +7,13 @@ require_once('PointPaper.php');
 $id = $_GET["id"];
 
 
-if(!isset($_SESSION['notSkyline']))
+if(!isset($_SESSION['S']))
     die("notSkyline is NOT in session");
 
-$data = unserialize($_SESSION["notSkyline"]);
+$data = unserialize($_SESSION["S"]);
+
+
+//print_r($data);
 
 $bra = new BRA();
 
@@ -55,7 +58,11 @@ $bra = new BRA();
 //
 //    die();
 
-
+//    print_r(unserialize($_SESSION['qL']));
+//    echo "<br />";
+//    print_r($data[$id]);
+//    echo PHP_EOL . "<br /> ========= " . PHP_EOL;
+//    print_r($data);
 
 $res = $bra->query($data, $data[$id], unserialize($_SESSION['qL']));
 //echo "qL: <br>";
@@ -71,7 +78,10 @@ $res = $bra->query($data, $data[$id], unserialize($_SESSION['qL']));
 $result = array();
 $index = 0;
 foreach(unserialize($_SESSION['ranges']) as $attrName => $val){
-    $result[$attrName] = $res->attributes[$index];
+//    print_r($res);
+    $attr = $res->attributes[$index];
+    $result[$attrName] = $attr;
+
     $index++;
 }
 echo json_encode(array(
