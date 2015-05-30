@@ -3,13 +3,16 @@ require_once('PointPaper.php');
 
 class BRA {
 
+    public $Wresult = array();
+
     public function query(&$points, $p, $qL) {
         $C = $this->closeDominance($points, $p); // Line 1-10
         if(count($C) === 0) {
+            print_r($C);
             return $qL;
         }
         $W = array();
-        foreach($this->getCorners($C) as $c) {
+        foreach($this->getCorners($C, $qL) as $c) {
             $add = true;
             foreach($W as $p) {
                 if($this->strictlyDominated($c, $p)) {
@@ -33,6 +36,11 @@ class BRA {
                 $w0 = $w;
             }
         }
+//        echo "====== W =======";
+//        echo "<pre>";
+//        print_r($W);
+//        $this->Wresult = $W;
+//        echo "</pre>";
         return $w0;
     }
 
@@ -92,7 +100,7 @@ class BRA {
         return true;
     }
 
-    private function getCorners($C) {
+    public function getCorners($C, $qL) {
         if(count($C) === 1) {
             return $C;
         }
@@ -103,20 +111,50 @@ class BRA {
         }
         $corners = array();
         foreach($combinations as $c) {
+            if(count($c) == 1) //the point itself
+                continue;
             $min = array_fill(0, $numDim, INF);
             foreach($c as $p) {
                 for($d = 0; $d < $numDim; $d++) {
-                    if($p->attributes[$d] < $min[$d]) {
+                    if($p->attributes[$d] < $min[$d] && !in_array($p->attributes[$d], $min)) {
                         $min[$d] = $p->attributes[$d];
                     }
                 }
             }
+
+            //Adding projections
             array_push($corners, new PointPaper($min));
+            for($i = 0; $i < $numDim; $i++) {
+                $projection = array();
+                for($j = 0; $j < $numDim; $j++) {
+                    if($i == $j) {
+                        array_push($projection, $qL->attributes[$j]);
+                    } else {
+                        array_push($projection, $min[$j]);
+                    }
+                }
+                array_push($corners, new PointPaper($projection));
+            }
         }
-        return $corners;
+
+        //Remove points which are closely dominated
+        $result = array();
+        foreach($corners as $corner){
+            $add = true;
+            foreach($C as $close){
+                if($this->strictlyDominated($corner, $close)){
+                    $add = false;
+                    break;
+                }
+            }
+            if($add){
+                array_push($result, $corner);
+            }
+        }
+        return $result;
     }
 
-    function getCombinations($base,$n){
+    public function getCombinations($base,$n){
 
         $baselen = count($base);
         if($baselen == 0){

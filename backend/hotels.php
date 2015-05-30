@@ -2,6 +2,7 @@
 require_once("headers.php");
 require_once('Data.php');
 require_once('BNL.php');
+require_once('BRA.php');
 
 
 
@@ -31,7 +32,8 @@ if(strcmp($_GET['stars'], 'true') === 0) {
     $ranges['stars'] = array($_GET['starsFrom'], $_GET['starsTo'], 'MAX');
 }
 // Get all hotels within the above ranges
-$hotels = $database->query($ranges);
+$hotels = $database->hotels;
+unset($hotels['__extremes__']);
 
 // Prepare for PrioReA
 $extremes = $database->getExtremes();
@@ -57,9 +59,32 @@ if(count($data) === 0) {
         "notSkyline" => array())));
 }
 
+$qL = array();
+$qU = array();
+foreach($ranges as $k=>$v) {
+    if($v[2] === 'MAX') {
+        array_push($qL, floatval($extremes[$k][1]) - $v[1]);
+        array_push($qU, floatval($extremes[$k][1]) - $v[0]);
+    } else {
+        array_push($qL, $v[0]);
+        array_push($qU, $v[1]);
+    }
+}
+
+$bra = new BRA();
+$qL = new PointPaper($qL);
+$qU = new PointPaper($qU);
+$S = array(); //Points inside qL and qU
+foreach($data as $id=>$hotel){
+    if($bra->dominanceOrEqual($qL, $hotel) && $bra->dominanceOrEqual($hotel, $qU)){
+        $S[$id] = $hotel;
+        print_r($hotel);
+        echo "<br>";
+    }
+}
 
 $bnl = new BNL();
-foreach($bnl->query($data) as $k => $_) {
+foreach($bnl->query($S) as $k => $_) {
     $skyline[$k] = $hotels[$k];
 }
 
@@ -132,17 +157,10 @@ function getExtreme(&$hotels, &$ranges) {
 */
 
 session_unset(); //Clear session variables
-$_SESSION['notSkyline'] = serialize(array_diff_key($data, $skyline));
-$qL = array();
-foreach($ranges as $k=>$v) {
-    if($v[2] === 'MIN') {
-        array_push($qL, $v[0]);
-    } elseif($v[2] === 'MAX') {
-        array_push($qL, floatval($extremes[$k][1]) - $v[1]);
-    }
-}
+$_SESSION['S'] = serialize($S);
+
 // TODO: Generate qL
-$_SESSION['qL'] = serialize(new PointPaper($qL));
+$_SESSION['qL'] = serialize($qL);
 $_SESSION['ranges'] = serialize($ranges);
 
 // Return the result as a nice JSON

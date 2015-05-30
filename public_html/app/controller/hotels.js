@@ -27,6 +27,7 @@ controllers.HotelsController = function ($scope, $modal, $timeout, HotelRange, H
             });
             $scope.sortBy('price', true, $scope.hotels[0]);
             $scope.sortBy('price', true, $scope.hotels[1]);
+            console.log("Sorted");
             modalInstance.dismiss();
 
             if($scope.currentHotel) {
@@ -35,7 +36,11 @@ controllers.HotelsController = function ($scope, $modal, $timeout, HotelRange, H
                 for(var i = 0; i < tmp.length; i++) {
                     if(tmp[i].id === $scope.currentHotel.id) {
                         tmp[i].highlight = true;
-                        tmp.move(i, 0);
+                        //tmp.move(i, 0);
+                        $scope.hotels[0].filtered[0] = tmp[i];
+                        var tempHotel = tmp[0];
+                        tmp[0] = tmp[i];
+                        tmp[i] = tempHotel;
                         found = true;
                         break;
                     }
@@ -43,6 +48,8 @@ controllers.HotelsController = function ($scope, $modal, $timeout, HotelRange, H
                 if(found) {
                     $scope.hotels[0].isOpen = true;
                     $scope.hotels[1].isOpen = false;
+                    //$scope.hotels[0].hotels.unshift($scope.currentHotel);
+                    //console.log("Shifted");
                     $scope.currentHotel = undefined;
 
                 } else {
@@ -130,7 +137,7 @@ controllers.HotelsController = function ($scope, $modal, $timeout, HotelRange, H
                     ql = parseFloat(skyNot.qL.rating);
                     if(ql != $scope.ranges.ratingTo) {
                         $scope.currentSkyNot.ratingTo = $scope.ranges.ratingTo;
-                        $scope.ranges.ratingTo = 9.8 - ql - 0.1;
+                        $scope.ranges.ratingTo = 9.8 - ql;
                     }
                 }
                 if($scope.ranges.pools) {
