@@ -43,16 +43,14 @@ $qL = array();
 foreach($hotels as $id => $value) {
     $tmp = array();
     foreach($ranges as $k=>$v) {
-        array_push($tmp, $value[$k]); //Price, distance to beach, distance to town
+        if($v[2] === 'MIN') {
+            array_push($tmp, $value[$k]); //Price, distance to beach, distance to town
+        } elseif($v[2] === 'MAX') { //Pools, stars, user-ratings
+            // Solve the dual to maximize a value
+            //printf("%f - %f = %f\n", floatval($extremes[$k][1]), floatval($value[$k]), floatval($extremes[$k][1]) - floatval($value[$k]) + 1);
 
-//        if($v[2] === 'MIN') {
-//            array_push($tmp, $value[$k]); //Price, distance to beach, distance to town
-//        } elseif($v[2] === 'MAX') { //Pools, stars, user-ratings
-//            // Solve the dual to maximize a value
-//            //printf("%f - %f = %f\n", floatval($extremes[$k][1]), floatval($value[$k]), floatval($extremes[$k][1]) - floatval($value[$k]) + 1);
-//
-//            array_push($tmp, floatval($extremes[$k][1]) - floatval($value[$k]));
-//        }
+            array_push($tmp, floatval($extremes[$k][1]) - floatval($value[$k]));
+        }
     }
     $hotels[$id]["id"] = $id;
     $data[$id] = new PointPaper($tmp);
@@ -66,13 +64,8 @@ if(count($data) === 0) {
 $qL = array();
 $qU = array();
 foreach($ranges as $k=>$v) {
-//    if($v[2] === 'MAX') {
-//        array_push($qL, floatval($extremes[$k][1]) - $v[1]);
-//        array_push($qU, floatval($extremes[$k][1]) - $v[0]);
-//    } else {
         array_push($qL, $v[0]);
         array_push($qU, $v[1]);
-//    }
 }
 
 $bra = new BRA();
