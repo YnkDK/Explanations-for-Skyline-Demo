@@ -16,7 +16,7 @@
                 </tr>
                 <tr>
                     <td class="text-left">Price ($)</td>
-                    <td class="text-center"><span class="previous-data">{{currentSkyNot.priceFrom}}</span></td>
+                    <td class="text-center"><span class="previous-data">{{currentSkyNot.priceFrom | number:2}}</span></td>
                     <td class="text-center">
                         <div class="input-wrapper">
                             <span class="no-form-control text-left" ng-click="edit.priceFrom = true"
@@ -39,9 +39,36 @@
                     </td>
                     <td class="text-center"><input type="checkbox" ng-model="ranges.price"></td>
                 </tr>
+
+                <tr>
+                    <td class="text-left">User rating (1 - 10)</td>
+                    <td class="text-center"></td>
+                    <td class="text-center">
+                        <div class="input-wrapper">
+                            <span class="no-form-control text-left" ng-click="edit.ratingFrom = true"
+                                  ng-hide="!ranges.rating || edit.ratingFrom">{{ranges.ratingFrom | number:2}}</span>
+                            <input ng-blur="edit.ratingFrom = false" class="form-control" type="number" step="0.5" min="0"
+                                   max="{{ranges.ratingTo}}" ng-model="ranges.ratingFrom" ng-disabled="!ranges.rating"
+                                   value="{{ranges.ratingFrom | number:2}}">
+                        </div>
+                    </td>
+                    <td class="text-center">-</td>
+                    <td class="text-center"><span class="previous-data">{{currentSkyNot.ratingTo | number:1}}</span></td>
+                    <td class="text-center">
+                        <div class="input-wrapper">
+                            <span class="no-form-control text-left" ng-click="edit.ratingTo = true"
+                                  ng-hide="!ranges.rating || edit.ratingTo">{{ranges.ratingTo | number:2}}</span>
+                            <input ng-blur="edit.ratingTo = false" class="form-control" type="number" step="0.5"
+                                   min="{{ranges.ratingFrom}}" max="5" ng-model="ranges.ratingTo" ng-disabled="!ranges.rating"
+                                   value="{{ranges.ratingTo | number:2}}">
+                        </div>
+                    </td>
+                    <td class="text-center"><input type="checkbox" ng-model="ranges.rating"></td>
+                </tr>
+
                 <tr>
                     <td class="text-left">Dist. beach (km)</td>
-                    <td class="text-center"><span class="previous-data">{{currentSkyNot.beachFrom | number:1}}</span></td>
+                    <td class="text-center"><span class="previous-data">{{currentSkyNot.beachFrom | number:2}}</span></td>
                     <td class="text-center">
                         <div class="input-wrapper">
                             <span class="no-form-control text-left" ng-click="edit.beachFrom = true"
@@ -64,9 +91,10 @@
                     </td>
                     <td class="text-center"><input type="checkbox" ng-model="ranges.beach"></td>
                 </tr>
+
                 <tr>
                     <td class="text-left">Dist. downtown (km)</td>
-                    <td class="text-center"><span class="previous-data">{{currentSkyNot.downtownFrom}}</span></td>
+                    <td class="text-center"><span class="previous-data">{{currentSkyNot.downtownFrom | number:2}}</span></td>
                     <td class="text-center">
                         <div class="input-wrapper">
                             <span class="no-form-control text-left" ng-click="edit.downtownFrom = true"
@@ -89,31 +117,7 @@
                     </td>
                     <td class="text-center"><input type="checkbox" ng-model="ranges.downtown"></td>
                 </tr>
-                <tr>
-                    <td class="text-left">Room size (m<sup>2</sup>)</td>
-                    <td class="text-center"></td>
-                    <td class="text-center">
-                        <div class="input-wrapper">
-                            <span class="no-form-control text-left" ng-click="edit.roomsizeFrom = true"
-                                  ng-hide="!ranges.roomsize || edit.roomsizeFrom">{{ranges.roomsizeFrom | number:2}}</span>
-                            <input ng-blur="edit.roomsizeFrom = false" class="form-control" type="number" step="1" min="0"
-                                   max="{{ranges.roomsizeTo}}" ng-model="ranges.roomsizeFrom" ng-disabled="!ranges.roomsize"
-                                   value="{{ranges.roomsizeFrom | number:2}}">
-                        </div>
-                    </td>
-                    <td class="text-center">-</td>
-                    <td class="text-center"><span class="previous-data">{{currentSkyNot.roomsizeTo}}</span></td>
-                    <td class="text-center">
-                        <div class="input-wrapper">
-                            <span class="no-form-control text-left" ng-click="edit.roomsizeTo = true"
-                                  ng-hide="!ranges.roomsize || edit.roomsizeTo">{{ranges.roomsizeTo | number:2}}</span>
-                            <input ng-blur="edit.roomsizeTo = false" class="form-control" type="number" step="1"
-                                   min="{{ranges.roomsizeFrom}}" ng-model="ranges.roomsizeTo" ng-disabled="!ranges.roomsize"
-                                   value="{{ranges.roomsizeTo | number:2}}">
-                        </div>
-                    </td>
-                    <td class="text-center"><input type="checkbox" ng-model="ranges.roomsize"></td>
-                </tr>
+
                 <tr>
                     <td class="text-left">ARoS (km)</td>
                     <td class="text-center"></td>
@@ -127,7 +131,7 @@
                         </div>
                     </td>
                     <td class="text-center">-</td>
-                    <td class="text-center"><span class="previous-data">{{currentSkyNot.arosTo}}</span></td>
+                    <td class="text-center"><span class="previous-data">{{currentSkyNot.arosTo | number:2}}</span></td>
                     <td class="text-center">
                         <div class="input-wrapper">
                             <span class="no-form-control text-left" ng-click="edit.arosTo = true"
@@ -139,31 +143,33 @@
                     </td>
                     <td class="text-center"><input type="checkbox" ng-model="ranges.aros"></td>
                 </tr>
+
                 <tr>
-                    <td class="text-left">User rating (1 - 10)</td>
+                    <td class="text-left">Room size (m<sup>2</sup>)</td>
                     <td class="text-center"></td>
                     <td class="text-center">
                         <div class="input-wrapper">
-                            <span class="no-form-control text-left" ng-click="edit.ratingFrom = true"
-                                  ng-hide="!ranges.rating || edit.ratingFrom">{{ranges.ratingFrom | number:2}}</span>
-                            <input ng-blur="edit.ratingFrom = false" class="form-control" type="number" step="0.5" min="0"
-                                   max="{{ranges.ratingTo}}" ng-model="ranges.ratingFrom" ng-disabled="!ranges.rating"
-                                   value="{{ranges.ratingFrom | number:2}}">
+                            <span class="no-form-control text-left" ng-click="edit.roomsizeFrom = true"
+                                  ng-hide="!ranges.roomsize || edit.roomsizeFrom">{{ranges.roomsizeFrom | number:2}}</span>
+                            <input ng-blur="edit.roomsizeFrom = false" class="form-control" type="number" step="1" min="0"
+                                   max="{{ranges.roomsizeTo}}" ng-model="ranges.roomsizeFrom" ng-disabled="!ranges.roomsize"
+                                   value="{{ranges.roomsizeFrom | number:2}}">
                         </div>
                     </td>
                     <td class="text-center">-</td>
-                    <td class="text-center"><span class="previous-data">{{currentSkyNot.ratingTo}}</span></td>
+                    <td class="text-center"><span class="previous-data">{{currentSkyNot.roomsizeTo | number:0}}</span></td>
                     <td class="text-center">
                         <div class="input-wrapper">
-                            <span class="no-form-control text-left" ng-click="edit.ratingTo = true"
-                                  ng-hide="!ranges.rating || edit.ratingTo">{{ranges.ratingTo | number:2}}</span>
-                            <input ng-blur="edit.ratingTo = false" class="form-control" type="number" step="0.5"
-                                   min="{{ranges.ratingFrom}}" max="5" ng-model="ranges.ratingTo" ng-disabled="!ranges.rating"
-                                   value="{{ranges.ratingTo | number:2}}">
+                            <span class="no-form-control text-left" ng-click="edit.roomsizeTo = true"
+                                  ng-hide="!ranges.roomsize || edit.roomsizeTo">{{ranges.roomsizeTo | number:2}}</span>
+                            <input ng-blur="edit.roomsizeTo = false" class="form-control" type="number" step="1"
+                                   min="{{ranges.roomsizeFrom}}" ng-model="ranges.roomsizeTo" ng-disabled="!ranges.roomsize"
+                                   value="{{ranges.roomsizeTo | number:2}}">
                         </div>
                     </td>
-                    <td class="text-center"><input type="checkbox" ng-model="ranges.rating"></td>
+                    <td class="text-center"><input type="checkbox" ng-model="ranges.roomsize"></td>
                 </tr>
+
                 <tr>
                     <td class="text-left">Wifi (MB/s)</td>
                     <td class="text-center"></td>
@@ -177,7 +183,7 @@
                         </div>
                     </td>
                     <td class="text-center">-</td>
-                    <td class="text-center"><span class="previous-data">{{currentSkyNot.wifiTo}}</span></td>
+                    <td class="text-center"><span class="previous-data">{{currentSkyNot.wifiTo | number:0}}</span></td>
                     <td class="text-center">
                         <div class="input-wrapper">
                             <span class="no-form-control text-left" ng-click="edit.wifiTo = true"

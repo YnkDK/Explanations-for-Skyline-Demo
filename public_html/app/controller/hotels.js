@@ -35,8 +35,6 @@ controllers.HotelsController = function ($scope, $modal, $timeout, HotelRange, H
                 for(var i = 0; i < tmp.length; i++) {
                     if(tmp[i].id === $scope.currentHotel.id) {
                         tmp[i].highlight = true;
-                        //tmp.move(i, 0);
-                        console.log($scope.hotels[0].filtered)
                         moveHighlightedHotelToFrontpage();
 
                         found = true;
@@ -46,8 +44,6 @@ controllers.HotelsController = function ($scope, $modal, $timeout, HotelRange, H
                 if(found) {
                     $scope.hotels[0].isOpen = true;
                     $scope.hotels[1].isOpen = false;
-                    //$scope.hotels[0].hotels.unshift($scope.currentHotel);
-                    //console.log("Shifted");
                     $scope.currentHotel = undefined;
 
                 } else {
@@ -101,7 +97,7 @@ controllers.HotelsController = function ($scope, $modal, $timeout, HotelRange, H
         if(isClickable) {
             $scope.currentHotel = hotel;
             $scope.hotels = [];
-            $scope.currentSkyNot = {};
+            $scope.currentSkyNot = {}; //Reset previous values (red numbers)
             var skyNot = SkyNot.get({id: hotel.id}, function() {
                 var ql;
                 var epsilon = 0.000000001;

@@ -95,7 +95,7 @@ foreach($bnl->query($S) as $id => $_) {
     $skyline[$id] = $hotels[$id];
 }
 
-//Find not-skyline
+//Find not-skyline (reverse of what are in skyline)
 foreach(array_diff_key($S, $skyline) as $id => $_) {
     array_push($notSkyline, $hotels[$id]);
 }
