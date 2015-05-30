@@ -98,6 +98,7 @@ $_SESSION['S'] = serialize($S);
 // TODO: Generate qL
 $_SESSION['qL'] = serialize($qL);
 $_SESSION['ranges'] = serialize($ranges);
+$_SESSION['extremes'] = serialize($extremes);
 
 // Return the result as a nice JSON
 echo json_encode(array(
