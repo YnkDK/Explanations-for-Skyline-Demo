@@ -101,6 +101,7 @@ controllers.HotelsController = function ($scope, $modal, $timeout, HotelRange, H
         if(isClickable) {
             $scope.currentHotel = hotel;
             $scope.hotels = [];
+            $scope.currentSkyNot = {};
             var skyNot = SkyNot.get({id: hotel.id}, function() {
                 var ql;
                 var epsilon = 0.000000001;
