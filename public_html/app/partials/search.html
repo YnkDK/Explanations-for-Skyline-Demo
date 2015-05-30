@@ -90,32 +90,57 @@
                     <td class="text-center"><input type="checkbox" ng-model="ranges.downtown"></td>
                 </tr>
                 <tr>
-                    <td class="text-left">Num. pools</td>
+                    <td class="text-left">Room size (m<sup>2</sup>)</td>
                     <td class="text-center"></td>
                     <td class="text-center">
                         <div class="input-wrapper">
-                            <span class="no-form-control text-left" ng-click="edit.poolsFrom = true"
-                                  ng-hide="!ranges.pools || edit.poolsFrom">{{ranges.poolsFrom | number:2}}</span>
-                            <input ng-blur="edit.poolsFrom = false" class="form-control" type="number" step="1" min="0"
-                                   max="{{ranges.poolsTo}}" ng-model="ranges.poolsFrom" ng-disabled="!ranges.pools"
-                                   value="{{ranges.poolsFrom | number:2}}">
+                            <span class="no-form-control text-left" ng-click="edit.roomsizeFrom = true"
+                                  ng-hide="!ranges.roomsize || edit.roomsizeFrom">{{ranges.roomsizeFrom | number:2}}</span>
+                            <input ng-blur="edit.roomsizeFrom = false" class="form-control" type="number" step="1" min="0"
+                                   max="{{ranges.roomsizeTo}}" ng-model="ranges.roomsizeFrom" ng-disabled="!ranges.roomsize"
+                                   value="{{ranges.roomsizeFrom | number:2}}">
                         </div>
                     </td>
                     <td class="text-center">-</td>
-                    <td class="text-center"><span class="previous-data">{{currentSkyNot.poolsTo}}</span></td>
+                    <td class="text-center"><span class="previous-data">{{currentSkyNot.roomsizeTo}}</span></td>
                     <td class="text-center">
                         <div class="input-wrapper">
-                            <span class="no-form-control text-left" ng-click="edit.poolsTo = true"
-                                  ng-hide="!ranges.pools || edit.poolsTo">{{ranges.poolsTo | number:2}}</span>
-                            <input ng-blur="edit.poolsTo = false" class="form-control" type="number" step="1"
-                                   min="{{ranges.poolsFrom}}" ng-model="ranges.poolsTo" ng-disabled="!ranges.pools"
-                                   value="{{ranges.poolsTo | number:2}}">
+                            <span class="no-form-control text-left" ng-click="edit.roomsizeTo = true"
+                                  ng-hide="!ranges.roomsize || edit.roomsizeTo">{{ranges.roomsizeTo | number:2}}</span>
+                            <input ng-blur="edit.roomsizeTo = false" class="form-control" type="number" step="1"
+                                   min="{{ranges.roomsizeFrom}}" ng-model="ranges.roomsizeTo" ng-disabled="!ranges.roomsize"
+                                   value="{{ranges.roomsizeTo | number:2}}">
                         </div>
                     </td>
-                    <td class="text-center"><input type="checkbox" ng-model="ranges.pools"></td>
+                    <td class="text-center"><input type="checkbox" ng-model="ranges.roomsize"></td>
                 </tr>
                 <tr>
-                    <td class="text-left">User rating</td>
+                    <td class="text-left">ARoS (km)</td>
+                    <td class="text-center"></td>
+                    <td class="text-center">
+                        <div class="input-wrapper">
+                            <span class="no-form-control text-left" ng-click="edit.arosFrom = true"
+                                  ng-hide="!ranges.aros || edit.arosFrom">{{ranges.arosFrom | number:2}}</span>
+                            <input ng-blur="edit.arosFrom = false" class="form-control" type="number" step="1" min="0"
+                                   max="{{ranges.arosTo}}" ng-model="ranges.arosFrom" ng-disabled="!ranges.aros"
+                                   value="{{ranges.arosFrom | number:2}}">
+                        </div>
+                    </td>
+                    <td class="text-center">-</td>
+                    <td class="text-center"><span class="previous-data">{{currentSkyNot.arosTo}}</span></td>
+                    <td class="text-center">
+                        <div class="input-wrapper">
+                            <span class="no-form-control text-left" ng-click="edit.arosTo = true"
+                                  ng-hide="!ranges.aros || edit.arosTo">{{ranges.arosTo | number:2}}</span>
+                            <input ng-blur="edit.arosTo = false" class="form-control" type="number" step="1"
+                                   min="{{ranges.arosFrom}}" ng-model="ranges.arosTo" ng-disabled="!ranges.aros"
+                                   value="{{ranges.arosTo | number:2}}">
+                        </div>
+                    </td>
+                    <td class="text-center"><input type="checkbox" ng-model="ranges.aros"></td>
+                </tr>
+                <tr>
+                    <td class="text-left">User rating (1 - 10)</td>
                     <td class="text-center"></td>
                     <td class="text-center">
                         <div class="input-wrapper">
@@ -140,29 +165,29 @@
                     <td class="text-center"><input type="checkbox" ng-model="ranges.rating"></td>
                 </tr>
                 <tr>
-                    <td class="text-left">Stars</td>
+                    <td class="text-left">Wifi (MB/s)</td>
                     <td class="text-center"></td>
                     <td class="text-center">
                         <div class="input-wrapper">
-                            <span class="no-form-control text-left" ng-click="edit.starsFrom = true"
-                                  ng-hide="!ranges.stars || edit.starsFrom">{{ranges.starsFrom | number:2}}</span>
-                            <input ng-blur="edit.starsFrom = false" class="form-control" type="number" step="1" min="0"
-                                   max="{{ranges.starsTo}}" ng-model="ranges.starsFrom" ng-disabled="!ranges.stars"
-                                   value="{{ranges.starsFrom | number:2}}">
+                            <span class="no-form-control text-left" ng-click="edit.wifiFrom = true"
+                                  ng-hide="!ranges.wifi || edit.wifiFrom">{{ranges.wifiFrom | number:2}}</span>
+                            <input ng-blur="edit.wifiFrom = false" class="form-control" type="number" step="1" min="0"
+                                   max="{{ranges.wifiTo}}" ng-model="ranges.wifiFrom" ng-disabled="!ranges.wifi"
+                                   value="{{ranges.wifiFrom | number:2}}">
                         </div>
                     </td>
                     <td class="text-center">-</td>
-                    <td class="text-center"><span class="previous-data">{{currentSkyNot.starsTo}}</span></td>
+                    <td class="text-center"><span class="previous-data">{{currentSkyNot.wifiTo}}</span></td>
                     <td class="text-center">
                         <div class="input-wrapper">
-                            <span class="no-form-control text-left" ng-click="edit.starsTo = true"
-                                  ng-hide="!ranges.stars || edit.starsTo">{{ranges.starsTo | number:2}}</span>
-                            <input ng-blur="edit.starsTo = false" class="form-control" type="number" step="1"
-                                   min="{{ranges.starsFrom}}" max="5" ng-model="ranges.starsTo" ng-disabled="!ranges.stars"
-                                   value="{{ranges.starsTo | number:2}}">
+                            <span class="no-form-control text-left" ng-click="edit.wifiTo = true"
+                                  ng-hide="!ranges.wifi || edit.wifiTo">{{ranges.wifiTo | number:2}}</span>
+                            <input ng-blur="edit.wifiTo = false" class="form-control" type="number" step="1"
+                                   min="{{ranges.wifiFrom}}" ng-model="ranges.wifiTo" ng-disabled="!ranges.wifi"
+                                   value="{{ranges.wifiTo | number:2}}">
                         </div>
                     </td>
-                    <td class="text-center"><input type="checkbox" ng-model="ranges.stars"></td>
+                    <td class="text-center"><input type="checkbox" ng-model="ranges.wifi"></td>
                 </tr>
             </table>
             <button class="btn btn-primary btn-block" ng-click="query()">Query</button>

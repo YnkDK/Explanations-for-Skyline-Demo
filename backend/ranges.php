@@ -7,23 +7,26 @@ $ex = $db->getExtremes();
 
 echo json_encode(array(
     "data" => array(
-        "price" => FALSE,
+        "price" => TRUE,
         "priceFrom" => $ex["price"][0],
         "priceTo" => $ex["price"][1],
-        "beach" => FALSE,
+        "beach" => TRUE,
         "beachFrom" => $ex["beach"][0],
         "beachTo" => $ex["beach"][1],
-        "downtown" => FALSE,
+        "downtown" => TRUE,
         "downtownFrom" => $ex["downtown"][0],
         "downtownTo" => $ex["downtown"][1],
-        "pools" => FALSE,
-        "poolsFrom" => $ex["pools"][0],
-        "poolsTo" => $ex["pools"][1],
+        "roomsize" => FALSE,
+        "roomsizeFrom" => $ex["roomsize"][0],
+        "roomsizeTo" => $ex["roomsize"][1],
         "rating" => FALSE,
         "ratingFrom" => $ex["rating"][0],
         "ratingTo" => $ex["rating"][1],
-        "stars" => FALSE,
-        "starsFrom" => $ex["stars"][0],
-        "starsTo" => $ex["stars"][1]
+        "wifi" => FALSE,
+        "wifiFrom" => $ex["wifi"][0],
+        "wifiTo" => $ex["wifi"][1],
+        "aros" => FALSE,
+        "arosFrom" => $ex["aros"][0],
+        "arosTo" => $ex["aros"][1]
     )
 ));

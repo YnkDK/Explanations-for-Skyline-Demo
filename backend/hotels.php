@@ -5,8 +5,8 @@ require_once('BNL.php');
 require_once('BRA.php');
 
 
-
 $database = new Data();
+$bra = new BRA();
 
 $skyline = array();
 $notSkyline = array();
@@ -19,8 +19,8 @@ if(strcmp($_GET['beach'], 'true') === 0) {
 if(strcmp($_GET['downtown'], 'true') === 0) {
     $ranges['downtown'] = array($_GET['downtownFrom'], $_GET['downtownTo'], 'MIN');
 }
-if(strcmp($_GET['pools'], 'true') === 0) {
-    $ranges['pools'] = array($_GET['poolsFrom'], $_GET['poolsTo'], 'MAX');
+if(strcmp($_GET['roomsize'], 'true') === 0) {
+    $ranges['roomsize'] = array($_GET['roomsizeFrom'], $_GET['roomsizeTo'], 'MAX');
 }
 if(strcmp($_GET['price'], 'true') === 0) {
     $ranges['price'] = array($_GET['priceFrom'], $_GET['priceTo'], 'MIN');
@@ -28,15 +28,19 @@ if(strcmp($_GET['price'], 'true') === 0) {
 if(strcmp($_GET['rating'], 'true') === 0) {
     $ranges['rating'] = array($_GET['ratingFrom'], $_GET['ratingTo'], 'MAX');
 }
-if(strcmp($_GET['stars'], 'true') === 0) {
-    $ranges['stars'] = array($_GET['starsFrom'], $_GET['starsTo'], 'MAX');
+if(strcmp($_GET['wifi'], 'true') === 0) {
+    $ranges['wifi'] = array($_GET['wifiFrom'], $_GET['wifiTo'], 'MAX');
 }
+if(strcmp($_GET['aros'], 'true') === 0) {
+    $ranges['aros'] = array($_GET['arosFrom'], $_GET['arosTo'], 'MAX');
+}
+
 
 // Get all hotels within the above ranges
 $hotels = $database->hotels;
 unset($hotels['__extremes__']);
 
-// Prepare for PrioReA
+// Prepare data for algorithms
 $extremes = $database->getExtremes();
 $data = array();
 $qL = array();
@@ -44,58 +48,58 @@ foreach($hotels as $id => $value) {
     $tmp = array();
     foreach($ranges as $k=>$v) {
         if($v[2] === 'MIN') {
-            array_push($tmp, $value[$k]); //Price, distance to beach, distance to town
-        } elseif($v[2] === 'MAX') { //Pools, stars, user-ratings
+            array_push($tmp, $value[$k]);   //Price, distance to beach, distance to town
+        } elseif($v[2] === 'MAX') {         //Roomsize, aros, wifi, user-ratings
             // Solve the dual to maximize a value
-            //printf("%f - %f = %f\n", floatval($extremes[$k][1]), floatval($value[$k]), floatval($extremes[$k][1]) - floatval($value[$k]) + 1);
-
             array_push($tmp, floatval($extremes[$k][1]) - floatval($value[$k]));
         }
     }
     $hotels[$id]["id"] = $id;
     $data[$id] = new PointPaper($tmp);
 }
+
+//Die script if no hotels exist between qL and qU.
 if(count($data) === 0) {
     die(json_encode(array(
         "skyline" => array(),
         "notSkyline" => array())));
 }
 
+//Create qL and qU as PointPapers
 $qL = array();
 $qU = array();
 foreach($ranges as $k=>$v) {
-        array_push($qL, $v[0]);
-        array_push($qU, $v[1]);
+    array_push($qL, $v[0]);
+    array_push($qU, $v[1]);
 }
-
-$bra = new BRA();
 $qL = new PointPaper($qL);
 $qU = new PointPaper($qU);
 
-$S = array(); //Points inside qL and qU
+
+//$S : array with points inside qL and qU
+$S = array();
 foreach($data as $id=>$hotel){
     if($bra->dominanceOrEqual($qL, $hotel) && $bra->dominanceOrEqual($hotel, $qU)){
         $S[$id] = $hotel;
-//        print_r($hotel);
-//        echo "<br>";
     }
 }
 
-//Find skyline (user view)
+//Find skyline using BNL algorithm
 $bnl = new BNL();
 foreach($bnl->query($S) as $id => $_) {
     $skyline[$id] = $hotels[$id];
 }
 
+//Find not-skyline
 foreach(array_diff_key($S, $skyline) as $id => $_) {
     array_push($notSkyline, $hotels[$id]);
 }
 
+//Clear session variables
+session_unset();
 
-session_unset(); //Clear session variables
+//Add new session variables
 $_SESSION['S'] = serialize($S);
-
-// TODO: Generate qL
 $_SESSION['qL'] = serialize($qL);
 $_SESSION['ranges'] = serialize($ranges);
 
@@ -107,71 +111,3 @@ echo json_encode(array(
     "notSkyline-size" => count($notSkyline),
     "outputSize" => count($skyline) + count($notSkyline)
 ));
-
-
-    // TODO: Order notSkyline by distance to skyline
-// Setup PrioReA
-/*
-$minMax = getExtreme($hotels, $ranges);
-$bra = new BRA();
-$idx = 0;
-foreach($hotels as $id => $value) {
-    // Get the Point-object corresponding to the current hotel
-    $output = $bra->query($data, $data[$id], new PointPaper(array_fill(0, count($ranges), 0.0)));
-    //$output = explode(",", exec('bin/Sky'. count($ranges) .' '.$idx.' "' . implode($data, '|') . '"'));
-    //$output = array_map('floatval', $output);
-    // Set the score for this hotel
-    $output = $output->attributes;
-    $score =  array_sum($output);
-    // Add the sky-not value for each attribute
-    $i = 0;
-    foreach($ranges as $k=>$v) {
-        if($v[2] === 'MAX') {
-            if($output[$i] > 0.0) {
-                $hotels[$id]["sn" . ucfirst($k)] = $minMax[$k][1] - $output[$i] + 1;
-            } elseif($output[$i] === 0.0) {
-                $hotels[$id]["sn" . ucfirst($k)] = false;
-            }
-
-            $hotels[$id]["score"] = $score - 1;
-        } elseif($v[2] === 'MIN') {
-            if($output[$i] === 0.0) {
-                $hotels[$id]["sn" . ucfirst($k)] = false;
-            } else {
-                $hotels[$id]["sn" . ucfirst($k)] = $minMax[$k][0] + $output[$i];
-            }
-
-            $hotels[$id]["score"] = $score;
-        }
-        $i++;
-    }
-    // Determine this hotel is in the skyline
-    if($score === 0.0) {
-        array_push($skyline, $hotels[$id]);
-    } else {
-        array_push($notSkyline, $hotels[$id]);
-    }
-    $idx++;
-}
-
-function getExtreme(&$hotels, &$ranges) {
-    // Get desired keys
-    $res = array();
-    foreach($ranges as $k => $v) {
-        $res[$k] = array($v[1], $v[0]);
-    }
-
-    foreach($hotels as $row) {
-        foreach($res as $k => $v) {
-            if($row[$k] < $v[0]) {
-                $res[$k][0] = $row[$k];
-            }
-            if($row[$k] > $v[1]) {
-                $res[$k][1] = $row[$k];
-            }
-        }
-    }
-    return $res;
-}
-*/
-

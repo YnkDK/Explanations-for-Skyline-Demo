@@ -4,7 +4,6 @@ controllers.HotelsController = function ($scope, $modal, $timeout, HotelRange, H
     $scope.currentSkyNot = {}; // The previous value if BRA/PrioReA tells to change the range query
     $scope.hotels = []; // Index 0 holds all hotels in skyline, while index 1 holds all non-skyline
     $scope.numPerPage = 5; // The number of pages in each accordion
-    $scope.stars = [1, 2, 3, 4, 5]; // The maximum number stars allowed
     // Define scope functions
     /**
      * Fetches all hotels within the given ranges, dividing them into skyline and not-skyline
@@ -126,11 +125,11 @@ controllers.HotelsController = function ($scope, $modal, $timeout, HotelRange, H
                         $scope.ranges.downtownFrom = ql + epsilon;
                     }
                 }
-                if($scope.ranges.stars) {
-                    ql = parseFloat(skyNot.qL.stars);
-                    if(ql != $scope.ranges.starsFrom) {
-                        $scope.currentSkyNot.starsTo = $scope.ranges.starsTo;
-                        $scope.ranges.starsFrom = ql + epsilon;
+                if($scope.ranges.wifi) {
+                    ql = parseFloat(skyNot.qL.wifi);
+                    if(ql != $scope.ranges.wifiFrom) {
+                        $scope.currentSkyNot.wifiTo = $scope.ranges.wifiTo;
+                        $scope.ranges.wifiFrom = ql + epsilon;
                     }
                 }
                 if($scope.ranges.rating)  {
@@ -140,11 +139,18 @@ controllers.HotelsController = function ($scope, $modal, $timeout, HotelRange, H
                         $scope.ranges.ratingFrom = ql + epsilon;
                     }
                 }
-                if($scope.ranges.pools) {
-                    ql = parseFloat(skyNot.qL.pools);
-                    if(ql != $scope.ranges.poolsFrom) {
-                        $scope.currentSkyNot.poolsTo = $scope.ranges.poolsTo;
-                        $scope.ranges.poolsFrom = ql + epsilon;
+                if($scope.ranges.roomsize) {
+                    ql = parseFloat(skyNot.qL.roomsize);
+                    if(ql != $scope.ranges.roomsizeFrom) {
+                        $scope.currentSkyNot.roomsizeTo = $scope.ranges.roomsizeTo;
+                        $scope.ranges.roomsizeFrom = ql + epsilon;
+                    }
+                }
+                if($scope.ranges.aros) {
+                    ql = parseFloat(skyNot.qL.aros);
+                    if(ql != $scope.ranges.arosFrom) {
+                        $scope.currentSkyNot.arosTo = $scope.ranges.arosTo;
+                        $scope.ranges.arosFrom = ql + epsilon;
                     }
                 }
             });
