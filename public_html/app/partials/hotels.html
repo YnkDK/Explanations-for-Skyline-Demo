@@ -11,24 +11,22 @@
             <div>{{currentHotel.address}}</div>
             <table class="table">
                 <tr>
-                    <th>Price/day:</th>
-                    <th>Dist. beach:</th>
-                    <th>Dist. downtown</th>
-                    <th>Num. pools</th>
-                    <th>User rating:</th>
-                    <th>Stars:</th>
+                    <th>Price/day</th>
+                    <th>User rating</th>
+                    <th>Beach</th>
+                    <th>Downtown</th>
+                    <th>ARoS</th>
+                    <th>Room size</th>
+                    <th>Wifi</th>
                 </tr>
                 <tr>
                     <td>{{currentHotel.price | currency}}</td>
+                    <td>{{currentHotel.rating | number : 1}}</td>
                     <td>{{currentHotel.beach| number : 1}} km</td>
                     <td>{{currentHotel.downtown| number : 1}} km</td>
-                    <td>{{currentHotel.pools}}</td>
-                    <td>{{currentHotel.rating | number : 1}}</td>
-                    <td>
-                        <span class="glyphicon "
-                              ng-class="{'glyphicon-star' : $index < currentHotel.stars, 'glyphicon-star-empty' : !($index < currentHotel.stars)}"
-                              ng-repeat="s in stars"></span>
-                    </td>
+                    <td>{{currentHotel.aros | number : 1}} km</td>
+                    <td>{{currentHotel.roomsize | number : 0}} m<sup>2</sup></td>
+                    <td>{{currentHotel.wifi | number : 0}} Mbps</td>
                 </tr>
             </table>
         </div>

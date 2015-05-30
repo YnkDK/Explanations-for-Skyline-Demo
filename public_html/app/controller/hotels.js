@@ -127,30 +127,30 @@ controllers.HotelsController = function ($scope, $modal, $timeout, HotelRange, H
                 }
                 if($scope.ranges.wifi) {
                     ql = parseFloat(skyNot.qL.wifi);
-                    if(ql != $scope.ranges.wifiFrom) {
+                    if(ql != $scope.ranges.wifiTo) {
                         $scope.currentSkyNot.wifiTo = $scope.ranges.wifiTo;
-                        $scope.ranges.wifiFrom = ql + epsilon;
+                        $scope.ranges.wifiTo = ql - epsilon;
                     }
                 }
                 if($scope.ranges.rating)  {
                     ql = parseFloat(skyNot.qL.rating);
                     if(ql != $scope.ranges.ratingFrom) {
                         $scope.currentSkyNot.ratingTo = $scope.ranges.ratingTo;
-                        $scope.ranges.ratingFrom = ql + epsilon;
+                        $scope.ranges.ratingTo = ql - epsilon;
                     }
                 }
                 if($scope.ranges.roomsize) {
                     ql = parseFloat(skyNot.qL.roomsize);
-                    if(ql != $scope.ranges.roomsizeFrom) {
+                    if(ql != $scope.ranges.roomsizeTo) {
                         $scope.currentSkyNot.roomsizeTo = $scope.ranges.roomsizeTo;
-                        $scope.ranges.roomsizeFrom = ql + epsilon;
+                        $scope.ranges.roomsizeTo = ql - epsilon;
                     }
                 }
                 if($scope.ranges.aros) {
                     ql = parseFloat(skyNot.qL.aros);
-                    if(ql != $scope.ranges.arosFrom) {
+                    if(ql != $scope.ranges.arosTo) {
                         $scope.currentSkyNot.arosTo = $scope.ranges.arosTo;
-                        $scope.ranges.arosFrom = ql + epsilon;
+                        $scope.ranges.arosTo = ql - epsilon;
                     }
                 }
             });
