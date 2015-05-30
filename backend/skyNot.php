@@ -59,14 +59,10 @@ $res = $bra->query($data, $data[$id], unserialize($_SESSION['qL']));
 
 $result = array();
 $index = 0;
+//Prepare for view
 foreach(unserialize($_SESSION['ranges']) as $attrName => $val){
-//    print_r($res);
-    if($res == null){
-        echo "BRA result = null <br />";
-    }
-    $attr = $res->attributes[$index];
-    $result[$attrName] = $attr;
-
+    $attrVal = $res->attributes[$index];
+    $result[$attrName] = $attrVal;
     $index++;
 }
 echo json_encode(array(
