@@ -94,7 +94,9 @@ foreach($bnl->query($S) as $id => $_) {
     $skyline[$id] = $hotels[$id];
 }
 
-$notSkyline = array_values(array_diff_key($hotels, $skyline));
+foreach(array_diff_key($S, $skyline) as $id => $_) {
+    array_push($notSkyline, $hotels[$id]);
+}
 
 
 session_unset(); //Clear session variables
