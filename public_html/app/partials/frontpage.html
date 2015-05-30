@@ -1,3 +1,62 @@
-<highchart config="chartConfig"></highchart>
-<br />
-<highchart config="chartConfig2"></highchart>
+
+{{qL}}
+<div class="well well-lg" ng-show="currentCanvas === 0" style="height: 150px;">
+    <p>Test</p>
+    <div class="row" ng-hide="points.length > 0">
+        <div class="col-sm-3">
+            <div class="input-group">
+                <label for="n" class="input-group-addon">Num. points</label>
+                <input id="n" class="form-control" ng-model="numPoints">
+            </div>
+        </div>
+        <div class="col-sm-5">
+            <div class="input-group">
+                <label for="seed" class="input-group-addon">Seed</label>
+                <input id="seed" class="form-control" ng-model="seed">
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <button class="btn btn-primary" ng-click="genData(numPoints, seed)">Generate random points</button>
+        </div>
+    </div>
+    <div class="row" ng-show="points.length > 0">
+        <div class="col-sm-8">
+            Great! You have now generated {{ numPoints }} random points. Click next to choose lower and upper bound
+        </div>
+        <div class="col-sm-4">
+            <button class="btn btn-primary" ng-click="next()">Next!</button>
+        </div>
+    </div>
+</div>
+
+<div class="well well-lg" ng-show="currentCanvas === 1" style="height: 150px;">
+    <div ng-hide="canvases[1].qL !== undefined">Click on the canvas to set the lower bound.</div>
+    <div ng-hide="canvases[1].qL != undefined && canvases[1].qU != undefined">Now click on the canvas to set the upper bound</div>
+    <div class="row" ng-show="canvases[1].qL != undefined && canvases[1].qU != undefined">
+        <div class="col-sm-8">
+            Great! You have now generated selected a lower and upper bound. Click next to run see the skyline!
+        </div>
+        <div class="col-sm-4">
+            <button class="btn btn-primary" ng-click="next()">Next!</button>
+        </div>
+    </div>
+</div>
+
+<div class="well well-lg" ng-show="currentCanvas === 2" style="height: 150px;">
+    <div ng-hide="canvases[2].C !== undefined">We have highlighted the skyline. Click on any point within the bound to see the closely dominating points.</div>
+    <div class="row" ng-show="canvases[2].C !== undefined">
+        <div class="col-sm-8">
+            You can now see the {{canvases[2].C.length}} point<span ng-show="canvases[2].C.length > 1">s</span> which are closely dominated by ({{canvases[2].p[0] | number:1}}, {{canvases[2].p[1] | number:1}})
+        </div>
+        <div class="col-sm-4">
+            <button class="btn btn-primary" ng-click="next()">Next!</button>
+        </div>
+    </div>
+</div>
+
+<div class="well well-lg" ng-show="currentCanvas === 3" style="height: 150px;"></div>
+<canvas ng-show="currentCanvas === 0" class="well well-lg" id="firstCanvas" height="500px" width="970px" style="background: #ffffff;"></canvas>
+<canvas ng-show="currentCanvas === 1" class="well well-lg" id="secondCanvas" height="500px" width="970px" style="background: #ffffff;"></canvas>
+<canvas ng-show="currentCanvas === 2" class="well well-lg" id="thirdCanvas" height="500px" width="970px" style="background: #ffffff;"></canvas>
+<canvas ng-show="currentCanvas === 3" class="well well-lg" id="fourthCanvas" height="500px" width="970px" style="background: #ffffff;"></canvas>
