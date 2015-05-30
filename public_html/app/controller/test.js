@@ -173,7 +173,7 @@ controllers.TestController = function ($scope, $timeout) {
 
         $scope.cGraph.context.fillStyle = "#FF33FF";
         $scope.cGraph.fillPoint(nearest[0], nearest[1]);
-        var C = canvases[2].C = getCloseDominance(nearest, canvases[2].S);
+        var C = canvases[2].C = closeDominance(nearest, canvases[2].S);
         $scope.cGraph.context.beginPath();
         for(i = 0; i < C.length; i++) {
             var fromx = C[i][0],
@@ -188,71 +188,6 @@ controllers.TestController = function ($scope, $timeout) {
         $scope.cGraph.context.stroke();
         $scope.$apply();
     };
-
-    function getCloseDominance(nearest, S) {
-        var C = [];
-        var tx = nearest[0], ty = nearest[1];
-        for(var i = 0; i < S.length; i++) {
-            var sx = S[i][0], sy = S[i][1];
-            if(sx == tx && sy == ty) continue;
-            if((sx <= tx && sy <= ty && (sx < tx || sy < ty)) || (sx == tx && sy == ty)) {
-                var add = true;
-                for(var j = 0; j < C.length; j++) {
-                    if(C[j] === undefined) continue;
-                    var cx = C[j][0], cy = C[j][1];
-                    if((sx <= cx && sy <= cy && (sx < cx || sy < cy))) {
-                        add = false;
-                        break
-                    } else if(cx <= sx && cy <= sy && (cx < sx || cy < sy)) {
-                        C[j] = undefined;
-                    }
-                }
-                if(add) {
-                    C.push(S[i]);
-                }
-            }
-        }
-        C = C.filter(function(n) { return n !== undefined });
-        return C;
-    }
-
-    function boundingRectangleAlgorithm(C, qL) {
-        if(C.length === 0) {
-            return qL;
-        }
-        var W = [];
-        for(var i = 0; i < C.length; i++) {
-            for(var j = i; j < C.length; j++) {
-                var cx = Math.min(C[i][0], C[j][0]);
-                var cy = Math.min(C[i][1], C[j][1]);
-                var corners = [[cx, cy], [qL[0], cy], [cx, qL[1]]];
-                for(var l = 0; l < 3; l++) {
-                    cx = corners[l][0];
-                    cy = corners[l][1];
-                    var add = true;
-                    for(var k = 0; k < W.length; k++) {
-                        if(W[k] === undefined) continue;
-                        var px = W[k][0], py = W[k][1];
-                        if(cx < px && cy < py) {
-                            add = false;
-                            break;
-                        } else if(px < cx && py < cy) {
-                            W[k] = undefined;
-                        }
-                    }
-                    if(add) {
-                        W.push([cx, cy]);
-                    }
-                }
-            }
-        }
-
-        W = W.filter(function(n) { return n !== undefined });
-        W.sort(function(a, b) {
-            return Math.abs(a[0]-qL[0])+ Math.abs(a[1]-qL[1]) < Math.abs(b[0]-qL[0]) + Math.abs(b[1]-qL[1]);
-        });
-        return W[0]
-    }
 
     function handleNewCanvas(c) {
         console.log(c);
@@ -310,7 +245,7 @@ controllers.TestController = function ($scope, $timeout) {
                 current = canvases[2].notS[i];
                 g.fillPoint(current[0], current[1]);
             }
-            qL = boundingRectangleAlgorithm(canvases[2].C, canvases[2].p);
+            qL = boundingRectangleAlgorithm(canvases[2].C, qL);
 
             qU = canvases[1].qU;
             drawBound(qL, qU);
