@@ -37,10 +37,9 @@ controllers.HotelsController = function ($scope, $modal, $timeout, HotelRange, H
                     if(tmp[i].id === $scope.currentHotel.id) {
                         tmp[i].highlight = true;
                         //tmp.move(i, 0);
-                        $scope.hotels[0].filtered[0] = tmp[i];
-                        var tempHotel = tmp[0];
-                        tmp[0] = tmp[i];
-                        tmp[i] = tempHotel;
+                        console.log($scope.hotels[0].filtered)
+                        moveHighlightedHotelToFrontpage();
+
                         found = true;
                         break;
                     }
@@ -105,46 +104,47 @@ controllers.HotelsController = function ($scope, $modal, $timeout, HotelRange, H
             $scope.hotels = [];
             var skyNot = SkyNot.get({id: hotel.id}, function() {
                 var ql;
+                var epsilon = 0.000000001;
                 if($scope.ranges.beach) {
                     ql = parseFloat(skyNot.qL.beach);
                     if(ql != $scope.ranges.beachFrom) {
                         $scope.currentSkyNot.beachFrom = $scope.ranges.beachFrom;
-                        $scope.ranges.beachFrom = ql + 0.00001;
+                        $scope.ranges.beachFrom = ql + epsilon;
                     }
                 }
                 if($scope.ranges.price) {
                     ql = parseFloat(skyNot.qL.price);
                     if(ql != $scope.ranges.priceFrom) {
                         $scope.currentSkyNot.priceFrom = $scope.ranges.priceFrom;
-                        $scope.ranges.priceFrom = ql + 0.00001;
+                        $scope.ranges.priceFrom = ql + epsilon;
                     }
                 }
                 if($scope.ranges.downtown) {
                     ql = parseFloat(skyNot.qL.downtown);
                     if(ql != $scope.ranges.downtownFrom) {
                         $scope.currentSkyNot.downtownFrom = $scope.ranges.downtownFrom;
-                        $scope.ranges.downtownFrom = ql + 0.00001;
+                        $scope.ranges.downtownFrom = ql + epsilon;
                     }
                 }
                 if($scope.ranges.stars) {
                     ql = parseFloat(skyNot.qL.stars);
                     if(ql != $scope.ranges.starsFrom) {
                         $scope.currentSkyNot.starsTo = $scope.ranges.starsTo;
-                        $scope.ranges.starsFrom = ql + 0.00001;
+                        $scope.ranges.starsFrom = ql + epsilon;
                     }
                 }
                 if($scope.ranges.rating)  {
                     ql = parseFloat(skyNot.qL.rating);
                     if(ql != $scope.ranges.ratingFrom) {
                         $scope.currentSkyNot.ratingTo = $scope.ranges.ratingTo;
-                        $scope.ranges.ratingFrom = ql + 0.00001;
+                        $scope.ranges.ratingFrom = ql + epsilon;
                     }
                 }
                 if($scope.ranges.pools) {
                     ql = parseFloat(skyNot.qL.pools);
                     if(ql != $scope.ranges.poolsFrom) {
                         $scope.currentSkyNot.poolsTo = $scope.ranges.poolsTo;
-                        $scope.ranges.poolsFrom = ql + 0.00001;
+                        $scope.ranges.poolsFrom = ql + epsilon;
                     }
                 }
             });
@@ -196,6 +196,19 @@ controllers.HotelsController = function ($scope, $modal, $timeout, HotelRange, H
             }
         }
         return false;
+    }
+
+    function moveHighlightedHotelToFrontpage(){
+        var tempH;
+
+        for(var j = 0; j < $scope.hotels[0].filtered.length; j++){
+            //console.log($scope.hotels[0].filtered[j].id + " vs " + $scope.currentHotel.id);
+            if($scope.hotels[0].filtered[j].id === $scope.currentHotel.id){
+                tempH = $scope.hotels[0].filtered[0];
+                $scope.hotels[0].filtered[0] = $scope.hotels[0].filtered[j];
+                $scope.hotels[0].filtered[j] = tempH;
+            }
+        }
     }
 
 
