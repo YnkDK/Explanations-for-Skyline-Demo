@@ -17,8 +17,13 @@ $res = $bra->query($data, $data[$id], unserialize($_SESSION['qL']));
 //Prepare data for view/frontend
 $result = array();
 $index = 0;
+$extremes = unserialize($_SESSION['extremes']);
 foreach(unserialize($_SESSION['ranges']) as $attrName => $val){
-    $attrVal = $res->attributes[$index];
+    if($val[2] === 'MAX') {
+        $attrVal = floatval($extremes[$attrName][1]) - $res->attributes[$index];
+    } else {
+        $attrVal = $res->attributes[$index];
+    }
     $result[$attrName] = $attrVal;
     $index++;
 }

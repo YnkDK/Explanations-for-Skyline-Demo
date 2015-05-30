@@ -69,8 +69,13 @@ if(count($data) === 0) {
 $qL = array();
 $qU = array();
 foreach($ranges as $k=>$v) {
-    array_push($qL, $v[0]);
-    array_push($qU, $v[1]);
+    if($v[2] === 'MAX') {
+        array_push($qL, $extremes[$k][1] - $v[1]);
+        array_push($qU, $extremes[$k][1] - $v[0]);
+    } else {
+        array_push($qL, $v[0]);
+        array_push($qU, $v[1]);
+    }
 }
 $qL = new PointPaper($qL);
 $qU = new PointPaper($qU);
@@ -102,6 +107,7 @@ session_unset();
 $_SESSION['S'] = serialize($S);
 $_SESSION['qL'] = serialize($qL);
 $_SESSION['ranges'] = serialize($ranges);
+$_SESSION['extremes'] = serialize($extremes);
 
 // Return the result as a nice JSON
 echo json_encode(array(
