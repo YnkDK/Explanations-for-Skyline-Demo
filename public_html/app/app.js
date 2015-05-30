@@ -9,7 +9,6 @@ var factories = {};
 var app = angular.module('Application', [
     'ngRoute',
     'ngResource',
-    'highcharts-ng',
     'ui.bootstrap',
     'uiGmapgoogle-maps'
 ]);

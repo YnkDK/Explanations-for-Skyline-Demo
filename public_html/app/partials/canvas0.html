@@ -1,0 +1,27 @@
+<p>Test</p>
+<div class="row" ng-hide="points.length > 0">
+    <div class="col-sm-3">
+        <div class="input-group">
+            <label for="n" class="input-group-addon">Num. points</label>
+            <input id="n" class="form-control" ng-model="numPoints">
+        </div>
+    </div>
+    <div class="col-sm-5">
+        <div class="input-group">
+            <label for="seed" class="input-group-addon">Seed</label>
+            <input id="seed" class="form-control" ng-model="seed">
+        </div>
+    </div>
+
+    <div class="col-sm-4">
+        <button class="btn btn-primary" ng-click="genData(numPoints, seed)">Generate random points</button>
+    </div>
+</div>
+<div class="row" ng-show="points.length > 0">
+    <div class="col-sm-8">
+        Great! You have now generated {{ numPoints }} random points. Click next to choose lower and upper bound
+    </div>
+    <div class="col-sm-4">
+        <button class="btn btn-primary" ng-click="next()">Next!</button>
+    </div>
+</div>
