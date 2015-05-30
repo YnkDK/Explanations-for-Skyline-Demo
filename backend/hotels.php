@@ -31,6 +31,7 @@ if(strcmp($_GET['rating'], 'true') === 0) {
 if(strcmp($_GET['stars'], 'true') === 0) {
     $ranges['stars'] = array($_GET['starsFrom'], $_GET['starsTo'], 'MAX');
 }
+
 // Get all hotels within the above ranges
 $hotels = $database->hotels;
 unset($hotels['__extremes__']);
@@ -42,13 +43,16 @@ $qL = array();
 foreach($hotels as $id => $value) {
     $tmp = array();
     foreach($ranges as $k=>$v) {
-        if($v[2] === 'MIN') {
-            array_push($tmp, $value[$k]);
-        } elseif($v[2] === 'MAX') {
-            // Solve the dual to maximize a value
-            //printf("%f - %f = %f\n", floatval($extremes[$k][1]), floatval($value[$k]), floatval($extremes[$k][1]) - floatval($value[$k]) + 1);
-            array_push($tmp, floatval($extremes[$k][1]) - floatval($value[$k]));
-        }
+        array_push($tmp, $value[$k]); //Price, distance to beach, distance to town
+
+//        if($v[2] === 'MIN') {
+//            array_push($tmp, $value[$k]); //Price, distance to beach, distance to town
+//        } elseif($v[2] === 'MAX') { //Pools, stars, user-ratings
+//            // Solve the dual to maximize a value
+//            //printf("%f - %f = %f\n", floatval($extremes[$k][1]), floatval($value[$k]), floatval($extremes[$k][1]) - floatval($value[$k]) + 1);
+//
+//            array_push($tmp, floatval($extremes[$k][1]) - floatval($value[$k]));
+//        }
     }
     $hotels[$id]["id"] = $id;
     $data[$id] = new PointPaper($tmp);
@@ -62,33 +66,53 @@ if(count($data) === 0) {
 $qL = array();
 $qU = array();
 foreach($ranges as $k=>$v) {
-    if($v[2] === 'MAX') {
-        array_push($qL, floatval($extremes[$k][1]) - $v[1]);
-        array_push($qU, floatval($extremes[$k][1]) - $v[0]);
-    } else {
+//    if($v[2] === 'MAX') {
+//        array_push($qL, floatval($extremes[$k][1]) - $v[1]);
+//        array_push($qU, floatval($extremes[$k][1]) - $v[0]);
+//    } else {
         array_push($qL, $v[0]);
         array_push($qU, $v[1]);
-    }
+//    }
 }
 
 $bra = new BRA();
 $qL = new PointPaper($qL);
 $qU = new PointPaper($qU);
+
 $S = array(); //Points inside qL and qU
 foreach($data as $id=>$hotel){
     if($bra->dominanceOrEqual($qL, $hotel) && $bra->dominanceOrEqual($hotel, $qU)){
         $S[$id] = $hotel;
-        print_r($hotel);
-        echo "<br>";
+//        print_r($hotel);
+//        echo "<br>";
     }
 }
 
+//Find skyline (user view)
 $bnl = new BNL();
-foreach($bnl->query($S) as $k => $_) {
-    $skyline[$k] = $hotels[$k];
+foreach($bnl->query($S) as $id => $_) {
+    $skyline[$id] = $hotels[$id];
 }
 
 $notSkyline = array_values(array_diff_key($hotels, $skyline));
+
+
+session_unset(); //Clear session variables
+$_SESSION['S'] = serialize($S);
+
+// TODO: Generate qL
+$_SESSION['qL'] = serialize($qL);
+$_SESSION['ranges'] = serialize($ranges);
+
+// Return the result as a nice JSON
+echo json_encode(array(
+    "skyline" => array_values($skyline),
+    "skyline-size" => count($skyline),
+    "notSkyline" => $notSkyline,
+    "notSkyline-size" => count($notSkyline),
+    "outputSize" => count($skyline) + count($notSkyline)
+));
+
 
     // TODO: Order notSkyline by distance to skyline
 // Setup PrioReA
@@ -156,18 +180,3 @@ function getExtreme(&$hotels, &$ranges) {
 }
 */
 
-session_unset(); //Clear session variables
-$_SESSION['S'] = serialize($S);
-
-// TODO: Generate qL
-$_SESSION['qL'] = serialize($qL);
-$_SESSION['ranges'] = serialize($ranges);
-
-// Return the result as a nice JSON
-echo json_encode(array(
-    "skyline" => array_values($skyline),
-    "skyline-size" => count($skyline),
-    "notSkyline" => $notSkyline,
-    "notSkyline-size" => count($notSkyline),
-    "outputSize" => count($skyline) + count($notSkyline)
-));

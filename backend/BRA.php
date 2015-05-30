@@ -8,7 +8,6 @@ class BRA {
     public function query(&$points, $p, $qL) {
         $C = $this->closeDominance($points, $p); // Line 1-10
         if(count($C) === 0) {
-            print_r($C);
             return $qL;
         }
         $W = array();
@@ -36,11 +35,6 @@ class BRA {
                 $w0 = $w;
             }
         }
-//        echo "====== W =======";
-//        echo "<pre>";
-//        print_r($W);
-//        $this->Wresult = $W;
-//        echo "</pre>";
         return $w0;
     }
 
@@ -101,6 +95,7 @@ class BRA {
     }
 
     public function getCorners($C, $qL) {
+        $C = array_unique($C);
         if(count($C) === 1) {
             return $C;
         }
@@ -111,8 +106,8 @@ class BRA {
         }
         $corners = array();
         foreach($combinations as $c) {
-            if(count($c) == 1) //the point itself
-                continue;
+//            if(count($c) == 1) //the point itself
+//                continue;
             $min = array_fill(0, $numDim, INF);
             foreach($c as $p) {
                 for($d = 0; $d < $numDim; $d++) {

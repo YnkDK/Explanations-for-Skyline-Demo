@@ -8,12 +8,9 @@ $id = $_GET["id"];
 
 
 if(!isset($_SESSION['S']))
-    die("notSkyline is NOT in session");
+    die("S is NOT in session");
 
 $data = unserialize($_SESSION["S"]);
-
-
-//print_r($data);
 
 $bra = new BRA();
 
@@ -58,27 +55,15 @@ $bra = new BRA();
 //
 //    die();
 
-//    print_r(unserialize($_SESSION['qL']));
-//    echo "<br />";
-//    print_r($data[$id]);
-//    echo PHP_EOL . "<br /> ========= " . PHP_EOL;
-//    print_r($data);
-
 $res = $bra->query($data, $data[$id], unserialize($_SESSION['qL']));
-//echo "qL: <br>";
-//print_r(unserialize($_SESSION['qL']));
-//echo "Res: <br />";
-//print_r($res);
-//echo "data[$id]: <br>";
-//print_r($data[$id]);
-//echo "ranges: <br>";
-//print_r(unserialize($_SESSION['ranges']));
-//echo "DATA: <br>";
-//print_r($data);
+
 $result = array();
 $index = 0;
 foreach(unserialize($_SESSION['ranges']) as $attrName => $val){
 //    print_r($res);
+    if($res == null){
+        echo "BRA result = null <br />";
+    }
     $attr = $res->attributes[$index];
     $result[$attrName] = $attr;
 

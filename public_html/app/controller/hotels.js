@@ -130,21 +130,21 @@ controllers.HotelsController = function ($scope, $modal, $timeout, HotelRange, H
                     ql = parseFloat(skyNot.qL.stars);
                     if(ql != $scope.ranges.starsFrom) {
                         $scope.currentSkyNot.starsTo = $scope.ranges.starsTo;
-                        $scope.ranges.starsFrom = ql;
+                        $scope.ranges.starsFrom = ql + 0.00001;
                     }
                 }
                 if($scope.ranges.rating)  {
                     ql = parseFloat(skyNot.qL.rating);
                     if(ql != $scope.ranges.ratingFrom) {
                         $scope.currentSkyNot.ratingTo = $scope.ranges.ratingTo;
-                        $scope.ranges.ratingFrom = ql;
+                        $scope.ranges.ratingFrom = ql + 0.00001;
                     }
                 }
                 if($scope.ranges.pools) {
                     ql = parseFloat(skyNot.qL.pools);
                     if(ql != $scope.ranges.poolsFrom) {
                         $scope.currentSkyNot.poolsTo = $scope.ranges.poolsTo;
-                        $scope.ranges.poolsFrom = ql;
+                        $scope.ranges.poolsFrom = ql + 0.00001;
                     }
                 }
             });
