@@ -4,18 +4,18 @@
         ng-class="{'glyphicon-chevron-down': status.isFirstOpen, 'glyphicon-chevron-right': !status.isFirstOpen}"></i>
 </accordion-heading>
 
-<div class="btn-group" dropdown dropdown-append-to-body>
+<div class="btn-group" style="margin-bottom: 15px;" dropdown dropdown-append-to-body>
     <button type="button" class="btn btn-primary dropdown-toggle" dropdown-toggle>
         Order by: {{ order }} <span class="caret"></span>
     </button>
     <ul class="dropdown-menu" role="menu">
         <li><a href ng-click="sortBy('price', false, acc)">Price/day</a></li>
+        <li><a href ng-click="sortBy('rating', true, acc)">User rating</a></li>
         <li><a href ng-click="sortBy('beach', false, acc)">Dist. beach</a></li>
         <li><a href ng-click="sortBy('downtown', false, acc)">Dist. downtown</a></li>
-        <li><a href ng-click="sortBy('pools', true, acc)">Num. pools</a></li>
-        <li><a href ng-click="sortBy('rating', true, acc)">User rating</a></li>
-        <li><a href ng-click="sortBy('stars', true, acc)">Stars</a></li>
-        <li><a href ng-click="sortBy('score', false, acc)">Sky-not score</a></li>
+        <li><a href ng-click="sortBy('aros', true, acc)">Dist. ARoS</a></li>
+        <li><a href ng-click="sortBy('roomsize', true, acc)">Room size</a></li>
+        <li><a href ng-click="sortBy('wifi', true, acc)">Wifi speed</a></li>
     </ul>
 </div>
 <div ng-include="'app/partials/hotel-well.html'"></div>
