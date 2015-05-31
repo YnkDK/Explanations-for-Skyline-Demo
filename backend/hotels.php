@@ -14,25 +14,25 @@ $notSkyline = array();
 // Define the user-specified ranges
 $ranges = array();
 if(strcmp($_GET['beach'], 'true') === 0) {
-    $ranges['beach'] = array($_GET['beachFrom'], $_GET['beachTo'], 'MIN');
+    $ranges['beach'] = array($_GET['beachFrom'], $_GET['beachTo'], $_GET['beachType']);
 }
 if(strcmp($_GET['downtown'], 'true') === 0) {
-    $ranges['downtown'] = array($_GET['downtownFrom'], $_GET['downtownTo'], 'MIN');
+    $ranges['downtown'] = array($_GET['downtownFrom'], $_GET['downtownTo'], $_GET['downtownType']);
 }
 if(strcmp($_GET['roomsize'], 'true') === 0) {
-    $ranges['roomsize'] = array($_GET['roomsizeFrom'], $_GET['roomsizeTo'], 'MAX');
+    $ranges['roomsize'] = array($_GET['roomsizeFrom'], $_GET['roomsizeTo'], $_GET['roomsizeType']);
 }
 if(strcmp($_GET['price'], 'true') === 0) {
-    $ranges['price'] = array($_GET['priceFrom'], $_GET['priceTo'], 'MIN');
+    $ranges['price'] = array($_GET['priceFrom'], $_GET['priceTo'], $_GET["priceType"]);
 }
 if(strcmp($_GET['rating'], 'true') === 0) {
-    $ranges['rating'] = array($_GET['ratingFrom'], $_GET['ratingTo'], 'MAX');
+    $ranges['rating'] = array($_GET['ratingFrom'], $_GET['ratingTo'], $_GET["ratingType"]);
 }
 if(strcmp($_GET['wifi'], 'true') === 0) {
-    $ranges['wifi'] = array($_GET['wifiFrom'], $_GET['wifiTo'], 'MAX');
+    $ranges['wifi'] = array($_GET['wifiFrom'], $_GET['wifiTo'], $_GET["wifiType"]);
 }
 if(strcmp($_GET['aros'], 'true') === 0) {
-    $ranges['aros'] = array($_GET['arosFrom'], $_GET['arosTo'], 'MAX');
+    $ranges['aros'] = array($_GET['arosFrom'], $_GET['arosTo'], $_GET["arosType"]);
 }
 
 

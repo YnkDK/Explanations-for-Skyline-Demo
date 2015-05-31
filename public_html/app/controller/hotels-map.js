@@ -1,58 +1,7 @@
-controllers.HotelsMapController = function ($scope, $resource, $location, uiGmapGoogleMapApi, $log) {
-    $scope.oneAtATime = true;
-    var url = backend + 'hotels.php';
-    $scope.stars = [
-        1, 2, 3, 4, 5
-    ];
-    // The accordions data, i.e. the hotels
-    $scope.inSkyline = [];
-    $scope.notSkyline =
-
-        // Default settings for the query
-        $scope.data = {
-            price: true,
-            priceFrom: 0,
-            priceTo: 900,
-
-            beach: true,
-            beachFrom: 0.0,
-            beachTo: 20.0,
-
-            downtown: true,
-            downtownFrom: 0.0,
-            downtownTo: 20,
-
-            pools: true,
-            poolsFrom: 0,
-            poolsTo: 10,
-
-            ratings: true,
-            ratingsFrom: 0,
-            ratingsTo: 10,
-
-            stars: true,
-            starsFrom: 0,
-            starsTo: 5
-        };
-
-    /**
-     * Sends the query to backend and update the accordions
-     * with the result
-     */
-    $scope.query = function () {
-        $resource(url).get(
-            $scope.data
-            , function (values) {
-                $scope.inSkyline = values.skyline;
-                $scope.notSkyline = values.notSkyline;
-            }, function (error) {
-                alert("That's an error. See console for more info.");
-                console.log(error);
-            });
-    };
-    /**
-     *
-     */
+controllers.HotelsMapController = function ($scope, $modal, $timeout, uiGmapGoogleMapApi, HotelRange, Hotels) {
+    $scope.ranges = {}; // Defines qL and qU for the range query
+    $scope.hotels = [];
+    $scope.loadingText = "";
 
     $scope.map = {center: {latitude: 45, longitude: -73}, zoom: 8};
     uiGmapGoogleMapApi.then(function (maps) {
@@ -96,27 +45,71 @@ controllers.HotelsMapController = function ($scope, $resource, $location, uiGmap
         }
     });
 
-    $scope.hotels = [];
-    var notSkyline = [];
-    $scope.handleClick = function (event) {
-        $scope.current = notSkyline[event.model.id];
-    };
-    $resource(url).get(
-        $scope.data
-        , function (values) {
-            console.log(values);
-            $scope.hotels = [];
-            notSkyline = [];
-            for(var i = 0; i < values.notSkyline.length; i++) {
-                $scope.hotels.push({
-                    id: i,
-                    latitude: values.notSkyline[i].coordinates[1],
-                    longitude:values.notSkyline[i].coordinates[0]
-                });
-                notSkyline.push(values.notSkyline[i]);
-            }
-        }, function (error) {
-            alert("That's an error. See console for more info.");
-            console.log(error);
+
+    // Define local variables
+    var modalInstance = undefined;
+    // Define local functions
+    /**
+     * Shows a loading gif
+     */
+    function loading() {
+        modalInstance = $modal.open({
+            templateUrl: 'app/partials/modal-loading.html',
+            size: 'sm',
+            backdrop: 'static',
+            keyboard: false,
+            scope: $scope
         });
+    }
+
+    /**
+     * Fetches the default ranges from the server
+     */
+    function fetchRanges() {
+        $scope.loadingText = "Fetching ranges...";
+        loading();
+        var ranges = HotelRange.get({}, function() {
+            $scope.ranges = ranges.data;
+
+            //Swap min and max
+            //for(var property in $scope.ranges) {
+            //    if($scope.ranges.hasOwnProperty(property)) {
+            //        if($scope.ranges[property] === 'MAX') {
+            //            $scope.ranges[property] = 'MIN';
+            //        } else if($scope.ranges[property] === 'MIN') {
+            //            $scope.ranges[property] = 'MAX';
+            //        }
+            //    }
+            //}
+            // Do not use attributes that cannot be changed
+            $scope.ranges.beach = false;
+            $scope.ranges.aros = false;
+            $scope.ranges.downtown = false;
+            // Ensure that the rest is enabled
+            $scope.ranges.price = false;
+            $scope.ranges.rating = true;
+            $scope.ranges.wifi = false;
+            $scope.ranges.roomsize = false;
+            // Get skyline of the hotels using these parameters
+            $scope.loadingText = "Computing skyline...";
+            var hotels = Hotels.get($scope.ranges, function() {
+                for(var i = 0; i < hotels.skyline.length; i++) {
+                    var h = hotels.skyline[i];
+                    $scope.hotels.push({
+                        id: h.id,
+                        latitude: h.coordinates[1],
+                        longitude: h.coordinates[0]
+                    })
+                }
+                $scope.notSkyline = hotels.notSkyline;
+                $scope.skyline = hotels.skyline;
+                console.log($scope.notSkyline);
+                modalInstance.dismiss();
+            });
+        });
+    }
+
+    // Start by getting the extreme ranges
+    fetchRanges();
+
 };
