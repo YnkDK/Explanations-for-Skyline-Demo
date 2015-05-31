@@ -2,7 +2,7 @@
 require_once('headers.php');
 require_once('BRA.php');
 require_once('PointPaper.php');
-
+ini_set('max_execution_time', 300);
 if(!isset($_SESSION['S']) && !(isset($_GET["id"])))
     die("S is NOT in session OR you forgot to specify id");
 
