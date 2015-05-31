@@ -51,3 +51,9 @@ body {
 .green-border {
     border: 5px dashed darkseagreen;
 }
+
+.disabled-input {
+    background-color: #EEEEEE;
+    opacity: 1;
+    cursor: not-allowed;
+}
