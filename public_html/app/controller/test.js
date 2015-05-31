@@ -251,12 +251,15 @@ controllers.TestController = function ($scope, $timeout) {
             g.context.textAlign = "right";
             g.fillPoint(qL[0], qL[1]);
             g.fillText("qL", qL[0] - 2.5, qL[1]);
+            g.context.textAlign = "left";
+            g.fillPoint(qU[0], qU[1]);
+            g.fillText("qU", qU[0] + 2.5, qU[1]);
             canvases[2].skyline = bnl(canvases[2].S);
             drawSkyline(canvases[2].skyline);
             g.canvas.addEventListener("click", $scope.chooseP, false);
         } else if(c.id == "fourthCanvas") {
             qL = canvases[1].qL;
-            drawBound(qL, canvases[1].qU);
+            //drawBound(qL, canvases[1].qU);
             g.context.fillStyle = "green";
             g.context.font = "8px sans-serif";
             g.context.textAlign = "right";

@@ -1,64 +1,100 @@
+<div class="panel panel-default" ng-show="currentCanvas === 0">
+    <div class="panel-heading">
+        <h3>Point generation</h3>
+    </div>
+    <div class="panel-body" style="max-height: 150px; min-height: 150px; font-size: 16px">
+    Before starting analyzing any data, we fist need to generate them.
+        Below you can set the number of points to generate and making them reproducible by using a seed.
+    </div>
+    <div class="panel-footer">
+        <div class="row" ng-hide="points.length > 0">
+            <div class="col-sm-3">
+                <div class="input-group">
+                    <label for="n" class="input-group-addon">Num. points</label>
+                    <input id="n" class="form-control" ng-model="numPoints">
+                </div>
+            </div>
+            <div class="col-sm-5">
+                <div class="input-group">
+                    <label for="seed" class="input-group-addon">Seed</label>
+                    <input id="seed" class="form-control" ng-model="seed">
+                </div>
+            </div>
 
-{{qL}}
-<div class="well well-lg" ng-show="currentCanvas === 0" style="height: 150px;">
-    <p>Test</p>
-    <div class="row" ng-hide="points.length > 0">
-        <div class="col-sm-3">
-            <div class="input-group">
-                <label for="n" class="input-group-addon">Num. points</label>
-                <input id="n" class="form-control" ng-model="numPoints">
+            <div class="col-sm-4">
+                <button class="btn btn-primary pull-right" ng-click="genData(numPoints, seed)">Generate random points</button>
             </div>
         </div>
-        <div class="col-sm-5">
-            <div class="input-group">
-                <label for="seed" class="input-group-addon">Seed</label>
-                <input id="seed" class="form-control" ng-model="seed">
+
+        <div class="row" ng-show="points.length > 0">
+            <div class="col-sm-10">
+
+            </div>
+            <div class="col-sm-2">
+                <button class="btn btn-primary btn-block" ng-click="next()">Next canvas</button>
             </div>
         </div>
-
-        <div class="col-sm-4">
-            <button class="btn btn-primary" ng-click="genData(numPoints, seed)">Generate random points</button>
-        </div>
     </div>
-    <div class="row" ng-show="points.length > 0">
-        <div class="col-sm-8">
-            Great! You have now generated {{ numPoints }} random points. Click next to choose lower and upper bound
-        </div>
-        <div class="col-sm-4">
-            <button class="btn btn-primary" ng-click="next()">Next!</button>
+</div>
+
+<div class="panel panel-default" ng-show="currentCanvas === 1">
+    <div class="panel-heading">
+        <h3>Constrained Dataset</h3>
+    </div>
+    <div class="panel-body" style="max-height: 150px; min-height: 150px; font-size: 16px;">
+    <div>You have now generated {{numPoints}} random points. Click on the canvas to set your constraints. </div>
+    <div ng-show="canvases[1].qL !== undefined">Lower constraint: ({{canvases[1].qL[0]|number:1}}, {{canvases[1].qL[1]|number:1}})</div>
+    <div ng-show="canvases[1].qU !== undefined">Upper constraint: ({{canvases[1].qU[0]|number:1}}, {{canvases[1].qU[1]|number:1}})</div>
+    <div ng-show="canvases[1].qL != undefined && canvases[1].qU != undefined">Great! You have now selected the lower and upper constraint. On the next canvas we will show you the constrained skyline.</div>
+    </div>
+    <div class="panel-footer">
+        <div class="row">
+            <div class="col-sm-10">
+            </div>
+            <div class="col-sm-2">
+                <button class="btn btn-success" ng-click="next()" ng-disabled="canvases[1].qL === undefined || canvases[1].qU === undefined">Next canvas</button>
+            </div>
         </div>
     </div>
 </div>
 
-<div class="well well-lg" ng-show="currentCanvas === 1" style="height: 150px;">
-    <div ng-hide="canvases[1].qL !== undefined">Click on the canvas to set the lower bound.</div>
-    <div ng-hide="canvases[1].qL != undefined && canvases[1].qU != undefined">Now click on the canvas to set the upper bound</div>
-    <div class="row" ng-show="canvases[1].qL != undefined && canvases[1].qU != undefined">
-        <div class="col-sm-8">
-            Great! You have now generated selected a lower and upper bound. Click next to run see the skyline!
-        </div>
-        <div class="col-sm-4">
-            <button class="btn btn-primary" ng-click="next()">Next!</button>
+<div class="panel panel-default" ng-show="currentCanvas === 2">
+    <div class="panel-heading">
+        <h3>Close dominance is sufficient</h3>
+    </div>
+    <div class="panel-body" style="max-height: 150px; min-height: 150px; font-size: 16px;">
+        The points in the skyline is highlighted as green points connected by a dotted line.<br />
+        Click on any point within the constrained dataset to find the closely dominating points.
+        <span ng-show="canvases[2].C !== undefined">
+            <br />You can now see the {{canvases[2].C.length}} point<span ng-show="canvases[2].C.length > 1">s</span> which closely dominates the query point ({{canvases[2].p[0] | number:1}}, {{canvases[2].p[1] | number:1}})
+        </span>
+    </div>
+    <div class="panel-footer">
+        <div class="row">
+            <div class="col-sm-10"></div>
+            <div class="col-sm-2">
+                <button ng-disabled="canvases[2].C === undefined" class="btn btn-success" ng-click="next()">Next canvas</button>
+            </div>
         </div>
     </div>
 </div>
 
-<div class="well well-lg" ng-show="currentCanvas === 2" style="height: 150px;">
-    <div ng-hide="canvases[2].C !== undefined">We have highlighted the skyline. Click on any point within the bound to see the closely dominating points.</div>
-    <div class="row" ng-show="canvases[2].C !== undefined">
-        <div class="col-sm-8">
-            You can now see the {{canvases[2].C.length}} point<span ng-show="canvases[2].C.length > 1">s</span> which are closely dominated by ({{canvases[2].p[0] | number:1}}, {{canvases[2].p[1] | number:1}})
-        </div>
-        <div class="col-sm-4">
-            <button class="btn btn-primary" ng-click="next()">Next!</button>
+<div class="panel panel-default" ng-show="currentCanvas === 3">
+    <div class="panel-heading">
+        <h3>Bounding Rectangle Algorithm</h3>
+    </div>
+    <div class="panel-body" style="max-height: 150px; min-height: 150px; font-size: 16px;">
+        After running the BRA the solution for the sky-not query is shown (highlighted with pink).
+        The query point is likewise shown as a pink point.
+    </div>
+    <div class="panel-footer">
+        <div class="row">
+            <div class="col-sm-2">
+                <button class="btn btn-danger right" ng-click="init()">Start over!</button>
+            </div>
+            <div class="col-sm-10"></div>
         </div>
     </div>
-</div>
-
-<div class="well well-lg" ng-show="currentCanvas === 3" style="height: 150px;">
-
-    <button class="btn btn-primary left" ng-click="currentCanvas = currentCanvas-1">Previous</button>
-    <button class="btn btn-danger right" ng-click="init()">Start over!</button>
 </div>
 <div id="canvas-4-graph">
 <canvas ng-show="currentCanvas === 0" class="well well-lg" id="firstCanvas" height="500px" width="970px" style="background: #ffffff;"></canvas>
