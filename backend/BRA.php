@@ -18,7 +18,7 @@ class BRA {
                     $add = false;
                     break;
                 } elseif($this->strictlyDominated($p, $c)) {
-                    $W = array_diff($W, [$p]);
+                    $W = array_diff($W, array($p));
                 }
             }
             if($add) {
