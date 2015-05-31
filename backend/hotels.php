@@ -91,7 +91,8 @@ foreach($data as $id=>$hotel){
 
 //Find skyline using BNL algorithm
 $bnl = new BNL();
-foreach($bnl->query($S) as $id => $_) {
+$bnlResult = $bnl->query($S);
+foreach($bnlResult as $id => $_) {
     $skyline[$id] = $hotels[$id];
 }
 
