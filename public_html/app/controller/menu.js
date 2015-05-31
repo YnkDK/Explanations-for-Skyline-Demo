@@ -1,16 +1,16 @@
 controllers.MenuController = function($scope, $location) {
-    $scope.page_name = "Sky-not query";
+    $scope.page_name = "The sky-not query";
     $scope.navigation = [
         {
-            name: 'Start',
+            name: '2D Demo',
             href: '#/frontpage'
         },
         {
-            name: 'Hotels',
+            name: 'Hotel guest',
             href: '#/hotels'
         },
         {
-            name: 'Hotels (map)',
+            name: 'Hotel manager',
             href: '#/hotels-map'
         },
         {
