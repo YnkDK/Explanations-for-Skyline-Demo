@@ -22,8 +22,28 @@ class BNL {
                 }
             }
         }
-        return array_diff($points, $bad);
+        return $this->custom_array_diff($points, $bad);
     }
+
+    /**
+     * Computes the difference of arrays in a more efficient way than the built-in PHP function array_diff
+     * Copied from http://stackoverflow.com/questions/2479963/how-does-array-diff-work/6700430
+     * @param array $arraya
+     * @param array $arrayb
+     * @return array $arraya minus those from $arrayb
+     */
+    function custom_array_diff(array $arraya, array $arrayb)
+    {
+        foreach ($arraya as $keya => $valuea)
+        {
+            if (in_array($valuea, $arrayb))
+            {
+                unset($arraya[$keya]);
+            }
+        }
+        return $arraya;
+    }
+
 }
 
 // Run the following if we access this file
