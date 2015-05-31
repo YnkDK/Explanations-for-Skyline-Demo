@@ -207,16 +207,17 @@ controllers.TestController = function ($scope, $timeout) {
         }
         var g = $scope.cGraph = Graph;
         if(g !== undefined && g.canvas !== undefined) {
-            var parent = document.getElementById("canvas-4-graph");
-            var newCanvas = document.createElement("canvas");
-            newCanvas.className = "well well-lg";
-            newCanvas.width = 970;
-            newCanvas.width = 500;
-            var att = document.createAttribute("ng-show");
-            att.value = "currentCanvas === " + $scope.currentCanvas;
-            newCanvas.setAttributeNode(att);
-            newCanvas.id = c.id;
-            parent.replaceChild(newCanvas, canvas);
+            g.canvas.width = 970;
+            //var parent = document.getElementById("canvas-4-graph");
+            //var newCanvas = document.createElement("canvas");
+            //newCanvas.className = "well well-lg";
+            //newCanvas.width = 970;
+            //newCanvas.width = 500;
+            //var att = document.createAttribute("ng-show");
+            //att.value = "currentCanvas === " + $scope.currentCanvas;
+            //newCanvas.setAttributeNode(att);
+            //newCanvas.id = c.id;
+            //parent.replaceChild(newCanvas, canvas);
         }
         g.init(canvas);
         g.drawGrid();
