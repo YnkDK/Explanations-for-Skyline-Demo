@@ -7,7 +7,7 @@ $ex = $db->getExtremes();
 
 echo json_encode(array(
     "data" => array(
-        "price" => FALSE,
+        "price" => TRUE,
         "priceFrom" => $ex["price"][0],
         "priceTo" => $ex["price"][1],
         "beach" => FALSE,
@@ -19,10 +19,10 @@ echo json_encode(array(
         "roomsize" => FALSE,
         "roomsizeFrom" => $ex["roomsize"][0],
         "roomsizeTo" => $ex["roomsize"][1],
-        "rating" => FALSE,
+        "rating" => TRUE,
         "ratingFrom" => $ex["rating"][0],
         "ratingTo" => $ex["rating"][1],
-        "wifi" => FALSE,
+        "wifi" => TRUE,
         "wifiFrom" => $ex["wifi"][0],
         "wifiTo" => $ex["wifi"][1],
         "aros" => FALSE,
