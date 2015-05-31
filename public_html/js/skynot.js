@@ -70,17 +70,16 @@ function boundingRectangleAlgorithm(C, qL) {
                 cy = corners[l][1];
                 var add = true;
                 for(var k = 0; k < W.length; k++) {
+                    if(W[k] === undefined) continue;
                     var px = W[k][0], py = W[k][1];
                     if(cx < px && cy < py) { // if c is strictly dominated by p
                         add = false;
                         break;
                     } else if(px < cx && py < cy) { // if p is strictly dominated by c
-                        console.log(W[k]);
                         W[k] = undefined;
                     }
                 }
                 if(add) {
-                    console.log([cx, cy]);
                     W.push([cx, cy]);
                 }
             }
@@ -105,8 +104,80 @@ function boundingRectangleAlgorithm(C, qL) {
  * @returns {Array}
  */
 function prioritizedRecursionAlgorithm(C, p, qL, D) {
+    if(C.length === 0) {
+        return qL;
+    }
+    var best = p;
+    // Sort d in D by p[d] - qL[d], ascending
+    if(D.length === 2) {
+        if(p[0]-qL[0] > p[1]-qL[1]) {
+            D[0] = 1;
+            D[1] = 0;
+        } else {
+            D[0] = 0;
+            D[1] = 1;
+        }
+    }
+    for(var i = 0; i < D.length; i++) {
+        var d = D[i];
+        sortS(C, i, qL);
+        var maxMin = 0;
+        for(var j = 0; j < C.length; j++) {
+            var s = C[j];
+            if(s[d] - qL[d] + maxMin < manhattan(qL, best)) {
+                // Remove the current dimension from D
+                var newD;
+                if(D.length == 2) {
+                    if(d == 0) {
+                        newD = [1];
+                    } else {
+                        newD = [0];
+                    }
+                } else {
+                    newD = [];
+                }
+                var rec = prioritizedRecursionAlgorithm(C.slice(0, j), p, qL, newD);
+                if(manhattan(qL, rec) + s[d] - qL[d] < manhattan(qL, best)) {
+                    best = rec;
+                    rec[d] = s[d];
+                } else if(manhattan(qL, rec) >= manhattan(qL, best)) {
+                    break;
+                }
+            } else if(maxMin >= best[0] + best[1]) {
+                break;
+            } else {
+                // Do nothing
+            }
+            var min = minD(s, qL);
+            if(maxMin < min) {
+                maxMin = min;
+            }
+        }
+    }
+    console.log(best);
+    return best;
+}
 
-    return [];
+/**
+ * Sort S by s[d] - qL[d], descending
+ * @param C
+ * @param d
+ * @param qL
+ */
+function sortS(C, d, qL) {
+    var tmp = [];
+    for(var i = 0; i < C.length; i++) {
+        tmp.push({
+            score: C[i][d] - qL[d],
+            coordinate: C[i]
+        });
+    }
+    tmp.sort(function(a, b) {
+        return a.score - b.score;
+    });
+    for(i = 0; i < C.length; i++) {
+        C[i] = tmp[i].coordinate;
+    }
 }
 
 /**
@@ -143,16 +214,6 @@ function dominance(s, t) {
  */
 function manhattan(a, b) {
     return Math.abs(a[0]-b[0]) + Math.abs(a[1]-b[1]);
-}
-
-function sortD(D, p, qL) {
-    // TODO: Implement this
-    return [];
-}
-
-function sortS(S, qL) {
-    // TODO: Implement this
-    return [];
 }
 
 /**
