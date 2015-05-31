@@ -1,6 +1,6 @@
 controllers.TestController = function ($scope, $timeout) {
     var canvases;
-    function init() {
+    $scope.init = function init() {
         $scope.seed = 'Your random text seed';
         $scope.points = [];
         $scope.currentCanvas = 0;
@@ -31,17 +31,24 @@ controllers.TestController = function ($scope, $timeout) {
                 isDone: false
             }
         ];
-    }
-    init();
+
+        $timeout(function() {
+            canvases[$scope.currentCanvas].active = true;
+            handleNewCanvas(canvases[$scope.currentCanvas]);
+        }, 100);
+    };
+    $scope.init();
 
     $scope.next = function() {
         $scope.currentCanvas++;
         canvases[$scope.currentCanvas-1].active = false;
         canvases[$scope.currentCanvas-1].isDone = true;
-        $timeout(function() {
-            canvases[$scope.currentCanvas].active = true;
-            handleNewCanvas(canvases[$scope.currentCanvas]);
-        }, 100);
+        if(!canvases[$scope.currentCanvas].isDone){
+            $timeout(function() {
+                canvases[$scope.currentCanvas].active = true;
+                handleNewCanvas(canvases[$scope.currentCanvas]);
+            }, 100);
+        }
     };
 
     $scope.genData = function(n, seed) {
@@ -57,6 +64,7 @@ controllers.TestController = function ($scope, $timeout) {
             ]);
             $scope.cGraph.fillPoint(x, y);
         }
+        $scope.next();
 
     };
     function bnl(S) {
@@ -192,11 +200,24 @@ controllers.TestController = function ($scope, $timeout) {
     function handleNewCanvas(c) {
         console.log(c);
         var canvas = document.getElementById(c.id);
+        console.log(canvas);
         if(canvas === null) {
             console.log("Canvas was null");
             return;
         }
         var g = $scope.cGraph = Graph;
+        if(g !== undefined && g.canvas !== undefined) {
+            var parent = document.getElementById("canvas-4-graph");
+            var newCanvas = document.createElement("canvas");
+            newCanvas.className = "well well-lg";
+            newCanvas.width = 970;
+            newCanvas.width = 500;
+            var att = document.createAttribute("ng-show");
+            att.value = "currentCanvas === " + $scope.currentCanvas;
+            newCanvas.setAttributeNode(att);
+            newCanvas.id = c.id;
+            parent.replaceChild(newCanvas, canvas);
+        }
         g.init(canvas);
         g.drawGrid();
         if(c.id === "secondCanvas") {
@@ -274,6 +295,7 @@ controllers.TestController = function ($scope, $timeout) {
             drawSkyline(skyline);
             g.context.fillStyle = "#FF33FF";
             g.fillPoint(canvases[2].p[0], canvases[2].p[1]);
+            c.isDone = true;
         }
     }
 
@@ -283,8 +305,5 @@ controllers.TestController = function ($scope, $timeout) {
         console.log(canvases);
     });
 
-    $timeout(function() {
-        canvases[$scope.currentCanvas].active = true;
-        handleNewCanvas(canvases[$scope.currentCanvas]);
-    }, 100);
+
 };

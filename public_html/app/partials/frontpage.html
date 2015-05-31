@@ -55,8 +55,14 @@
     </div>
 </div>
 
-<div class="well well-lg" ng-show="currentCanvas === 3" style="height: 150px;"></div>
+<div class="well well-lg" ng-show="currentCanvas === 3" style="height: 150px;">
+
+    <button class="btn btn-primary left" ng-click="currentCanvas = currentCanvas-1">Previous</button>
+    <button class="btn btn-danger right" ng-click="init()">Start over!</button>
+</div>
+<div id="canvas-4-graph">
 <canvas ng-show="currentCanvas === 0" class="well well-lg" id="firstCanvas" height="500px" width="970px" style="background: #ffffff;"></canvas>
 <canvas ng-show="currentCanvas === 1" class="well well-lg" id="secondCanvas" height="500px" width="970px" style="background: #ffffff;"></canvas>
 <canvas ng-show="currentCanvas === 2" class="well well-lg" id="thirdCanvas" height="500px" width="970px" style="background: #ffffff;"></canvas>
 <canvas ng-show="currentCanvas === 3" class="well well-lg" id="fourthCanvas" height="500px" width="970px" style="background: #ffffff;"></canvas>
+</div>
