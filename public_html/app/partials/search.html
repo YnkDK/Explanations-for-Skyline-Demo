@@ -20,7 +20,7 @@
                     <td class="text-center">
                         <div class="input-wrapper">
                             <span ng-class="{'disabled-input': !ranges.price}" class="no-form-control text-left" ng-click="edit.priceFrom = ranges.price"
-                                  ng-hide="edit.priceFrom">{{ranges.priceFrom | number:2}}</span>
+                                  ng-hide="edit.priceFrom">{{ranges.priceFrom | number:0}}</span>
                             <input ng-blur="edit.priceFrom = false" class="form-control" type="number" step="10" min="0"
                                    max="{{ranges.priceTo}}" ng-model="ranges.priceFrom" ng-disabled="!ranges.price"
                                    value="{{ranges.priceFrom | number:2}}">
@@ -31,7 +31,7 @@
                     <td class="text-center">
                         <div class="input-wrapper">
                             <span ng-class="{'disabled-input': !ranges.price}" class="no-form-control text-left" ng-click="edit.priceTo = ranges.price"
-                                  ng-hide="edit.priceTo">{{ranges.priceTo | number:2}}</span>
+                                  ng-hide="edit.priceTo">{{ranges.priceTo | number:0}}</span>
                             <input ng-blur="edit.priceTo = false" class="form-control" type="number" step="10"
                                    min="{{ranges.priceFrom}}" ng-model="ranges.priceTo" ng-disabled="!ranges.price"
                                    value="{{ranges.priceTo | number:2}}">
@@ -46,7 +46,7 @@
                     <td class="text-center">
                         <div class="input-wrapper">
                             <span ng-class="{'disabled-input': !ranges.rating}" class="no-form-control text-left" ng-click="edit.ratingFrom = ranges.rating"
-                                  ng-hide="edit.ratingFrom">{{ranges.ratingFrom | number:2}}</span>
+                                  ng-hide="edit.ratingFrom">{{ranges.ratingFrom | number:1}}</span>
                             <input ng-blur="edit.ratingFrom = false" class="form-control" type="number" step="0.5" min="0"
                                    max="{{ranges.ratingTo}}" ng-model="ranges.ratingFrom" ng-disabled="!ranges.rating"
                                    value="{{ranges.ratingFrom | number:2}}">
@@ -57,7 +57,7 @@
                     <td class="text-center">
                         <div class="input-wrapper">
                             <span ng-class="{'disabled-input': !ranges.rating}" class="no-form-control text-left" ng-click="edit.ratingTo = ranges.rating"
-                                  ng-hide="edit.ratingTo">{{ranges.ratingTo | number:2}}</span>
+                                  ng-hide="edit.ratingTo">{{ranges.ratingTo | number:1}}</span>
                             <input ng-blur="edit.ratingTo = false" class="form-control" type="number" step="0.5"
                                    min="{{ranges.ratingFrom}}" max="5" ng-model="ranges.ratingTo" ng-disabled="!ranges.rating"
                                    value="{{ranges.ratingTo | number:2}}">
@@ -72,7 +72,7 @@
                     <td class="text-center">
                         <div class="input-wrapper">
                             <span ng-class="{'disabled-input': !ranges.beach}" class="no-form-control text-left" ng-click="edit.beachFrom = ranges.beach"
-                                  ng-hide="edit.beachFrom">{{ranges.beachFrom | number:2}}</span>
+                                  ng-hide="edit.beachFrom">{{ranges.beachFrom | number:1}}</span>
                             <input ng-blur="edit.beachFrom = false" class="form-control" type="number" step="0.1" min="0"
                                    max="{{ranges.beachTo}}" ng-model="ranges.beachFrom" ng-disabled="!ranges.beach"
                                    value="{{ranges.beachFrom | number:2}}">
@@ -83,7 +83,7 @@
                     <td class="text-center">
                         <div class="input-wrapper">
                             <span ng-class="{'disabled-input': !ranges.beach}" class="no-form-control text-left" ng-click="edit.beachTo = ranges.beach"
-                                  ng-hide="edit.beachTo">{{ranges.beachTo | number:2}}</span>
+                                  ng-hide="edit.beachTo">{{ranges.beachTo | number:1}}</span>
                             <input ng-blur="edit.beachTo = false" class="form-control" type="number" step="0.1"
                                    min="{{ranges.beachFrom}}" ng-model="ranges.beachTo" ng-disabled="!ranges.beach"
                                    value="{{ranges.beachTo | number:2}}">
@@ -98,7 +98,7 @@
                     <td class="text-center">
                         <div class="input-wrapper">
                             <span ng-class="{'disabled-input': !ranges.downtown}" class="no-form-control text-left" ng-click="edit.downtownFrom = ranges.downtown"
-                                  ng-hide="edit.downtownFrom">{{ranges.downtownFrom | number:2}}</span>
+                                  ng-hide="edit.downtownFrom">{{ranges.downtownFrom | number:1}}</span>
                             <input ng-blur="edit.downtownFrom = false" class="form-control" type="number" step="0.1" min="0"
                                    max="{{ranges.downtownTo}}" ng-model="ranges.downtownFrom" ng-disabled="!ranges.downtown"
                                    value="{{ranges.downtownFrom | number:2}}">
@@ -109,7 +109,7 @@
                     <td class="text-center">
                         <div class="input-wrapper">
                             <span ng-class="{'disabled-input': !ranges.downtown}" class="no-form-control text-left" ng-click="edit.downtownTo = ranges.downtown"
-                                  ng-hide="edit.downtownTo">{{ranges.downtownTo | number:2}}</span>
+                                  ng-hide="edit.downtownTo">{{ranges.downtownTo | number:1}}</span>
                             <input ng-blur="edit.downtownTo = false" class="form-control" type="number" step="0.1"
                                    min="{{ranges.downtownFrom}}" ng-model="ranges.downtownTo" ng-disabled="!ranges.downtown"
                                    value="{{ranges.downtownTo | number:2}}">
@@ -124,7 +124,7 @@
                     <td class="text-center">
                         <div class="input-wrapper">
                             <span ng-class="{'disabled-input': !ranges.aros}" class="no-form-control text-left" ng-click="edit.arosFrom = ranges.aros"
-                                  ng-hide="edit.arosFrom">{{ranges.arosFrom | number:2}}</span>
+                                  ng-hide="edit.arosFrom">{{ranges.arosFrom | number:1}}</span>
                             <input ng-blur="edit.arosFrom = false" class="form-control" type="number" step="1" min="0"
                                    max="{{ranges.arosTo}}" ng-model="ranges.arosFrom" ng-disabled="!ranges.aros"
                                    value="{{ranges.arosFrom | number:2}}">
@@ -135,7 +135,7 @@
                     <td class="text-center">
                         <div class="input-wrapper">
                             <span ng-class="{'disabled-input': !ranges.aros}" class="no-form-control text-left" ng-click="edit.arosTo = ranges.aros"
-                                  ng-hide="edit.arosTo">{{ranges.arosTo | number:2}}</span>
+                                  ng-hide="edit.arosTo">{{ranges.arosTo | number:1}}</span>
                             <input ng-blur="edit.arosTo = false" class="form-control" type="number" step="1"
                                    min="{{ranges.arosFrom}}" ng-model="ranges.arosTo" ng-disabled="!ranges.aros"
                                    value="{{ranges.arosTo | number:2}}">
@@ -150,7 +150,7 @@
                     <td class="text-center">
                         <div class="input-wrapper">
                             <span ng-class="{'disabled-input': !ranges.roomsize}" class="no-form-control text-left" ng-click="edit.roomsizeFrom = ranges.roomsize"
-                                  ng-hide="edit.roomsizeFrom">{{ranges.roomsizeFrom | number:2}}</span>
+                                  ng-hide="edit.roomsizeFrom">{{ranges.roomsizeFrom | number:0}}</span>
                             <input ng-blur="edit.roomsizeFrom = false" class="form-control" type="number" step="1" min="0"
                                    max="{{ranges.roomsizeTo}}" ng-model="ranges.roomsizeFrom" ng-disabled="!ranges.roomsize"
                                    value="{{ranges.roomsizeFrom | number:2}}">
@@ -161,7 +161,7 @@
                     <td class="text-center">
                         <div class="input-wrapper">
                             <span ng-class="{'disabled-input': !ranges.roomsize}" class="no-form-control text-left" ng-click="edit.roomsizeTo = ranges.roomsize"
-                                  ng-hide="edit.roomsizeTo">{{ranges.roomsizeTo | number:2}}</span>
+                                  ng-hide="edit.roomsizeTo">{{ranges.roomsizeTo | number:0}}</span>
                             <input ng-blur="edit.roomsizeTo = false" class="form-control" type="number" step="1"
                                    min="{{ranges.roomsizeFrom}}" ng-model="ranges.roomsizeTo" ng-disabled="!ranges.roomsize"
                                    value="{{ranges.roomsizeTo | number:2}}">
@@ -176,7 +176,7 @@
                     <td class="text-center">
                         <div class="input-wrapper">
                             <span ng-class="{'disabled-input': !ranges.wifi}" class="no-form-control text-left" ng-click="edit.wifiFrom = ranges.wifi"
-                                  ng-hide="edit.wifiFrom">{{ranges.wifiFrom | number:2}}</span>
+                                  ng-hide="edit.wifiFrom">{{ranges.wifiFrom | number:0}}</span>
                             <input ng-blur="edit.wifiFrom = false" class="form-control" type="number" step="1" min="0"
                                    max="{{ranges.wifiTo}}" ng-model="ranges.wifiFrom" ng-disabled="!ranges.wifi"
                                    value="{{ranges.wifiFrom | number:2}}">
@@ -187,7 +187,7 @@
                     <td class="text-center">
                         <div class="input-wrapper">
                             <span ng-class="{'disabled-input': !ranges.wifi}" class="no-form-control text-left" ng-click="edit.wifiTo = ranges.wifi"
-                                  ng-hide="edit.wifiTo">{{ranges.wifiTo | number:2}}</span>
+                                  ng-hide="edit.wifiTo">{{ranges.wifiTo | number:0}}</span>
                             <input ng-blur="edit.wifiTo = false" class="form-control" type="number" step="1"
                                    min="{{ranges.wifiFrom}}" ng-model="ranges.wifiTo" ng-disabled="!ranges.wifi"
                                    value="{{ranges.wifiTo | number:2}}">
