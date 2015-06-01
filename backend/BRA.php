@@ -2,9 +2,6 @@
 require_once('PointPaper.php');
 
 class BRA {
-
-    public $Wresult = array();
-
     public function query(&$points, $p, $qL) {
         $C = $this->closeDominance($points, $p); // Line 1-10
         if(count($C) === 0) {
@@ -149,6 +146,10 @@ class BRA {
         return $result;
     }
 
+
+    /*
+     * http://stackoverflow.com/questions/4279722/php-recursion-to-get-all-possibilities-of-strings/8880362#8880362
+     */
     public function getCombinations($base,$n){
 
         $baselen = count($base);
