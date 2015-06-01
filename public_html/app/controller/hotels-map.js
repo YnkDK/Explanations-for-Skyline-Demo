@@ -84,10 +84,10 @@ controllers.HotelsMapController = function ($scope, $modal, $timeout, uiGmapGoog
             // Do not use attributes that cannot be changed
             $scope.ranges.beach = false;
             $scope.ranges.aros = false;
-            $scope.ranges.downtown = false;
+            $scope.ranges.downtown = true;
             // Ensure that the rest is enabled
-            $scope.ranges.price = false;
-            $scope.ranges.rating = true;
+            $scope.ranges.price = true;
+            $scope.ranges.rating = false;
             $scope.ranges.wifi = false;
             $scope.ranges.roomsize = false;
             // Get skyline of the hotels using these parameters

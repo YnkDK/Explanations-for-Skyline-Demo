@@ -14,19 +14,19 @@ $extremes = unserialize($_SESSION["extremes"]);
 $qL = unserialize($_SESSION['qL']);
 
 echo "<pre>";
-$p = $data[$id];
+$p = clone $data[$id];
 print_r(array_combine(array_keys($ranges), array_values($p->attributes)));
 // Use f(x) on all points in S
 foreach($data as &$point) {
     f($point);
 }
 // Use f(x) on p
-f($p);
+//f($p);
 // Use f(x) on qL
 f($qL);
 
 $bra = new BRA();
-$res = $bra->query($data, $data[$id], $qL);
+$res = $bra->query($data, $p, $qL);
 f($res);
 print_r($res);
 
@@ -34,9 +34,10 @@ function f(&$x) {
     global $ranges;
     $j = 0;
     foreach($ranges as $key => $value) {
-        if($value[2] === 'MIN') {
+//        if($value[2] === 'MIN') {
             $x->attributes[$j] = 500 - $x->attributes[$j];
-        }
+//            print_r($key);
+//        }
         $j++;
     }
 }

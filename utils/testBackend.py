@@ -4,6 +4,7 @@ import json
 import cookielib
 import urllib2
 from copy import deepcopy
+from time import time
 
 cookies = cookielib.LWPCookieJar()
 handlers = [
@@ -63,19 +64,23 @@ default = {
 	"wifiType": 'MAX'
 }
 # Get hotels not in skyline using max range
-f = fetch('http://localhost:31337/backend/hotels.php?' + urllib.urlencode(default))
-hotels = json.loads(f.read())
+f = fetch('http://cs.au.dk/~mys/backend/hotels.php?' + urllib.urlencode(default))
+
+hotels = json.loads(unicode(f.read()))
 print 'Hotels not in skyline:', len(hotels["notSkyline"])
 
-
+times = []
 for hotel in hotels["notSkyline"]:
 	# Reset PHP Session etc
 	cookies.clear()
 	# Update PHP Session
-	fetch('http://localhost:31337/backend/hotels.php?' + urllib.urlencode(default))
+	fetch('http://cs.au.dk/~mys/backend/hotels.php?' + urllib.urlencode(default))
 	current = hotel["id"]
 	print "Running on ID:", current,
-	skyNot = fetch('http://localhost:31337/backend/skyNot.php?id={:d}'.format(current)).read()
+	start = time()
+	skyNot = fetch('http://cs.au.dk/~mys/backend/skyNot.php?id={:d}'.format(current)).read()
+	times.append(time()-start)
+	print sum(times)/float(len(times))
 	# Load response for sky-not query
 	qL = json.loads(skyNot)
 	# Prepare for new query
@@ -87,7 +92,9 @@ for hotel in hotels["notSkyline"]:
 		else:
 			newQuery["{:s}From".format(k)] = v + 0.000000001
 	# Request with new query, expect it to be in skyline
-	tmp = json.loads(fetch('http://localhost:31337/backend/hotels.php?' + urllib.urlencode(newQuery)).read())
+	uri = 'http://cs.au.dk/~mys/backend/hotels.php?' + urllib.urlencode(newQuery)
+	req = fetch(uri)
+	tmp = json.loads(req.read())
 	for t in tmp["skyline"]:
 		if t["id"] == hotel["id"]:
 			break
@@ -95,3 +102,4 @@ for hotel in hotels["notSkyline"]:
 		# If we completed the for-loop without a break, we got an error!
 		print '< ERROR',
 	print ''
+
