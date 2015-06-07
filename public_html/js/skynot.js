@@ -97,10 +97,10 @@ function boundingRectangleAlgorithm(C, qL) {
 
 /**
  *
- * @param C
- * @param p
- * @param qL
- * @param D
+ * @param {Array} C
+ * @param {Array} p
+ * @param {Array} qL
+ * @param {Array} D
  * @returns {Array}
  */
 function prioritizedRecursionAlgorithm(C, p, qL, D) {
@@ -121,6 +121,8 @@ function prioritizedRecursionAlgorithm(C, p, qL, D) {
     for(var i = 0; i < D.length; i++) {
         var d = D[i];
         sortS(C, i, qL);
+
+
         var maxMin = 0;
         for(var j = 0; j < C.length; j++) {
             var s = C[j];
@@ -136,10 +138,14 @@ function prioritizedRecursionAlgorithm(C, p, qL, D) {
                 } else {
                     newD = [];
                 }
+
                 var rec = prioritizedRecursionAlgorithm(C.slice(0, j), p, qL, newD);
                 if(manhattan(qL, rec) + s[d] - qL[d] < manhattan(qL, best)) {
-                    best = rec;
-                    rec[d] = s[d];
+
+
+                    best = rec.slice(0);
+                    best[d] = s[d];
+
                 } else if(manhattan(qL, rec) >= manhattan(qL, best)) {
                     break;
                 }
@@ -148,21 +154,21 @@ function prioritizedRecursionAlgorithm(C, p, qL, D) {
             } else {
                 // Do nothing
             }
-            var min = minD(s, qL);
+
+            var min = minD(s, qL, D);
             if(maxMin < min) {
                 maxMin = min;
             }
         }
     }
-    console.log(best);
     return best;
 }
 
 /**
  * Sort S by s[d] - qL[d], descending
- * @param C
- * @param d
- * @param qL
+ * @param {Array} C
+ * @param {Number} d
+ * @param {Array} qL
  */
 function sortS(C, d, qL) {
     var tmp = [];
@@ -220,8 +226,13 @@ function manhattan(a, b) {
  *
  * @param s {Array}
  * @param qL {Array}
+ * @param d {Array}
  * @returns {number}
  */
-function minD(s, qL) {
-    return Math.min(s[0]-qL[0], s[1]-qL[1]);
+function minD(s, qL, d) {
+    if(d.length === 2) {
+        return Math.min(s[0]-qL[0], s[1]-qL[1]);
+    } else {
+        return s[d[0]] - qL[d[0]];
+    }
 }

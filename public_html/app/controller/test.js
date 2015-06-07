@@ -270,8 +270,8 @@ controllers.TestController = function ($scope, $timeout) {
                 current = canvases[2].notS[i];
                 g.fillPoint(current[0], current[1]);
             }
-            qL = boundingRectangleAlgorithm(canvases[2].C, qL);
-
+            //qL = boundingRectangleAlgorithm(canvases[2].C, qL);
+            qL = prioritizedRecursionAlgorithm(canvases[2].C, canvases[2].p,qL, [0,1]);
             qU = canvases[1].qU;
             drawBound(qL, qU);
             g.context.fillStyle = "#FF33FF";

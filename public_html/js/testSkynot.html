@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<pre id="output"></pre>
+
+<script src="skynot.js"></script>
+<script>
+    var C = [
+            [1,5],
+            [2,3.5],
+            [3,3],
+            [4,2],
+            [5,1.7]
+    ];
+    var p = [10, 6];
+    var qL = [0,0];
+    var D = [0,1];
+
+    var res = prioritizedRecursionAlgorithm(C, p, qL, D);
+    document.getElementById("output").innerHTML = res.toString();
+</script>
+</body>
+</html>
