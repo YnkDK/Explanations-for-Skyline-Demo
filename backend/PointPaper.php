@@ -30,6 +30,7 @@ class PointPaper {
             // Ensure that the keys are 0...|D|-1
             array_push($tmp, floatval($a));
         }
+        PointPaper::$num_dims = count($tmp);
         $this->attributes = $tmp;
     }
 

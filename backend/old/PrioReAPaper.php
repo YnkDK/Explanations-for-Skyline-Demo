@@ -1,5 +1,5 @@
 <?php
-require_once "PointPaper.php";
+//require_once "../PointPaper.php";
 
 define("EPSILON", 0.000000001);
 
@@ -9,7 +9,8 @@ class PrioReAPaper {
             throw new Exception("You must query on some points");
         }
         $D = range(0, $query->getNumberOfDimensions()-1);
-        $C = $this->getCloseDoms($points, $query, $lowerBound);
+        $bra = new BRA();
+        $C = $bra->closeDominance($points, $query);
         return $this->algorithm($C, $query, $lowerBound, $D);
     }
 
@@ -40,7 +41,7 @@ class PrioReAPaper {
         if($size === 0) {
             return $qL;
         }
-        print_r($C);
+//        print_r($C);
         $best = $p;
         $D = $this->sortD($D, $p, $qL);
         foreach($D as $d) {
@@ -54,12 +55,12 @@ class PrioReAPaper {
                     unset($dim_left[array_search($d, $dim_left)]);
                     $rec = $this->algorithm(
                         array_slice($S, 0, $i), // TODO: Check if it should be $i-1
-                        $qL,
                         $p,
+                        $qL,
                         $dim_left
                     );
                     if($qL->dist($rec) + $s->attributes[$d] - $qL->attributes[$d] < $qL->dist($best)) {
-                        $best = $rec;
+                        $best = new PointPaper($rec->attributes);
                         $best->attributes[$d] = $s->attributes[$d];
                     } elseif($qL->dist($rec) >= $qL->dist($best)) {
                         break;
@@ -144,6 +145,7 @@ class PrioReAPaper {
                 $min = $tmp;
             }
         }
+        assert($min !== INF);
         return $min;
     }
 
